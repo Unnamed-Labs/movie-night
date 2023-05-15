@@ -1,0 +1,90 @@
+import { prisma } from '../src/server/db';
+import ratings from './data/ratings.json';
+import genres from './data/genres.json';
+import actions from './data/actions.json';
+import movies from './data/movies.json';
+
+type Nvp = {
+  id: string;
+  name: string;
+};
+
+const createRatings = async () => {
+  const createRating = async (rating: Nvp) => {
+    await prisma.rating.create({
+      data: {
+        id: rating.id,
+        name: rating.name,
+      },
+    });
+  };
+
+  for (const rating of ratings) {
+    await createRating(rating);
+  }
+};
+
+const createGenres = async () => {
+  const createGenre = async (genre: Nvp) => {
+    await prisma.genre.create({
+      data: {
+        id: genre.id,
+        name: genre.name,
+      },
+    });
+  };
+
+  for (const genre of genres) {
+    await createGenre(genre);
+  }
+};
+
+const createActions = async () => {
+  const createAction = async (name: string) => {
+    await prisma.action.create({
+      data: {
+        name,
+      },
+    });
+  };
+
+  for (const action of actions) {
+    await createAction(action);
+  }
+};
+
+const createMovies = async () => {
+  for (const movie of movies) {
+    await prisma.movie.create({
+      data: {
+        name: movie.name,
+        runtime: movie.runtime,
+        score: movie.score,
+        year: movie.year,
+        rating: movie.rating,
+        genres: movie.genres,
+      },
+      include: {
+        rating: true,
+        genres: true,
+      },
+    });
+  }
+};
+
+const main = async () => {
+  await createRatings();
+  await createGenres();
+  await createActions();
+  await createMovies();
+};
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });

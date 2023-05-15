@@ -12,12 +12,13 @@ model Movie {
   name        String
   year        String
   runtime     String
-  rating      Float
-  score       Int
+  score       Float
   createdDate DateTime @default(now())
   genres      Genre[]
   results     Result[]
   votes       Vote[]
+  rating      Rating   @relation(fields: [ratingId], references: [id])
+  ratingId    String
 }
 
 model Genre {
@@ -50,8 +51,8 @@ model Participant {
 }
 
 model Action {
-  id   String @id @default(cuid())
-  name String
+  id   String     @id @default(cuid())
+  name String     @unique
   logs AuditLog[]
 }
 
@@ -81,6 +82,12 @@ model Vote {
   participant   Participant @relation(fields: [participantId], references: [id])
   participantId String
   createdDate   DateTime    @default(now())
+}
+
+model Rating {
+  id     String  @id @default(cuid())
+  name   String  @unique
+  movies Movie[]
 }
 
 model Account {
