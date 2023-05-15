@@ -1,32 +1,100 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
-  // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
   url      = env("DATABASE_URL")
 }
 
-// Necessary for Next auth
+model Movie {
+  id          String   @id @default(cuid())
+  name        String
+  year        String
+  runtime     String
+  rating      Float
+  score       Int
+  createdDate DateTime @default(now())
+  genres      Genre[]
+  results     Result[]
+  votes       Vote[]
+}
+
+model Genre {
+  id     String  @id @default(cuid())
+  name   String
+  movies Movie[]
+}
+
+model Room {
+  id           String        @id @default(cuid())
+  qrCode       Bytes         @unique()
+  code         String        @unique()
+  amount       Int
+  createdDate  DateTime      @default(now())
+  updatedDate  DateTime      @default(now())
+  participants Participant[]
+  results      Result[]
+  logs         AuditLog[]
+}
+
+model Participant {
+  id      String  @id @default(cuid())
+  name    String
+  isHost  Boolean @default(false)
+  isGuest Boolean @default(true)
+  room    Room    @relation(fields: [roomId], references: [id])
+  roomId  String
+  users   User[]
+  votes   Vote[]
+}
+
+model Action {
+  id   String @id @default(cuid())
+  name String
+  logs AuditLog[]
+}
+
+model Result {
+  id          String   @id @default(cuid())
+  movie       Movie    @relation(fields: [movieId], references: [id])
+  movieId     String
+  room        Room     @relation(fields: [roomId], references: [id])
+  roomId      String
+  createdDate DateTime @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  room        Room     @relation(fields: [roomId], references: [id])
+  roomId      String
+  action      Action   @relation(fields: [actionId], references: [id])
+  actionId    String
+  by          String
+  createdDate DateTime @default(now())
+}
+
+model Vote {
+  id            String      @id @default(cuid())
+  movie         Movie       @relation(fields: [movieId], references: [id])
+  movieId       String
+  participant   Participant @relation(fields: [participantId], references: [id])
+  participantId String
+  createdDate   DateTime    @default(now())
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? // @db.Text
-  access_token      String? // @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? // @db.Text
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -42,13 +110,14 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  participants  Participant[]
 }
 
 model VerificationToken {
