@@ -1,5 +1,6 @@
 [
   {
+    "id": "1",
     "name": "The Super Mario Bros. Movie",
     "year": "2023",
     "runtime": "1h 32m",
@@ -30,6 +31,7 @@
     }
   },
   {
+    "id": "2",
     "name": "Guardians of the Galaxy Vol. 3",
     "year": "2023",
     "runtime": "2h 30m",
@@ -54,6 +56,7 @@
     }
   },
   {
+    "id": "3",
     "name": "Shrek",
     "year": "2001",
     "runtime": "1h 30m",
@@ -84,6 +87,7 @@
     }
   },
   {
+    "id": "4",
     "name": "Air Bud",
     "year": "1997",
     "runtime": "1h 38m",
@@ -105,6 +109,7 @@
     }
   },
   {
+    "id": "5",
     "name": "Jimmy Neutron: Boy Genius",
     "year": "2001",
     "runtime": "1h 23m",
@@ -138,6 +143,7 @@
     }
   },
   {
+    "id": "6",
     "name": "Thor: Love and Thunder",
     "year": "2022",
     "runtime": "1h 59m",

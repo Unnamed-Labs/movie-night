@@ -11,11 +11,15 @@ type Nvp = {
 
 const createRatings = async () => {
   const createRating = async (rating: Nvp) => {
-    await prisma.rating.create({
-      data: {
+    await prisma.rating.upsert({
+      where: {
+        id: rating.id,
+      },
+      create: {
         id: rating.id,
         name: rating.name,
       },
+      update: {},
     });
   };
 
@@ -26,11 +30,15 @@ const createRatings = async () => {
 
 const createGenres = async () => {
   const createGenre = async (genre: Nvp) => {
-    await prisma.genre.create({
-      data: {
+    await prisma.genre.upsert({
+      where: {
+        id: genre.id,
+      },
+      create: {
         id: genre.id,
         name: genre.name,
       },
+      update: {},
     });
   };
 
@@ -40,11 +48,16 @@ const createGenres = async () => {
 };
 
 const createActions = async () => {
-  const createAction = async (name: string) => {
-    await prisma.action.create({
-      data: {
-        name,
+  const createAction = async (action: Nvp) => {
+    await prisma.action.upsert({
+      where: {
+        id: action.id,
       },
+      create: {
+        id: action.id,
+        name: action.name,
+      },
+      update: {},
     });
   };
 
@@ -55,8 +68,12 @@ const createActions = async () => {
 
 const createMovies = async () => {
   for (const movie of movies) {
-    await prisma.movie.create({
-      data: {
+    await prisma.movie.upsert({
+      where: {
+        id: movie.id as string,
+      },
+      create: {
+        id: movie.id as string,
         name: movie.name,
         runtime: movie.runtime,
         score: movie.score,
@@ -64,6 +81,7 @@ const createMovies = async () => {
         rating: movie.rating,
         genres: movie.genres,
       },
+      update: {},
       include: {
         rating: true,
         genres: true,
