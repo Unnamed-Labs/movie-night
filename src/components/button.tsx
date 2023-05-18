@@ -19,17 +19,18 @@ const Button: React.FC<ButtonProps> = ({
   switch (variant) {
     case 'primary':
       buttonType =
-        'bg-c flex rounded bg-emerald-300 px-20 py-3 text-xl text-slate-700 duration-150 hover:bg-emerald-600 hover:text-white';
+        'flex rounded bg-emerald-300 min-w-[144px] justify-center px-4 items-center py-3 text-xl text-slate-700 transition-colors hover:bg-emerald-600 hover:text-white';
       break;
     case 'secondary':
       buttonType =
-        'bg-c flex rounded bg-purple-300 px-20 py-3 text-xl text-slate-700 hover:bg-purple-500 hover:text-white';
+        'flex rounded bg-purple-300 min-w-[144px] justify-center px-4 items-center py-3 text-xl text-slate-700 transition-colors hover:bg-purple-500 hover:text-white';
       break;
     case 'disabled':
-      buttonType = 'bg-c flex rounded bg-slate-500 px-20 py-3 text-xl text-slate-700';
+      buttonType =
+        'flex rounded bg-slate-500 min-w-[144px] justify-center px-4 items-center py-3 text-xl text-slate-700';
       break;
     case 'standalone':
-      buttonType = 'bg-c flex basis-4 py-3 text-xl text-white underline hover:no-underline';
+      buttonType = 'flex basis-4 py-3 text-xl text-white underline hover:no-underline';
       break;
   }
 
