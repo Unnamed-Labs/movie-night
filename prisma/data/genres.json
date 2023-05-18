@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "name": "Animation"
+  },
+  {
+    "id": "2",
+    "name": "Family"
+  },
+  {
+    "id": "3",
+    "name": "Adventure"
+  },
+  {
+    "id": "4",
+    "name": "Fantasy"
+  },
+  {
+    "id": "5",
+    "name": "Comedy"
+  },
+  {
+    "id": "6",
+    "name": "Action"
+  },
+  {
+    "id": "7",
+    "name": "Science Fiction"
+  }
+]
