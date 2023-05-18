@@ -9,6 +9,7 @@
     "lint": "next lint",
     "fix": "eslint . --ext .js,.ts,.tsx,.mjs,.cjs --fix",
     "start": "next start",
+    "seed": "cross-env NODE_ENV=development prisma db seed",
     "reset": "cross-env NODE_ENV=development prisma migrate reset",
     "migrate": "cross-env NODE_ENV=development prisma migrate dev"
   },
@@ -21,7 +22,6 @@
     "@trpc/next": "^10.18.0",
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
-    "class-variance-authority": "^0.5.1",
     "clsx": "^1.2.1",
     "framer-motion": "^10.12.12",
     "next": "^13.2.4",
@@ -51,9 +51,13 @@
     "prettier-plugin-tailwindcss": "^0.2.6",
     "prisma": "^4.11.0",
     "tailwindcss": "^3.3.0",
+    "tsx": "^3.12.7",
     "typescript": "^5.0.2"
   },
   "ct3aMetadata": {
     "initVersion": "7.10.2"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
