@@ -1,11 +1,5 @@
 import React, { type ReactNode } from 'react';
 
-/* interface LinkProps {
-  children: ReactNode;
-  variant?: 'page1' | 'page2' | 'page3' | 'page4' | 'page5' | 'page6' | 'page7';
-  className?: string;
-} */
-
 interface ButtonProps {
   children: ReactNode;
   variant?: 'primary' | 'secondary' | 'disabled';
