@@ -33,10 +33,9 @@ const Timer: React.FC<TimerProps> = ({ initialTime }) => {
 
   useEffect(() => {
     timerControls.start({
-      scale: [1, 1.5, 1],
       transition: {
-        duration: 0.5,
-        times: [0, 0.5, 1],
+        duration: 1,
+        ease: [0.17, 0.67, 0.83, 0.67],
       },
     });
   }, [timeRemaining, timerControls]);
@@ -44,9 +43,9 @@ const Timer: React.FC<TimerProps> = ({ initialTime }) => {
   const seconds = timeRemaining;
 
   return (
-    <div className={`flex-col items-center justify-center rounded px-20 py-3 ${backgroundColor}`}>
+    <div className={`rounded-lg ${backgroundColor}`}>
       <motion.div
-        className="text-6xl font-bold text-black"
+        className=" flex min-w-[500px] items-center justify-center py-3 text-6xl font-semibold text-slate-900 transition-colors"
         animate={timerControls}
       >
         {seconds.toString().padStart(2, '0')} Seconds
