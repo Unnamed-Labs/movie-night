@@ -70,10 +70,10 @@ const createMovies = async () => {
   for (const movie of movies) {
     await prisma.movie.upsert({
       where: {
-        id: movie.id as string,
+        id: movie.id,
       },
       create: {
-        id: movie.id as string,
+        id: movie.id,
         name: movie.name,
         runtime: movie.runtime,
         score: movie.score,
