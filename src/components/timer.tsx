@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimationControls } from 'framer-motion';
 
 interface TimerProps {
   initialTime: number;
@@ -7,12 +7,21 @@ interface TimerProps {
 
 const Timer: React.FC<TimerProps> = ({ initialTime }) => {
   const [timeRemaining, setTimeRemaining] = useState(initialTime);
-  const [backgroundColor, setBackgroundColor] = useState('bg-green-400');
+  const [backgroundColor, setBackgroundColor] = useState('');
+  const [shimmerColor, setShimmerColor] = useState('');
 
-  const timerControls = useAnimation();
+  const controls = useAnimationControls();
+
+  useEffect(() => {
+    const startAnimation = async () => {
+      await controls.start({ x: '50%', y: '50%' });
+    };
+    void startAnimation();
+  }, [controls]);
 
   useEffect(() => {
     if (timeRemaining === 0) {
+      controls.stop();
       return;
     }
 
@@ -21,35 +30,47 @@ const Timer: React.FC<TimerProps> = ({ initialTime }) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeRemaining]);
+  }, [timeRemaining, controls]);
 
   useEffect(() => {
-    if (timeRemaining <= 30) {
-      setBackgroundColor('bg-rose-400');
-    } else if (timeRemaining <= 100) {
+    const percentOfTimeLeft = timeRemaining / initialTime;
+
+    if (percentOfTimeLeft > 0.67) {
+      setBackgroundColor('bg-green-400');
+      setShimmerColor(
+        'bg-gradient-to-tl from-transparent from-10% via-green-300 to-transparent to-90% opacity-75',
+      );
+    } else if (percentOfTimeLeft > 0.33) {
       setBackgroundColor('bg-amber-300');
+      setShimmerColor(
+        'bg-gradient-to-tl from-transparent from-10% via-amber-200 to-transparent to-90% opacity-75',
+      );
+    } else if (percentOfTimeLeft === 0) {
+      setBackgroundColor('bg-gradient-to-tl from-rose-400 to-rose-300');
+    } else {
+      setBackgroundColor('bg-rose-400');
+      setShimmerColor(
+        'bg-gradient-to-tl from-transparent from-10% via-rose-300 to-transparent to-90% opacity-75',
+      );
     }
-  }, [timeRemaining]);
-
-  useEffect(() => {
-    timerControls.start({
-      transition: {
-        duration: 1,
-        ease: [0.17, 0.67, 0.83, 0.67],
-      },
-    });
-  }, [timeRemaining, timerControls]);
-
-  const seconds = timeRemaining;
+  }, [timeRemaining, initialTime]);
 
   return (
-    <div className={`rounded-lg ${backgroundColor}`}>
-      <motion.div
-        className=" flex min-w-[500px] items-center justify-center py-3 text-6xl font-semibold text-slate-900 transition-colors"
-        animate={timerControls}
-      >
-        {seconds.toString().padStart(2, '0')} Seconds
-      </motion.div>
+    <div
+      className={`relative flex items-center justify-center rounded-lg p-3 text-2xl font-semibold text-slate-900 ${backgroundColor} overflow-hidden`}
+    >
+      <motion.span
+        className={`absolute left-0 top-0 z-[2] h-[200%] w-[200%] rounded-lg ${shimmerColor}`}
+        initial={{ x: '-100%', y: '-100%' }}
+        animate={controls}
+        transition={{
+          ease: 'easeIn',
+          repeat: Infinity,
+          duration: 1.5,
+          repeatDelay: 3,
+        }}
+      />
+      {timeRemaining} seconds
     </div>
   );
 };
