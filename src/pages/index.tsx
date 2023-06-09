@@ -1,8 +1,8 @@
 import { type NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { api } from '~/utils/api';
-import Button from '~/components/button';
 import Timer from '~/components/timer';
+import Button from '~/components/global/Button';
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: 'from tRPC' });
@@ -16,12 +16,7 @@ const Home: NextPage = () => {
         <section className="flex flex-col items-center gap-4">
           <h2 className="text-4xl font-extrabold tracking-tight text-white">Button</h2>
           <Button variant="primary">Ready</Button>;<Button variant="secondary">Ready</Button>;
-          <Button
-            disabled
-            variant="disabled"
-          >
-            Ready
-          </Button>
+          <Button disabled>Ready</Button>
           <Button variant="standalone">Cancel</Button>
         </section>
         <section className="flex flex-col items-center gap-4">
