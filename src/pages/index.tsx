@@ -1,7 +1,7 @@
 import { type NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { api } from '~/utils/api';
-import Timer from '~/components/timer';
+import Timer from '~/components/Timer';
 import Button from '~/components/global/Button';
 
 const Home: NextPage = () => {

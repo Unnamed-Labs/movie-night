@@ -20,13 +20,13 @@ const Timer: React.FC<TimerProps> = ({ initialTime }) => {
   }, [controls]);
 
   useEffect(() => {
-    if (timeRemaining === 0) {
+    if (timeRemaining <= 0) {
       controls.stop();
       return;
     }
 
     const timer = setInterval(() => {
-      setTimeRemaining((prevTime) => prevTime - 1);
+      setTimeRemaining((prevTime) => (prevTime === 0 ? 0 : prevTime - 1));
     }, 1000);
 
     return () => clearInterval(timer);
@@ -35,12 +35,12 @@ const Timer: React.FC<TimerProps> = ({ initialTime }) => {
   useEffect(() => {
     const percentOfTimeLeft = timeRemaining / initialTime;
 
-    if (percentOfTimeLeft > 0.67) {
+    if (percentOfTimeLeft > 2 / 3) {
       setBackgroundColor('bg-green-400');
       setShimmerColor(
         'bg-gradient-to-tl from-transparent from-10% via-green-300 to-transparent to-90% opacity-75',
       );
-    } else if (percentOfTimeLeft > 0.33) {
+    } else if (percentOfTimeLeft > 1 / 3) {
       setBackgroundColor('bg-amber-300');
       setShimmerColor(
         'bg-gradient-to-tl from-transparent from-10% via-amber-200 to-transparent to-90% opacity-75',
@@ -58,6 +58,7 @@ const Timer: React.FC<TimerProps> = ({ initialTime }) => {
   return (
     <div
       className={`relative flex items-center justify-center rounded-lg p-3 text-2xl font-semibold text-slate-900 ${backgroundColor} overflow-hidden`}
+      data-testid="timer"
     >
       <motion.span
         className={`absolute left-0 top-0 z-[2] h-[200%] w-[200%] rounded-lg ${shimmerColor}`}
