@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import Timer from '~/components/Timer';
+import Timer from '~/components/TimerComponent';
 
 describe('<Timer />', () => {
   jest.useFakeTimers();
