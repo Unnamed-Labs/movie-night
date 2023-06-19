@@ -3,6 +3,7 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import { api } from '~/utils/api';
 import Timer from '~/components/Timer';
 import Button from '~/components/global/Button';
+import MovieCard from '~/components/MovieCard';
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: 'from tRPC' });
@@ -31,6 +32,10 @@ const Home: NextPage = () => {
             </p>
             <AuthShowcase />
           </div>
+        </section>
+        <section className="flex flex-col items-center gap-4">
+          <h2 className="text-4xl font-extrabold tracking-tight text-white">Movie Card</h2>
+          <MovieCard />
         </section>
       </main>
     </>
