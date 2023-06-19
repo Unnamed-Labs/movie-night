@@ -13,12 +13,13 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   onClick,
 }) => {
-  let buttonType =
-    'flex rounded min-w-[144px] justify-center px-4 items-center py-3 text-xl text-slate-500';
+  let buttonType = 'flex rounded min-w-[144px] justify-center px-4 items-center py-3 text-xl';
 
   if (disabled) {
-    buttonType += ' bg-slate-700 hover:cursor-not-allowed';
+    buttonType += ' text-slate-500 bg-slate-700 hover:cursor-not-allowed';
   } else {
+    buttonType += ' text-slate-700';
+
     switch (variant) {
       case 'primary':
         buttonType += ' bg-emerald-300 transition-colors hover:bg-emerald-600 hover:text-white';
