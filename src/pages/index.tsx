@@ -36,7 +36,8 @@ const Home: NextPage = () => {
         </h1>
         <section className="flex flex-col items-center gap-4">
           <h2 className="text-4xl font-extrabold tracking-tight text-white">Button</h2>
-          <Button variant="primary">Ready</Button>;<Button variant="secondary">Ready</Button>;
+          <Button variant="primary">Ready</Button>
+          <Button variant="secondary">Ready</Button>
           <Button disabled>Ready</Button>
           <Button variant="standalone">Cancel</Button>
         </section>
@@ -88,6 +89,7 @@ const Home: NextPage = () => {
         <section className="flex flex-col items-center gap-4">
           <h2 className="text-4xl font-extrabold tracking-tight text-white">Movie Card</h2>
           <MovieCard />
+          <MovieCard collapsible />
         </section>
       </main>
     </>

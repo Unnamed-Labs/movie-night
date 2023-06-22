@@ -20,10 +20,14 @@ type MovieCardProps = {
   collapsible?: boolean;
 };
 
-const MovieCard = () => {
+const MovieCard = ({ collapsible }: MovieCardProps) => {
+  const [showDescription, setShowDescription] = useState<boolean>(!collapsible);
+  const handleMoreInfoClick = () => {
+    setShowDescription(!showDescription);
+  };
   return (
     <motion.div
-      className="flex w-full max-w-xs flex-col gap-2 rounded-lg bg-slate-700 p-4 text-slate-100"
+      className="flex w-full max-w-xs flex-col gap-2 rounded-lg bg-slate-700 p-4 text-slate-100 shadow-md shadow-black transition hover:-translate-y-1 hover:cursor-pointer hover:shadow-xl hover:shadow-black"
       data-testid="movie-card"
     >
       <div className="flex flex-row items-center justify-between">
@@ -57,12 +61,27 @@ const MovieCard = () => {
           </div>
           <span>Animation, Comedy, Fantasy, Adventure, Family</span>
         </div>
-        <p className="mt-4 text-sm">
-          It ain&apos;t easy bein&apos; green -- especially if you&apos;re a likable (albeit smelly)
-          ogre named Shrek. On a mission to retrieve a gorgeous princess from the clutches of a
-          fire-breathing dragon, Shrek teams up with an unlikely compatriot -- a wisecracking
-          donkey.
-        </p>
+
+        {
+          <div className="mt-4 flex flex-col justify-center text-sm">
+            {showDescription && (
+              <p className="w-full">
+                It ain&apos;t easy bein&apos; green -- especially if you&apos;re a likable (albeit
+                smelly) ogre named Shrek. On a mission to retrieve a gorgeous princess from the
+                clutches of a fire-breathing dragon, Shrek teams up with an unlikely compatriot -- a
+                wisecracking donkey.
+              </p>
+            )}
+            {collapsible && (
+              <Button
+                variant="standalone"
+                onClick={handleMoreInfoClick}
+              >
+                {showDescription ? 'Hide info' : 'View info'}
+              </Button>
+            )}
+          </div>
+        }
       </div>
     </motion.div>
   );
