@@ -16,6 +16,7 @@ const Home: NextPage = () => {
   const [phoneNumberError, setPhoneNumberError] = useState<boolean>(false);
   const [placeholder, setPlaceholder] = useState<string>('');
   const [search, setSearch] = useState<string>('');
+  const [cardDisabled, setCardDisabled] = useState<boolean>(false);
 
   const handlePhoneNumberChange = (newPhoneNumber: string) => {
     if (newPhoneNumber.length !== 10) {
@@ -88,8 +89,83 @@ const Home: NextPage = () => {
         </section>
         <section className="flex flex-col items-center gap-4">
           <h2 className="text-4xl font-extrabold tracking-tight text-white">Movie Card</h2>
-          <MovieCard />
-          <MovieCard collapsible />
+          <MovieCard
+            title="Shrek"
+            description="It ain't easy bein' green -- especially if you're a likable (albeit smelly) ogre named Shrek. On a mission to retrieve a gorgeous princess from the clutches of a fire-breathing dragon, Shrek teams up with an unlikely compatriot -- a wisecracking donkey."
+            categories={['Animation', 'Comedy', 'Fantasy', 'Adventure', 'Family']}
+            date="05/18/2001"
+            image={{
+              src: '/shrek.jpg',
+              alt: 'shrek the movie poster',
+            }}
+            location="US"
+            rating="PG"
+            runtime="1h 30m"
+            score={77}
+          />
+          <MovieCard
+            title="Shrek"
+            description="It ain't easy bein' green -- especially if you're a likable (albeit smelly) ogre named Shrek. On a mission to retrieve a gorgeous princess from the clutches of a fire-breathing dragon, Shrek teams up with an unlikely compatriot -- a wisecracking donkey."
+            categories={['Animation', 'Comedy', 'Fantasy', 'Adventure', 'Family']}
+            date="05/18/2001"
+            image={{
+              src: '/shrek.jpg',
+              alt: 'shrek the movie poster',
+            }}
+            location="US"
+            rating="PG"
+            runtime="1h 30m"
+            score={77}
+            collapsible
+          />
+          <MovieCard
+            selectable
+            title="Shrek"
+            description="It ain't easy bein' green -- especially if you're a likable (albeit smelly) ogre named Shrek. On a mission to retrieve a gorgeous princess from the clutches of a fire-breathing dragon, Shrek teams up with an unlikely compatriot -- a wisecracking donkey."
+            categories={['Animation', 'Comedy', 'Fantasy', 'Adventure', 'Family']}
+            date="05/18/2001"
+            image={{
+              src: '/shrek.jpg',
+              alt: 'shrek the movie poster',
+            }}
+            location="US"
+            rating="PG"
+            runtime="1h 30m"
+            score={77}
+          />
+          <div className="flex flex-col gap-8">
+            <MovieCard
+              selectable
+              disabled={cardDisabled}
+              title="Shrek"
+              description="It ain't easy bein' green -- especially if you're a likable (albeit smelly) ogre named Shrek. On a mission to retrieve a gorgeous princess from the clutches of a fire-breathing dragon, Shrek teams up with an unlikely compatriot -- a wisecracking donkey."
+              categories={['Animation', 'Comedy', 'Fantasy', 'Adventure', 'Family']}
+              date="05/18/2001"
+              image={{
+                src: '/shrek.jpg',
+                alt: 'shrek the movie poster',
+              }}
+              location="US"
+              rating="PG"
+              runtime="1h 30m"
+              score={77}
+            />
+            {cardDisabled ? (
+              <Button
+                variant="primary"
+                onClick={() => setCardDisabled(!cardDisabled)}
+              >
+                Enable me
+              </Button>
+            ) : (
+              <Button
+                variant="secondary"
+                onClick={() => setCardDisabled(!cardDisabled)}
+              >
+                Disable me
+              </Button>
+            )}
+          </div>
         </section>
       </main>
     </>
