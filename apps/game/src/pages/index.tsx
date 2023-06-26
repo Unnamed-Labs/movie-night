@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { type NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import { HiMagnifyingGlass } from 'react-icons/hi2';
-import { api } from 'apps/game/src/utils/api';
-import Timer from 'packages/ui/components/Timer';
-import Button from 'packages/ui/components/Button';
-import Input from 'packages/ui/components/Input';
+import { Timer } from '@movie/ui';
+import { Button } from '@movie/ui';
+import { Input } from '@movie/ui';
+import { api } from '~/utils/api';
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: 'from tRPC' });
@@ -77,12 +76,12 @@ const Home: NextPage = () => {
             value={placeholder}
             onChange={setPlaceholder}
           />
-          <Input
+          {/* <Input
             placeholder="Search"
             leftIcon={<HiMagnifyingGlass />}
             value={search}
             onChange={setSearch}
-          />
+          /> */}
         </section>
       </main>
     </>

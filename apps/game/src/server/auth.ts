@@ -2,8 +2,8 @@ import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type NextAuthOptions, type DefaultSession } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { env } from 'apps/game/src/env.mjs';
-import { prisma } from 'apps/game/src/server/db';
+import { prisma } from '@movie/db';
+import { env } from '~/env.mjs';
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`

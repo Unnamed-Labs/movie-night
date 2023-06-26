@@ -16,9 +16,9 @@
  */
 import { type CreateNextContextOptions } from '@trpc/server/adapters/next';
 import { type Session } from 'next-auth';
+import { prisma } from '@movie/db';
 
-import { getServerAuthSession } from 'apps/game/src/server/auth';
-import { prisma } from 'apps/game/src/server/db';
+import { getServerAuthSession } from '~/server/auth';
 
 type CreateContextOptions = {
   session: Session | null;

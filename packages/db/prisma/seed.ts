@@ -1,4 +1,4 @@
-import { prisma } from '../../../apps/game/src/server/db';
+import { prisma } from '../index';
 import ratings from './data/ratings.json';
 import genres from './data/genres.json';
 import actions from './data/actions.json';

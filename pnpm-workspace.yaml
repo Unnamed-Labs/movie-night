@@ -1,3 +1,6 @@
 packages:
-  - apps/*
-  - packages/*
+  - apps/game
+  - packages/ui
+  - packages/db
+  - packages/config/eslint
+  - packages/config/tailwind

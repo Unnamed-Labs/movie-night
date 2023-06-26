@@ -1,9 +1,8 @@
 import { type Config } from 'tailwindcss';
 
+import baseConfig from '@movie/tailwind-config';
+
 export default {
-  content: ['./src/**/*.{js,ts,jsx,tsx}'],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+  content: ['./src/**/*.tsx'],
+  presets: [baseConfig],
 } satisfies Config;

@@ -1,11 +1,10 @@
 {
-  "name": "@acme/tailwind-config",
+  "name": "@movie/tailwind-config",
   "version": "0.1.0",
   "main": "index.ts",
-  "license": "MIT",
   "files": [
     "index.ts",
-    "postcss.ts"
+    "postcss.js"
   ],
   "devDependencies": {
     "autoprefixer": "^10.4.14",
