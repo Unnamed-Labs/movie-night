@@ -68,7 +68,7 @@ const Timer: React.FC<TimerProps> = ({ initialTime }) => {
           ease: 'easeIn',
           repeat: Infinity,
           duration: 1.5,
-          repeatDelay: 3,
+          repeatDelay: 5,
         }}
       />
       {timeRemaining} seconds

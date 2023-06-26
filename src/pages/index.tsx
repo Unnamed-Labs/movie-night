@@ -3,6 +3,7 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import { api } from '~/utils/api';
 import Timer from '~/components/Timer';
 import Button from '~/components/global/Button';
+import Participant from '~/components/participant';
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: 'from tRPC' });
@@ -30,6 +31,25 @@ const Home: NextPage = () => {
               {hello.data ? hello.data.greeting : 'Loading tRPC query...'}
             </p>
             <AuthShowcase />
+            <section className="flex flex-col items-center gap-4">
+              <h2 className="text-4xl font-extrabold tracking-tight text-white">
+                Participant Card
+              </h2>
+              <Participant
+                name="Viglante"
+                image={{
+                  src: '/meow.jpg',
+                  alt: 'cute ass cat',
+                }}
+              ></Participant>
+              <Participant
+                name="Depthcharge23"
+                image={{
+                  src: '/saitaang.jpg',
+                  alt: 'aang drawing on saitama',
+                }}
+              ></Participant>
+            </section>
           </div>
         </section>
       </main>
