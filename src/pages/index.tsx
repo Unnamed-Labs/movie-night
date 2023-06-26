@@ -8,6 +8,7 @@ import Button from '~/components/global/Button';
 import Participant from '~/components/participant';
 import MovieCard from '~/components/MovieCard';
 import Input from '~/components/global/Input';
+import Participant from '~/components/participant';
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: 'from tRPC' });
@@ -297,6 +298,25 @@ const Home: NextPage = () => {
                 Disable me
               </Button>
             )}
+            <section className="flex flex-col items-center gap-4">
+              <h2 className="text-4xl font-extrabold tracking-tight text-white">
+                Participant Card
+              </h2>
+              <Participant
+                name="Viglante"
+                image={{
+                  src: '/meow.jpg',
+                  alt: 'cute ass cat',
+                }}
+              ></Participant>
+              <Participant
+                name="Depthcharge23"
+                image={{
+                  src: '/saitaang.jpg',
+                  alt: 'aang drawing on saitama',
+                }}
+              ></Participant>
+            </section>
           </div>
         </section>
       </main>
