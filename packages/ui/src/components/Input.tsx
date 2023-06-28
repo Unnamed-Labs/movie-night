@@ -12,7 +12,7 @@ type InputProps = {
   onChange: (val: string) => void;
 };
 
-const Input = ({
+export const Input: React.FC<InputProps> = ({
   label,
   value,
   onChange,
@@ -22,19 +22,19 @@ const Input = ({
   helpText,
   error,
   leftIcon,
-}: InputProps) => {
+}) => {
   const internalLabel = label ? (required ? `${label} *` : label) : '';
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
 
   return (
-    <label className="flex w-full max-w-xs flex-col gap-2 text-base text-slate-100">
+    <label className="ui-flex ui-w-full ui-max-w-xs ui-flex-col ui-gap-2 ui-text-base ui-text-slate-100">
       <strong>{internalLabel}</strong>
-      <div className="flex flex-row items-center gap-2 rounded-lg bg-slate-700 px-3 py-4">
-        {leftIcon && <span className="text-lg">{leftIcon}</span>}
+      <div className="ui-flex ui-flex-row ui-items-center ui-gap-2 ui-rounded-lg ui-bg-slate-700 ui-px-3 ui-py-4">
+        {leftIcon && <span className="ui-text-lg">{leftIcon}</span>}
         <input
-          className="bg-transparent outline-none"
+          className="ui-bg-transparent ui-outline-none"
           data-testid="input"
           type={type}
           value={value}
@@ -44,16 +44,16 @@ const Input = ({
       </div>
       {error ? (
         <span
-          className="flex flex-row items-center gap-2 px-2 text-sm text-rose-300"
+          className="ui-flex ui-flex-row ui-items-center ui-gap-2 ui-px-2 ui-text-sm ui-text-rose-300"
           data-testid="input-error"
         >
-          <HiOutlineExclamationCircle className="text-2xl" />
+          <HiOutlineExclamationCircle className="ui-text-2xl" />
           {error}
         </span>
       ) : (
         helpText && (
           <span
-            className="px-2 text-sm"
+            className="ui-px-2 ui-text-sm"
             data-testid="input-help-text"
           >
             {helpText}
@@ -63,5 +63,3 @@ const Input = ({
     </label>
   );
 };
-
-export default Input;

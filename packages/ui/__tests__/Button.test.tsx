@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Button from '../components/Button';
+import { Button } from '../src/components/Button';
 
 describe('<Button />', () => {
   it('should mount', () => {
@@ -14,21 +14,21 @@ describe('<Button />', () => {
     const { getByText } = render(<Button>Ready</Button>);
     const elem = getByText('Ready');
 
-    expect(elem).toHaveClass('bg-emerald-300');
+    expect(elem).toHaveClass('ui-bg-emerald-300');
   });
 
   it('should be a secondary variant', () => {
     const { getByText } = render(<Button variant="secondary">Ready</Button>);
     const elem = getByText('Ready');
 
-    expect(elem).toHaveClass('bg-purple-300');
+    expect(elem).toHaveClass('ui-bg-purple-300');
   });
 
   it('should be a standalone variant', () => {
     const { getByText } = render(<Button variant="standalone">Ready</Button>);
     const elem = getByText('Ready');
 
-    expect(elem).toHaveClass('underline');
+    expect(elem).toHaveClass('ui-underline');
   });
 
   it('should be disabled', () => {
@@ -36,7 +36,7 @@ describe('<Button />', () => {
     const elem = getByText('Ready');
 
     expect(elem).toHaveProperty('disabled');
-    expect(elem).toHaveClass('bg-slate-700');
+    expect(elem).toHaveClass('ui-bg-slate-700');
   });
 
   it('onClick should fire', async () => {

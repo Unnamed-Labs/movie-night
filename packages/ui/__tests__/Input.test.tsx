@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Input from '../components/Input';
+import { Input } from '../src/components/Input';
 
 const label = 'Name';
 let value = 'Aaron';

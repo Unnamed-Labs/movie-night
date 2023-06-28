@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import Timer from '../components/Timer';
+import { Timer } from '../src/components/Timer';
 
 describe('<Timer />', () => {
   jest.useFakeTimers();
@@ -37,7 +37,7 @@ describe('<Timer />', () => {
   it('should be green when in first third of time', () => {
     const { getByTestId } = render(<Timer initialTime={3} />);
     const elm = getByTestId('timer');
-    expect(elm.classList.contains('bg-green-400')).toBeTruthy();
+    expect(elm.classList.contains('ui-bg-green-400')).toBeTruthy();
   });
 
   it('should be yellow when in the second third of time', () => {
@@ -46,7 +46,7 @@ describe('<Timer />', () => {
     act(() => {
       jest.advanceTimersByTime(1000);
     });
-    expect(elm.classList.contains('bg-amber-300')).toBeTruthy();
+    expect(elm.classList.contains('ui-bg-amber-300')).toBeTruthy();
   });
 
   it('should be red when in the final third of time', () => {
@@ -55,6 +55,6 @@ describe('<Timer />', () => {
     act(() => {
       jest.advanceTimersByTime(2000);
     });
-    expect(elm.classList.contains('bg-rose-400')).toBeTruthy();
+    expect(elm.classList.contains('ui-bg-rose-400')).toBeTruthy();
   });
 });
