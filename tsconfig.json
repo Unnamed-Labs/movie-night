@@ -1,21 +1,5 @@
 {
-  "compilerOptions": {
-    "target": "es2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "checkJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "noUncheckedIndexedAccess": true,
-  },
-  "include": [".eslintrc.cjs", "prettier.config.cjs"]
+  "extends": "@movie/tsconfig/base.json",
+  "exclude": ["node_modules"],
+  "include": ["index.ts", ".eslintrc.cjs", "prettier.config.cjs", "packages/eslint-config-custom", "packages/tailwind"]
 }

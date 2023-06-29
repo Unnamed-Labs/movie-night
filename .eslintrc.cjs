@@ -1,22 +1,10 @@
-/** @type {import("eslint").Linter.Config} */
-const config = {
+module.exports = {
   root: true,
-  extends: ["@movie/eslint-config"], // uses the config in `packages/config/eslint`
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    ecmaVersion: "latest",
-    tsconfigRootDir: __dirname,
-    project: [
-      "./tsconfig.json",
-      "./apps/*/tsconfig.json",
-      "./packages/*/tsconfig.json",
-    ],
-  },
+  // This tells ESLint to load the config from the package `eslint-config-custom`
+  extends: ["@movie/eslint-config"],
   settings: {
     next: {
-      rootDir: ["apps/nextjs"],
+      rootDir: ["apps/*/"],
     },
   },
 };
-
-module.exports = config;

@@ -2,5 +2,6 @@ packages:
   - apps/game
   - packages/ui
   - packages/db
-  - packages/config/eslint
-  - packages/config/tailwind
+  - packages/eslint-config-custom
+  - packages/tailwind
+  - packages/tsconfig

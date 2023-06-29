@@ -1,11 +1,12 @@
 /** @type {import("eslint").Linter.Config} */
-const config = {
+module.exports = {
+  plugins: ['@typescript-eslint', 'prettier'],
   extends: [
     "next",
     "turbo",
+    "prettier",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "prettier",
   ],
   rules: {
     "@next/next/no-html-link-for-pages": "off",
@@ -22,9 +23,18 @@ const config = {
       "error",
       { prefer: "type-imports", fixStyle: "inline-type-imports" },
     ],
+    "prettier/prettier": "warn",
   },
-  ignorePatterns: ["**/*.config.js", "**/*.config.cjs", "packages/config/**"],
+  ignorePatterns: ["**/*.config.*", "dist", "node_modules", ".next", ".turbo", "__tests__"],
   reportUnusedDisableDirectives: true,
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: "latest",
+    tsconfigRootDir: '.',
+    project: [
+      "./tsconfig.json",
+      "./apps/*/tsconfig.json",
+      "./packages/*/tsconfig.json",
+    ],
+  },
 };
-
-module.exports = config;
