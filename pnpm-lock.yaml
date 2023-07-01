@@ -12,10 +12,10 @@ importers:
         specifier: ^0.20.0
         version: 0.20.0
       '@movie/eslint-config':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:packages/eslint-config-custom
       '@movie/tsconfig':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:packages/tsconfig
       eslint:
         specifier: ^8.43.0
@@ -36,10 +36,10 @@ importers:
   apps/game:
     dependencies:
       '@movie/db':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../../packages/db
       '@movie/ui':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../../packages/ui
       '@next-auth/prisma-adapter':
         specifier: ^1.0.5
@@ -82,19 +82,19 @@ importers:
         version: 4.3.7(react@18.2.0)
     devDependencies:
       '@movie/tailwind-config':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../../packages/tailwind
       '@movie/tsconfig':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../../packages/tsconfig
       '@types/node':
         specifier: ^18.15.5
         version: 18.15.5
       '@types/react':
-        specifier: ^18.0.28
+        specifier: ^18.2.0
         version: 18.2.0
       '@types/react-dom':
-        specifier: ^18.0.11
+        specifier: ^18.2.0
         version: 18.2.0
       autoprefixer:
         specifier: ^10.4.14
@@ -109,7 +109,7 @@ importers:
         specifier: ^7.2.1
         version: 7.2.1
       postcss:
-        specifier: ^8.4.21
+        specifier: ^8.4.24
         version: 8.4.24
       start-server-and-test:
         specifier: ^2.0.0
@@ -124,6 +124,12 @@ importers:
         specifier: ^4.15.0
         version: 4.15.0(prisma@4.15.0)
     devDependencies:
+      '@movie/tsconfig':
+        specifier: 0.1.0
+        version: link:../tsconfig
+      '@types/node':
+        specifier: ^18.15.5
+        version: 18.15.5
       dotenv-cli:
         specifier: ^7.2.1
         version: 7.2.1
@@ -173,7 +179,7 @@ importers:
         specifier: ^8.4.24
         version: 8.4.24
       tailwindcss:
-        specifier: ^3.3.2
+        specifier: ^3.3.0
         version: 3.3.2(ts-node@10.9.1)
 
   packages/tsconfig: {}
@@ -194,13 +200,13 @@ importers:
         version: 4.9.0(react@18.2.0)
     devDependencies:
       '@movie/eslint-config':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../eslint-config-custom
       '@movie/tailwind-config':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../tailwind
       '@movie/tsconfig':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../tsconfig
       '@testing-library/jest-dom':
         specifier: ^5.16.5

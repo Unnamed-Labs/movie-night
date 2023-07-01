@@ -1,4 +1,7 @@
 {
-  "extends": "../../tsconfig.json",
-  "include": ["index.ts"]
+  "extends": "@movie/tsconfig/base.json",
+  "compilerOptions": {
+    "resolveJsonModule": true
+  },
+  "include": ["."]
 }

@@ -13,7 +13,8 @@ export const Button: React.FC<ButtonProps> = ({
   disabled = false,
   onClick,
 }) => {
-  let buttonType = 'ui-flex ui-rounded ui-min-w-[144px] ui-justify-center ui-px-4 ui-items-center ui-py-3 ui-text-xl';
+  let buttonType =
+    'ui-flex ui-rounded ui-min-w-[144px] ui-justify-center ui-px-4 ui-items-center ui-py-3 ui-text-xl';
 
   if (disabled) {
     buttonType += ' ui-text-slate-500 ui-bg-slate-700 hover:ui-cursor-not-allowed';
@@ -22,13 +23,16 @@ export const Button: React.FC<ButtonProps> = ({
 
     switch (variant) {
       case 'primary':
-        buttonType += ' ui-bg-emerald-300 ui-transition-colors hover:ui-bg-emerald-600 hover:ui-text-white';
+        buttonType +=
+          ' ui-bg-emerald-300 ui-transition-colors hover:ui-bg-emerald-600 hover:ui-text-white';
         break;
       case 'secondary':
-        buttonType += ' ui-bg-purple-300 ui-transition-colors hover:ui-bg-purple-500 hover:ui-text-white';
+        buttonType +=
+          ' ui-bg-purple-300 ui-transition-colors hover:ui-bg-purple-500 hover:ui-text-white';
         break;
       case 'standalone':
-        buttonType = 'ui-flex ui-basis-4 ui-py-3 ui-text-xl ui-text-white ui-underline hover:ui-no-underline';
+        buttonType =
+          'ui-flex ui-basis-4 ui-py-3 ui-text-xl ui-text-white ui-underline hover:ui-no-underline';
         break;
     }
   }

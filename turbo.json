@@ -20,6 +20,9 @@
     },
     "lint": {},
     "lint:fix": {},
+    "test": {
+      "outputs": ["coverage/**", "cypress/**"]
+    },
     "clean": {
       "cache": false
     },
@@ -38,6 +41,7 @@
     "NEXTAUTH_SECRET",
     "NEXTAUTH_URL",
     "NODE_ENV",
-    "SKIP_ENV_VALIDATION"
+    "SKIP_ENV_VALIDATION",
+    "PORT"
   ]
 }

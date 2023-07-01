@@ -13,7 +13,7 @@ const Home: NextPage = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [phoneNumberError, setPhoneNumberError] = useState<boolean>(false);
   const [placeholder, setPlaceholder] = useState<string>('');
-  const [search, setSearch] = useState<string>('');
+  // const [search, setSearch] = useState<string>('');
 
   const handlePhoneNumberChange = (newPhoneNumber: string) => {
     if (newPhoneNumber.length !== 10) {

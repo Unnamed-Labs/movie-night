@@ -1,5 +1,11 @@
 {
   "extends": "@movie/tsconfig/base.json",
   "exclude": ["node_modules"],
-  "include": ["index.ts", ".eslintrc.cjs", "prettier.config.cjs", "packages/eslint-config-custom", "packages/tailwind"]
+  "include": [
+    "index.ts",
+    "**/.eslintrc.cjs",
+    "prettier.config.cjs",
+    "packages/eslint-config-custom",
+    "packages/tailwind"
+  ]
 }

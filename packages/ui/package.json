@@ -10,14 +10,15 @@
     "./styles.css": "./dist/index.css"
   },
   "scripts": {
+    "clean": "git clean -xdf dist .turbo node_modules",
     "build": "tsup",
-    "dev": "tsup --watch",
     "check-types": "tsc --noEmit",
     "watch": "jest --watch",
     "unit": "jest --ci",
     "coverage": "jest --coverage",
     "lint": "eslint \"src/**/*/*.ts*\"",
-    "fix": "pnpm lint --fix"
+    "lint:fix": "pnpm lint --fix",
+    "test": "pnpm lint && pnpm coverage"
   },
   "dependencies": {
     "framer-motion": "^10.12.12",
@@ -26,9 +27,9 @@
     "react-icons": "^4.9.0"
   },
   "devDependencies": {
-    "@movie/eslint-config": "workspace:*",
-    "@movie/tailwind-config": "workspace:*",
-    "@movie/tsconfig": "workspace:*",
+    "@movie/eslint-config": "0.1.0",
+    "@movie/tailwind-config": "0.1.0",
+    "@movie/tsconfig": "0.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
