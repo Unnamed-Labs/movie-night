@@ -31,8 +31,10 @@ jobs:
         with:
           node-version: 18.16.0
           cache: 'pnpm'
-      - name: Create .env file
-        uses: SpicyPizza/create-envfile@v2.0.2
+
+      - run: echo "Setting up cypress..."
+      - name: Setup Cypress
+        uses: cypress-io/github-action@v5
 
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: Install
