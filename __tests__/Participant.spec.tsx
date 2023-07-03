@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import Participant from '~/components/Participant';
+import Participant from '~/components/Participantcomp';
 
 const Name = 'Riley';
 const image = { src: 'example.jpg', alt: 'alt text' };

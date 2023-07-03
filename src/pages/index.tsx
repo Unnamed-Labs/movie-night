@@ -5,7 +5,7 @@ import { HiMagnifyingGlass } from 'react-icons/hi2';
 import { api } from '~/utils/api';
 import Timer from '~/components/Timer';
 import Button from '~/components/global/Button';
-import Participant from '~/components/Participant';
+import Participant from '~/components/Participantcomp';
 import MovieCard from '~/components/MovieCard';
 import Input from '~/components/global/Input';
 
