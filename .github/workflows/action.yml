@@ -31,6 +31,8 @@ jobs:
         with:
           node-version: 18.16.0
           cache: 'pnpm'
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@v2.0.2
 
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: Install
@@ -38,11 +40,11 @@ jobs:
       - name: Build
         run: pnpm build
         env:
-          DATABASE_URL: ${{ env.DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          NEXTAUTH_URL: ${{ env.NEXTAUTH_URL }}
-          DISCORD_CLIENT_ID: ${{ env.DISCORD_CLIENT_ID }}
-          DISCORD_CLIENT_SECRET: ${{ env.DISCORD_CLIENT_SECRET }}
+          DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
+          DATABASE_URL: ${{ vars.DATABASE_URL }}
+          NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
+          DISCORD_CLIENT_ID: ${{ vars.DISCORD_CLIENT_ID }}
       - name: Lint
         run: pnpm lint
       - name: Test
