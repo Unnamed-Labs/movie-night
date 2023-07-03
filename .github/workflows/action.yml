@@ -37,6 +37,12 @@ jobs:
         run: pnpm i
       - name: Build
         run: pnpm build
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL: ${{ env.NEXTAUTH_URL }}
+          DISCORD_CLIENT_ID: ${{ env.DISCORD_CLIENT_ID }}
+          DISCORD_CLIENT_SECRET: ${{ env.DISCORD_CLIENT_SECRET }}
       - name: Lint
         run: pnpm lint
       - name: Test
