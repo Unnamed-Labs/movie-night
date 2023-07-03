@@ -1,5 +1,4 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
 
 interface ParticipantProps {
   name: string;
@@ -11,13 +10,16 @@ interface ParticipantProps {
 
 const Participant: React.FC<ParticipantProps> = ({ name, image }) => {
   return (
-    <div className="flex h-20 max-w-md rounded-lg bg-slate-700 p-2 text-2xl text-white ">
+    <div
+      className="flex w-full flex-row items-center gap-4 rounded-lg bg-slate-700 p-4 text-lg text-white shadow-md shadow-black "
+      data-testid="participant"
+    >
       <img
-        className="ml-2 mr-2 h-auto max-h-16 w-auto rounded-full object-contain"
+        className="h-12 w-12  rounded-full object-cover"
         src={image.src}
         alt={image.alt}
       />
-      <span className="p-3">{name}</span>
+      <span>{name}</span>
     </div>
   );
 };

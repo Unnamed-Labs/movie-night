@@ -5,7 +5,7 @@ import { HiMagnifyingGlass } from 'react-icons/hi2';
 import { api } from '~/utils/api';
 import Timer from '~/components/Timer';
 import Button from '~/components/global/Button';
-import Participant from '~/components/participant';
+import Participant from '~/components/Participant';
 import MovieCard from '~/components/MovieCard';
 import Input from '~/components/global/Input';
 
@@ -64,14 +64,14 @@ const Home: NextPage = () => {
                   src: '/meow.jpg',
                   alt: 'cute ass cat',
                 }}
-              ></Participant>
+              />
               <Participant
                 name="Depthcharge23"
                 image={{
                   src: '/saitaang.jpg',
                   alt: 'aang drawing on saitama',
                 }}
-              ></Participant>
+              />
             </section>
           </div>
         </section>
