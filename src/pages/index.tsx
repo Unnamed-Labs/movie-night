@@ -5,6 +5,7 @@ import { HiMagnifyingGlass } from 'react-icons/hi2';
 import { api } from '~/utils/api';
 import Timer from '~/components/Timer';
 import Button from '~/components/global/Button';
+import Participant from '~/components/Participant';
 import MovieCard from '~/components/MovieCard';
 import Input from '~/components/global/Input';
 
@@ -53,6 +54,25 @@ const Home: NextPage = () => {
               {hello.data ? hello.data.greeting : 'Loading tRPC query...'}
             </p>
             <AuthShowcase />
+            <section className="flex flex-col items-center gap-4">
+              <h2 className="text-4xl font-extrabold tracking-tight text-white">
+                Participant Card
+              </h2>
+              <Participant
+                name="Viglante"
+                image={{
+                  src: '/meow.jpg',
+                  alt: 'cute ass cat',
+                }}
+              />
+              <Participant
+                name="Depthcharge23"
+                image={{
+                  src: '/saitaang.jpg',
+                  alt: 'aang drawing on saitama',
+                }}
+              />
+            </section>
           </div>
         </section>
         <section className="flex flex-col items-center gap-4">
