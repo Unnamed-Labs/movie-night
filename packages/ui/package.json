@@ -28,9 +28,9 @@
     "react-icons": "^4.9.0"
   },
   "devDependencies": {
-    "@movie/eslint-config": "0.1.0",
-    "@movie/tailwind-config": "0.1.0",
-    "@movie/tsconfig": "0.1.0",
+    "@movie/eslint-config": "workspace:*",
+    "@movie/tailwind-config": "workspace:*",
+    "@movie/tsconfig": "workspace:*",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",

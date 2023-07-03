@@ -57,7 +57,7 @@ export const Timer: React.FC<TimerProps> = ({ initialTime }) => {
 
   return (
     <div
-      className={`ui-relative ui-flex ui-items-center ui-justify-center ui-rounded-lg ui-p-3 ui-text-2xl ui-font-semibold ui-text-slate-900 ${backgroundColor} ui-overflow-hidden`}
+      className={`ui-relative ui-flex ui-items-center ui-justify-center ui-rounded-lg ui-p-3 ui-font-semibold ui-text-slate-900 ${backgroundColor} ui-overflow-hidden`}
       data-testid="timer"
     >
       <motion.span
