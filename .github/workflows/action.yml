@@ -35,6 +35,8 @@ jobs:
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: Install
         run: pnpm i
+      - name: Build
+        run: pnpm build
       - name: Lint
         run: pnpm lint
       - name: Test
