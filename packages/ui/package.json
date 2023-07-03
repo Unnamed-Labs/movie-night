@@ -12,6 +12,7 @@
   "scripts": {
     "clean": "git clean -xdf dist .turbo node_modules",
     "build": "tsup",
+    "dev": "tsup --watch",
     "check-types": "tsc --noEmit",
     "watch": "jest --watch",
     "unit": "jest --ci",
