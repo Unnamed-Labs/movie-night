@@ -12,10 +12,10 @@ importers:
         specifier: ^0.20.0
         version: 0.20.0
       '@movie/eslint-config':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:packages/eslint-config-custom
       '@movie/tsconfig':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:packages/tsconfig
       eslint:
         specifier: ^8.43.0
@@ -36,10 +36,10 @@ importers:
   apps/game:
     dependencies:
       '@movie/db':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../../packages/db
       '@movie/ui':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../../packages/ui
       '@next-auth/prisma-adapter':
         specifier: ^1.0.5
@@ -82,10 +82,10 @@ importers:
         version: 4.3.7(react@18.2.0)
     devDependencies:
       '@movie/tailwind-config':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../../packages/tailwind
       '@movie/tsconfig':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../../packages/tsconfig
       '@types/node':
         specifier: ^18.15.5
@@ -125,7 +125,7 @@ importers:
         version: 4.15.0(prisma@4.15.0)
     devDependencies:
       '@movie/tsconfig':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../tsconfig
       '@types/node':
         specifier: ^18.15.5
@@ -200,13 +200,13 @@ importers:
         version: 4.9.0(react@18.2.0)
     devDependencies:
       '@movie/eslint-config':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../eslint-config-custom
       '@movie/tailwind-config':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../tailwind
       '@movie/tsconfig':
-        specifier: workspace:*
+        specifier: 0.1.0
         version: link:../tsconfig
       '@testing-library/jest-dom':
         specifier: ^5.16.5
