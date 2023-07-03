@@ -5,6 +5,7 @@ import { Timer } from '@movie/ui';
 import { Button } from '@movie/ui';
 import { Input } from '@movie/ui';
 import { MovieCard } from '@movie/ui';
+import { Participant } from '@movie/ui';
 import { api } from '~/utils/api';
 
 const Home: NextPage = () => {
@@ -52,6 +53,25 @@ const Home: NextPage = () => {
               {hello.data ? hello.data.greeting : 'Loading tRPC query...'}
             </p>
             <AuthShowcase />
+            <section className="flex flex-col items-center gap-4">
+              <h2 className="text-4xl font-extrabold tracking-tight text-white">
+                Participant Card
+              </h2>
+              <Participant
+                name="Viglante"
+                image={{
+                  src: '/meow.jpg',
+                  alt: 'cute ass cat',
+                }}
+              />
+              <Participant
+                name="Depthcharge23"
+                image={{
+                  src: '/saitaang.jpg',
+                  alt: 'aang drawing on saitama',
+                }}
+              />
+            </section>
           </div>
         </section>
         <section className="flex flex-col items-center gap-4">
