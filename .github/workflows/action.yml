@@ -32,9 +32,14 @@ jobs:
           node-version: 18.16.0
           cache: 'pnpm'
 
+      - name: Install Cypress...
+        uses: cypress-io/github-action@v5
+        with:
+          runTests: false
+
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: Install
-        run: pnpm i
+        run: pnpm i --frozen-lockfile
       - name: Build
         run: pnpm build
         env:
