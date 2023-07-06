@@ -48,6 +48,5 @@ jobs:
       - name: Test
         uses: cypress-io/github-action@v5
         with:
-          install-command: pnpm i
+          install: false
           command: pnpm test
-          working-directory: apps/game
