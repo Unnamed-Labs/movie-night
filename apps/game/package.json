@@ -10,8 +10,7 @@
     "lint:fix": "pnpm lint --fix",
     "start": "pnpm with-env next start",
     "e2e": "cross-env SKIP_ENV_VALIDATION=true start-server-and-test dev http://localhost:3000 \"cypress open --e2e\"",
-    "e2e:headless": "cross-env SKIP_ENV_VALIDATION=true start-server-and-test dev http://localhost:3000 \"cypress run --e2e\"",
-    "test": "pnpm lint && pnpm e2e:headless",
+    "test": "cross-env SKIP_ENV_VALIDATION=true start-server-and-test dev http://localhost:3000 \"cypress run --e2e\"",
     "check-types": "tsc --noEmit",
     "with-env": "cross-env dotenv -e ../../.env --"
   },

@@ -16,10 +16,9 @@
     "check-types": "tsc --noEmit",
     "watch": "jest --watch",
     "unit": "jest --ci",
-    "coverage": "jest --coverage",
+    "test": "jest --coverage",
     "lint": "eslint \"src/**/*/*.ts*\"",
-    "lint:fix": "pnpm lint --fix",
-    "test": "pnpm lint && pnpm coverage"
+    "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
     "framer-motion": "^10.12.12",
