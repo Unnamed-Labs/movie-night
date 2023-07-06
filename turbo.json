@@ -21,6 +21,7 @@
     "lint": {},
     "lint:fix": {},
     "test": {
+      "cache": false,
       "dependsOn": ["^build"],
       "outputs": ["coverage/**", "cypress/**"]
     },

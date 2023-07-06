@@ -46,6 +46,4 @@ jobs:
       - name: Lint
         run: pnpm lint
       - name: Test
-        uses: cypress-io/github-action@v5
-        with:
-          start: pnpm test
+        run: pnpm test
