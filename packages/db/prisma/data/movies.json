@@ -1,0 +1,170 @@
+[
+  {
+    "id": "1",
+    "name": "The Super Mario Bros. Movie",
+    "year": "2023",
+    "runtime": "1h 32m",
+    "rating": {
+      "connect": {
+        "id": "2"
+      }
+    },
+    "score": 0.75,
+    "genres": {
+      "connect": [
+        {
+          "id": "1"
+        },
+        {
+          "id": "2"
+        },
+        {
+          "id": "3"
+        },
+        {
+          "id": "4"
+        },
+        {
+          "id": "5"
+        }
+      ]
+    }
+  },
+  {
+    "id": "2",
+    "name": "Guardians of the Galaxy Vol. 3",
+    "year": "2023",
+    "runtime": "2h 30m",
+    "rating": {
+      "connect": {
+        "id": "3"
+      }
+    },
+    "score": 0.82,
+    "genres": {
+      "connect": [
+        {
+          "id": "7"
+        },
+        {
+          "id": "3"
+        },
+        {
+          "id": "6"
+        }
+      ]
+    }
+  },
+  {
+    "id": "3",
+    "name": "Shrek",
+    "year": "2001",
+    "runtime": "1h 30m",
+    "rating": {
+      "connect": {
+        "id": "2"
+      }
+    },
+    "score": 0.77,
+    "genres": {
+      "connect": [
+        {
+          "id": "1"
+        },
+        {
+          "id": "5"
+        },
+        {
+          "id": "4"
+        },
+        {
+          "id": "3"
+        },
+        {
+          "id": "2"
+        }
+      ]
+    }
+  },
+  {
+    "id": "4",
+    "name": "Air Bud",
+    "year": "1997",
+    "runtime": "1h 38m",
+    "rating": {
+      "connect": {
+        "id": "2"
+      }
+    },
+    "score": 0.55,
+    "genres": {
+      "connect": [
+        {
+          "id": "5"
+        },
+        {
+          "id": "2"
+        }
+      ]
+    }
+  },
+  {
+    "id": "5",
+    "name": "Jimmy Neutron: Boy Genius",
+    "year": "2001",
+    "runtime": "1h 23m",
+    "rating": {
+      "connect": {
+        "id": "1"
+      }
+    },
+    "score": 0.59,
+    "genres": {
+      "connect": [
+        {
+          "id": "2"
+        },
+        {
+          "id": "6"
+        },
+        {
+          "id": "3"
+        },
+        {
+          "id": "1"
+        },
+        {
+          "id": "5"
+        },
+        {
+          "id": "7"
+        }
+      ]
+    }
+  },
+  {
+    "id": "6",
+    "name": "Thor: Love and Thunder",
+    "year": "2022",
+    "runtime": "1h 59m",
+    "rating": {
+      "connect": {
+        "id": "3"
+      }
+    },
+    "score": 0.66,
+    "genres": {
+      "connect": [
+        {
+          "id": "4"
+        },
+        {
+          "id": "6"
+        },
+        {
+          "id": "5"
+        }
+      ]
+    }
+  }
+]

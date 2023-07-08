@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "name": "CREATE_ROOM"
+  },
+  {
+    "id": "2",
+    "name": "START_VOTE"
+  },
+  {
+    "id": "3",
+    "name": "END_VOTE"
+  },
+  {
+    "id": "4",
+    "name": "PARTICIPANT_JOIN_ROOM_CODE"
+  },
+  {
+    "id": "5",
+    "name": "PARTICIPANT_JOIN_QR_CODE"
+  },
+  {
+    "id": "6",
+    "name": "PARTICIPANT_LEAVE"
+  },
+  {
+    "id": "7",
+    "name": "PARTICIPANT_LOCK_IN"
+  },
+  {
+    "id": "8",
+    "name": "FINAL_RESULT"
+  }
+]
