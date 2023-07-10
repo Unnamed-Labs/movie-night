@@ -1,0 +1,5 @@
+{
+  "extends": "@movie/tsconfig/base.json",
+  "include": ["src", "index.ts", "env.ts"],
+  "exclude": ["node_modules"]
+}

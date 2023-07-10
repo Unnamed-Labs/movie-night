@@ -1,0 +1,26 @@
+{
+  "name": "@movie/api",
+  "version": "0.1.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint .",
+    "lint:fix": "pnpm lint --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@movie/auth": "^0.1.0",
+    "@movie/db": "0.1.0",
+    "@trpc/client": "^10.18.0",
+    "@trpc/server": "^10.18.0",
+    "superjson": "1.12.2",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@movie/eslint-config": "0.1.0",
+    "@movie/tsconfig": "0.1.0",
+    "eslint": "^8.43.0",
+    "typescript": "^5.1.3"
+  }
+}

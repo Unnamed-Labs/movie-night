@@ -9,7 +9,8 @@ import { Participant } from '@movie/ui';
 import { api } from '~/utils/api';
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: 'from tRPC' });
+  const message = api.http.hello.useQuery();
+
   const [firstName, setFirstName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -17,6 +18,12 @@ const Home: NextPage = () => {
   const [placeholder, setPlaceholder] = useState<string>('');
   // const [search, setSearch] = useState<string>('');
   const [cardDisabled, setCardDisabled] = useState<boolean>(false);
+  const [num, setNumber] = useState<number>(0);
+  api.ws.randomNumber.useSubscription(undefined, {
+    onData(n) {
+      setNumber(n.randomNumber);
+    },
+  });
 
   const handlePhoneNumberChange = (newPhoneNumber: string) => {
     if (newPhoneNumber.length !== 10) {
@@ -49,29 +56,26 @@ const Home: NextPage = () => {
         <section className="flex flex-col items-center gap-4">
           <h2 className="text-4xl font-extrabold tracking-tight text-white">Auth Showcase</h2>
           <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : 'Loading tRPC query...'}
-            </p>
             <AuthShowcase />
-            <section className="flex flex-col items-center gap-4">
-              <h2 className="text-4xl font-extrabold tracking-tight text-white">
-                Participant Card
-              </h2>
-              <Participant
-                name="Viglante"
-                image={{
-                  src: '/meow.jpg',
-                  alt: 'cute ass cat',
-                }}
-              />
-              <Participant
-                name="Depthcharge23"
-                image={{
-                  src: '/saitaang.jpg',
-                  alt: 'aang drawing on saitama',
-                }}
-              />
-            </section>
+          </div>
+        </section>
+        <section className="flex flex-col items-center gap-4">
+          <h2 className="text-4xl font-extrabold tracking-tight text-white">Participant Card</h2>
+          <div className="flex w-full max-w-xs flex-col gap-4">
+            <Participant
+              name="Viglante"
+              image={{
+                src: '/meow.jpg',
+                alt: 'cute ass cat',
+              }}
+            />
+            <Participant
+              name="Depthcharge23"
+              image={{
+                src: '/saitaang.jpg',
+                alt: 'aang drawing on saitama',
+              }}
+            />
           </div>
         </section>
         <section className="flex flex-col items-center gap-4">
@@ -186,6 +190,11 @@ const Home: NextPage = () => {
             )}
           </div>
         </section>
+        <section className="flex flex-col items-center gap-4 text-white">
+          <h2 className="text-4xl font-extrabold tracking-tight">API Showcase</h2>
+          <p>{message.data?.text}</p>
+          <p>{num}</p>
+        </section>
       </main>
     </>
   );
@@ -196,16 +205,10 @@ export default Home;
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
 
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
-
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <p className="text-center text-2xl text-white">
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
       </p>
       <button
         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
