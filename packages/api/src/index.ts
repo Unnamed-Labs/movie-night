@@ -1,11 +1,8 @@
-import { httpRouter } from './router/http';
-import { wsRouter } from './router/ws';
-import { createTRPCRouter } from './trpc';
+import { type httpRouter } from './router/http';
+import { type wsRouter } from './router/ws';
 
-export const appRouter = createTRPCRouter({
-  http: httpRouter,
-  ws: wsRouter,
-});
+export { httpRouter } from './router/http';
+export type HttpRouter = typeof httpRouter;
 
-// export type definition of API
-export type AppRouter = typeof appRouter;
+export { wsRouter } from './router/ws';
+export type WSRouter = typeof wsRouter;

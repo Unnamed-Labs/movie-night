@@ -1,18 +1,22 @@
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
+import { httpRouter, type HttpRouter, wsRouter, type WSRouter } from './src/index';
+import { createTRPCRouter } from './src/trpc';
 
-import { type AppRouter } from './src/index';
-
-export { appRouter, type AppRouter } from './src/index';
+export { httpRouter, type HttpRouter, wsRouter, type WSRouter } from './src/index';
 export { createTRPCContext } from './src/trpc';
 
-/**
- * Inference helpers for input types
- * @example type HelloInput = RouterInputs['example']['hello']
- **/
-export type RouterInputs = inferRouterInputs<AppRouter>;
+export type HttpRouterInputs = inferRouterInputs<HttpRouter>;
+export type HttpRouterOutputs = inferRouterOutputs<HttpRouter>;
 
-/**
- * Inference helpers for output types
- * @example type HelloOutput = RouterOutputs['example']['hello']
- **/
+export type WSRouterInputs = inferRouterInputs<WSRouter>;
+export type WSRouterOutputs = inferRouterOutputs<WSRouter>;
+
+export const appRouter = createTRPCRouter({
+  http: httpRouter,
+  ws: wsRouter,
+});
+
+export type AppRouter = typeof appRouter;
+
+export type RouterInputs = inferRouterInputs<AppRouter>;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;

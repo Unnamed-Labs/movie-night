@@ -1,7 +1,7 @@
 import ws from '@fastify/websocket';
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify';
 import fastify from 'fastify';
-import { appRouter } from '@movie/api';
+import { wsRouter } from '@movie/api';
 import { createContext } from './context';
 
 export interface ServerOptions {
@@ -20,7 +20,7 @@ export function createServer(opts: ServerOptions) {
   void server.register(fastifyTRPCPlugin, {
     prefix,
     useWSS: true,
-    trpcOptions: { router: appRouter, createContext },
+    trpcOptions: { router: wsRouter, createContext },
   });
 
   server.get('/', (): string => {
