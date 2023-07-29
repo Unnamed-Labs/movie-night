@@ -43,9 +43,11 @@
     "NEXTAUTH_URL",
     "NODE_ENV",
     "SKIP_ENV_VALIDATION",
-    "PORT",
     "CI",
     "VERCEL",
-    "VERCEL_URL"
+    "VERCEL_URL",
+    "NEXT_PUBLIC_HTTP_URL",
+    "NEXT_PUBLIC_WS_URL",
+    "WS_PORT"
   ]
 }

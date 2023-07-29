@@ -2,13 +2,15 @@ import { httpBatchLink, loggerLink, wsLink, createWSClient, splitLink } from '@t
 import { createTRPCNext } from '@trpc/next';
 import superjson from 'superjson';
 
-import { type AppRouter } from '@movie/api';
+import { type AppRouter, type WSRouter } from '@movie/api';
 import { type NextPageContext } from 'next';
+
+import { env } from '~/env.mjs';
 
 const getBaseUrl = () => {
   if (typeof window !== 'undefined') return ''; // browser should use relative url
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
+  return env.NEXT_PUBLIC_HTTP_URL; // dev SSR should use localhost
 };
 
 const getWsLink = (ctx: NextPageContext | undefined) => {
@@ -28,9 +30,9 @@ const getWsLink = (ctx: NextPageContext | undefined) => {
     });
   }
   const client = createWSClient({
-    url: 'ws://localhost:2022/trpc',
+    url: env.NEXT_PUBLIC_WS_URL,
   });
-  return wsLink<AppRouter>({
+  return wsLink<WSRouter>({
     client,
   });
 };
@@ -57,5 +59,3 @@ export const api = createTRPCNext<AppRouter>({
   },
   ssr: false,
 });
-
-export { type RouterInputs, type RouterOutputs } from '@movie/api';

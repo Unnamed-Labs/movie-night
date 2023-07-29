@@ -9,7 +9,7 @@ import { Participant } from '@movie/ui';
 import { api } from '~/utils/api';
 
 const Home: NextPage = () => {
-  const message = api.http.hello.useQuery();
+  const message = api.hello.useQuery();
 
   const [firstName, setFirstName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -19,7 +19,7 @@ const Home: NextPage = () => {
   // const [search, setSearch] = useState<string>('');
   const [cardDisabled, setCardDisabled] = useState<boolean>(false);
   const [num, setNumber] = useState<number>(0);
-  api.ws.randomNumber.useSubscription(undefined, {
+  api.randomNumber.useSubscription(undefined, {
     onData(n) {
       setNumber(n.randomNumber);
     },

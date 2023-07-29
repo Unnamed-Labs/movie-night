@@ -91,6 +91,8 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
  */
 export const createTRPCRouter = t.router;
 
+export const mergeTRPCRouter = t.mergeRouters;
+
 /**
  * Public (unauthed) procedure
  *
