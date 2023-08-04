@@ -14,6 +14,10 @@
       "persistent": true,
       "cache": false
     },
+    "dev:all": {
+      "persistent": true,
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^build", "^db:generate"],
       "outputs": [".next/**", ".expo/**"]
@@ -46,8 +50,7 @@
     "CI",
     "VERCEL",
     "VERCEL_URL",
-    "NEXT_PUBLIC_HTTP_URL",
-    "NEXT_PUBLIC_WS_URL",
-    "WS_PORT"
+    "NEXT_PUBLIC_SERVER_URL",
+    "SERVER_PORT"
   ]
 }

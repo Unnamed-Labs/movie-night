@@ -7,16 +7,10 @@ import { type NextPageContext } from 'next';
 
 import { env } from '~/env.mjs';
 
-const getBaseUrl = () => {
-  if (typeof window !== 'undefined') return ''; // browser should use relative url
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-  return env.NEXT_PUBLIC_HTTP_URL; // dev SSR should use localhost
-};
-
 const getWsLink = (ctx: NextPageContext | undefined) => {
   if (typeof window === 'undefined') {
     return httpBatchLink({
-      url: `${getBaseUrl()}/api/trpc`,
+      url: `http://${env.NEXT_PUBLIC_SERVER_URL}`,
       headers() {
         if (!ctx?.req?.headers) {
           return {};
@@ -30,7 +24,7 @@ const getWsLink = (ctx: NextPageContext | undefined) => {
     });
   }
   const client = createWSClient({
-    url: env.NEXT_PUBLIC_WS_URL,
+    url: `ws://${env.NEXT_PUBLIC_SERVER_URL}`,
   });
   return wsLink<WSRouter>({
     client,
@@ -52,7 +46,7 @@ export const api = createTRPCNext<AppRouter>({
             return op.type === 'subscription';
           },
           true: getWsLink(ctx),
-          false: httpBatchLink({ url: `${getBaseUrl()}/api/trpc` }),
+          false: httpBatchLink({ url: `http://${env.NEXT_PUBLIC_SERVER_URL}` }),
         }),
       ],
     };

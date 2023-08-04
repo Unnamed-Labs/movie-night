@@ -4,12 +4,10 @@ import { z } from 'zod';
 export const env = createEnv({
   server: {},
   client: {
-    NEXT_PUBLIC_HTTP_URL: z.string().url(),
-    NEXT_PUBLIC_WS_URL: z.string().url(),
+    NEXT_PUBLIC_SERVER_URL: z.string(),
   },
   runtimeEnv: {
-    NEXT_PUBLIC_HTTP_URL: process.env.NEXT_PUBLIC_HTTP_URL,
-    NEXT_PUBLIC_WS_URL: process.env.NEXT_PUBLIC_WS_URL,
+    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
   },
   skipValidation: !!process.env.CI || !!process.env.SKIP_ENV_VALIDATION,
 });

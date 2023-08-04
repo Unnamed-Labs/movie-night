@@ -6,6 +6,7 @@
     "dev": "tsx watch src"
   },
   "dependencies": {
+    "@fastify/cors": "^8.3.0",
     "@fastify/websocket": "^8.1.0",
     "@movie/api": "^0.1.0",
     "@trpc/server": "^10.18.0",
