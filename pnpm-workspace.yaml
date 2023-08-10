@@ -1,6 +1,6 @@
 packages:
   - apps/game
-  - apps/web-sockets
+  - apps/server
   - packages/ui
   - packages/db
   - packages/api
