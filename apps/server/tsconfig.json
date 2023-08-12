@@ -1,5 +1,9 @@
 {
   "extends": "@movie/tsconfig/base.json",
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": ["."],
+  "exclude": ["node_modules", "coverage"],
+  "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false
+  }
 }
