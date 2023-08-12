@@ -47,7 +47,6 @@
     "NEXTAUTH_URL",
     "NODE_ENV",
     "SKIP_ENV_VALIDATION",
-    "CI",
     "VERCEL",
     "VERCEL_URL",
     "NEXT_PUBLIC_SERVER_URL",
