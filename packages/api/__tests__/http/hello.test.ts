@@ -1,4 +1,3 @@
-import { createServer } from '../../../../apps/server/src/server';
 import { createCaller } from '../helpers/caller';
 
 const session = {
@@ -10,16 +9,6 @@ const session = {
 };
 
 describe('hello()', () => {
-  const server = createServer();
-
-  beforeAll(async () => {
-    await server.start();
-  });
-
-  afterAll(async () => {
-    await server.stop();
-  });
-
   it('displays hello world', async () => {
     const caller = createCaller();
     expect(await caller.hello()).toEqual({ text: 'hello world' });

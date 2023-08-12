@@ -1,10 +1,8 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { type DefaultSession, type NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
-
 import { prisma } from '@movie/db';
-
-import { env } from '../env.mjs';
+import { env } from '../env';
 
 /**
  * Module augmentation for `next-auth` types
