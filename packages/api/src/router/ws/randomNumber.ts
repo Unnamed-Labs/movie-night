@@ -7,6 +7,7 @@ export const randomNumber = publicProcedure.subscription(() => {
       emit.next({ randomNumber: Math.random() });
     }, 1000);
 
+    /* istanbul ignore next */
     return () => {
       clearInterval(timer);
     };

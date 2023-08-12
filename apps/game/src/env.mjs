@@ -7,7 +7,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SERVER_URL: z.string(),
   },
   runtimeEnv: {
-    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
+    NEXT_PUBLIC_SERVER_URL: process.env.SERVER_URL,
   },
   skipValidation: !!process.env.CI || !!process.env.SKIP_ENV_VALIDATION,
 });
