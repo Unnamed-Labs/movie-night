@@ -4,7 +4,7 @@ import DiscordProvider from 'next-auth/providers/discord';
 
 import { prisma } from '@movie/db';
 
-import { env } from '../env';
+import { env } from '../env.mjs';
 
 /**
  * Module augmentation for `next-auth` types
