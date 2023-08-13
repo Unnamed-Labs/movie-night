@@ -46,7 +46,7 @@ jobs:
 
       - name: Install and cache Cypress
         id: cache-cypress
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.cache/Cypress
           key: cypress-cache-v2-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
