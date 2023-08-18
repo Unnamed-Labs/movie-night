@@ -4,15 +4,17 @@
   "private": true,
   "scripts": {
     "build": "pnpm with-env next build",
-    "clean": "git clean -xdf .next .turbo node_modules",
+    "clean": "git clean -xdf .next .turbo node_modules test-results",
     "dev": "pnpm with-env next dev",
     "lint": "cross-env dotenv -v SKIP_ENV_VALIDATION=true next lint",
     "lint:fix": "pnpm lint --fix",
     "start": "pnpm with-env next start",
-    "e2e": "cross-env SKIP_ENV_VALIDATION=true start-server-and-test dev http://localhost:3000 \"cypress open --e2e\"",
-    "test": "cross-env SKIP_ENV_VALIDATION=true start-server-and-test dev http://localhost:3000 \"cypress run --e2e\"",
-    "check-types": "tsc --noEmit",
-    "with-env": "cross-env dotenv -e ../../.env --"
+    "type-check": "tsc --noEmit",
+    "with-env": "cross-env dotenv -e ../../.env --",
+    "test:playwright": "playwright test",
+    "test:dev": "cross-env start-server-and-test dev 3000 test:playwright",
+    "test:start": "cross-env start-server-and-test start 3000 test:playwright",
+    "test": "cross-env PLAYWRIGHT_HEADLESS=true start-server-and-test start 3000 test:playwright"
   },
   "dependencies": {
     "@movie/api": "^0.1.0",
@@ -34,12 +36,12 @@
   "devDependencies": {
     "@movie/tailwind-config": "0.1.0",
     "@movie/tsconfig": "0.1.0",
+    "@playwright/test": "^1.37.1",
     "@types/node": "^18.15.5",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "autoprefixer": "^10.4.14",
     "cross-env": "^7.0.3",
-    "cypress": "^12.12.0",
     "dotenv-cli": "^7.2.1",
     "postcss": "^8.4.24",
     "start-server-and-test": "^2.0.0",
