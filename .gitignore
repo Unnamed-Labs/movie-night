@@ -7,6 +7,7 @@ node_modules
 coverage
 videos/
 screenshots/
+test-results
 
 # database
 **/prisma/db.sqlite

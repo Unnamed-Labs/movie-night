@@ -25,7 +25,15 @@ module.exports = {
     ],
     'prettier/prettier': 2,
   },
-  ignorePatterns: ['**/*.config.*', 'dist', 'node_modules', '.next', '.turbo', '__tests__'],
+  ignorePatterns: [
+    '**/*.config.*',
+    'dist',
+    'node_modules',
+    '.next',
+    '.turbo',
+    'coverage',
+    'test-results',
+  ],
   reportUnusedDisableDirectives: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {

@@ -14,6 +14,10 @@
       "persistent": true,
       "cache": false
     },
+    "dev:all": {
+      "persistent": true,
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^build", "^db:generate"],
       "outputs": [".next/**", ".expo/**"]
@@ -43,6 +47,9 @@
     "NEXTAUTH_URL",
     "NODE_ENV",
     "SKIP_ENV_VALIDATION",
-    "PORT"
+    "VERCEL",
+    "VERCEL_URL",
+    "NEXT_PUBLIC_SERVER_URL",
+    "SERVER_PORT"
   ]
 }

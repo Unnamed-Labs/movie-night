@@ -1,0 +1,26 @@
+{
+  "name": "@movie/server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf node_modules",
+    "lint": "eslint .",
+    "lint:fix": "pnpm lint --fix",
+    "type-check": "tsc --noEmit",
+    "dev": "tsx watch src"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.3.0",
+    "@fastify/websocket": "^8.1.0",
+    "@movie/api": "^0.1.0",
+    "@trpc/server": "^10.18.0",
+    "fastify": "^4.19.2"
+  },
+  "devDependencies": {
+    "@movie/eslint-config": "0.1.0",
+    "@movie/tsconfig": "0.1.0",
+    "eslint": "^8.43.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.3"
+  }
+}

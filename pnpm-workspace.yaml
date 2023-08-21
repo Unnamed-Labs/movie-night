@@ -1,7 +1,10 @@
 packages:
   - apps/game
+  - apps/server
   - packages/ui
   - packages/db
+  - packages/api
+  - packages/auth
   - packages/eslint-config-custom
   - packages/tailwind
   - packages/tsconfig

@@ -2,6 +2,9 @@
   "name": "@movie/eslint-config",
   "version": "0.1.0",
   "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf node_modules"
+  },
   "dependencies": {
     "@types/eslint": "^8.40.2",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
