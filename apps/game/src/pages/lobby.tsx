@@ -16,6 +16,8 @@ const Lobby = () => {
   const handleHostClick = () => {
     setIsHost(true);
     setBody('Press start when everyone has joined!');
+
+    // create a room
   };
 
   const handleJoinClick = () => {
@@ -31,6 +33,8 @@ const Lobby = () => {
     setIsJoin(false);
     setJoinedLobby(true);
     setBody('You’re in the lobby! The host will press start when everyone is in.');
+
+    // search for lobby, join if it exists, error message if not
   };
 
   const handleStartClick = () => {

@@ -8,6 +8,14 @@ const Search = () => {
   const router = useRouter();
   const [movieTitle, setMovieTitle] = useState('');
 
+  // Retrieve movies
+
+  // Search movies on input, debounce?
+  // Filter movies
+
+  // Select movies on card click
+  // Disable unselected cards if 2 are already selected
+
   const handleDoneClick = () => {
     void router.push('/vote');
   };

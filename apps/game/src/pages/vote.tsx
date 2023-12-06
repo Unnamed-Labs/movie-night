@@ -6,6 +6,11 @@ import movies from '../data/movies.json';
 const Vote = () => {
   const router = useRouter();
 
+  // Retrieve submitted movies
+
+  // Select movies on card click
+  // Disable unselected cards if 1 is already selected
+
   const handleLockInClick = () => {
     void router.push('/results');
   };
