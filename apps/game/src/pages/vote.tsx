@@ -1,12 +1,13 @@
 import { useRouter } from 'next/router';
 import { Button, MovieCard, Timer } from '@movie/ui';
+import type { Movie } from '@movie/api';
 import { Page } from '~/components/Page';
-import movies from '../data/movies.json';
 
 const Vote = () => {
   const router = useRouter();
 
   // Retrieve submitted movies
+  const movies: Movie[] = [];
 
   // Select movies on card click
   // Disable unselected cards if 1 is already selected

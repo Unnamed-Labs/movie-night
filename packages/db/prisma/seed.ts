@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { prisma } from '../index';
 import ratings from './data/ratings.json';
 import genres from './data/genres.json';

@@ -1,14 +1,15 @@
-import { MovieCard } from '@movie/ui';
+// import type { Movie } from '@movie/api';
+// import { MovieCard } from '@movie/ui';
 import { Page } from '~/components/Page';
-import movies from '../data/movies.json';
 
 const Results = () => {
+  // const movies: Movie[] = [];
   return (
     <Page
       title="Movie Night"
       body="Congrats to Shrek. Enjoy!"
     >
-      <MovieCard
+      {/* <MovieCard
         title={movies[1].name}
         description={movies[1].description}
         image={movies[1].image}
@@ -18,7 +19,7 @@ const Results = () => {
         rating={movies[1].rating}
         runtime={movies[1].runtime}
         score={movies[1].score * 100}
-      />
+      /> */}
     </Page>
   );
 };

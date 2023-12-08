@@ -17,3 +17,5 @@ export type AppRouter = typeof appRouter;
 
 export type RouterInputs = inferRouterInputs<AppRouter>;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
+
+export type { Movie } from './src/types/Movie';

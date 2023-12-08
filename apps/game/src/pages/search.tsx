@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import superjson from 'superjson';
+import debounce from 'lodash.debounce';
 import { Button, Input, MovieCard, Timer } from '@movie/ui';
-import { appRouter, createInnerTRPCContext } from '@movie/api';
+import { appRouter, createInnerTRPCContext, type Movie } from '@movie/api';
 import { Page } from '~/components/Page';
 import { api } from '~/utils/api';
 
@@ -15,7 +16,7 @@ export const getServerSideProps = async () => {
     }),
     transformer: superjson,
   });
-  await serverHelpers.movie.prefetch();
+  await serverHelpers.movie.getPopular.prefetch();
   return {
     props: {
       trpcState: serverHelpers.dehydrate(),
@@ -23,27 +24,32 @@ export const getServerSideProps = async () => {
   };
 };
 
-const Search = () => {
+const SearchPage = () => {
   const router = useRouter();
-  // Retrieve movies, infinite scroll?
-  const { data: movies } = api.movie.useQuery();
-  const [movieTitle, setMovieTitle] = useState('');
-  const [filterMovies, setFilterMovies] = useState(movies);
-  const [selectedMovies, setSelectedMovies] = useState([]);
+  const [movieTitle, setMovieTitle] = useState<string>('');
+  const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
+  const { data: popular } = api.movie.getPopular.useQuery();
+  const { data: searchResults } = api.movie.search.useQuery(
+    { query: movieTitle },
+    { enabled: !!movieTitle, refetchOnWindowFocus: false },
+  );
+  const movies = searchResults && searchResults.length > 0 ? searchResults : popular;
 
-  // Search movies on input, debounce?
-  // Filter movies
   const handleSearchOnInput = (name: string) => {
-    const newFilterMovies = movies.filter((movie) =>
-      movie.name.toLowerCase().includes(name.toLowerCase()),
-    );
     setMovieTitle(name);
-    setFilterMovies(newFilterMovies);
   };
 
-  // Select movies on card click
-  // Disable unselected cards if 2 are already selected
-  const handleCardClick = (movie) => {
+  const debouncedSearch = useMemo(() => {
+    return debounce(handleSearchOnInput, 300);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  });
+
+  const handleCardClick = (movie: Movie) => {
     const selected = selectedMovies.slice();
     const idx = selectedMovies.indexOf(movie);
 
@@ -56,7 +62,8 @@ const Search = () => {
     }
   };
 
-  const isDisabled = (movie) => selectedMovies.length >= 2 && !selectedMovies.includes(movie);
+  const isDisabled = (movie: Movie) =>
+    selectedMovies.length >= 2 && !selectedMovies.includes(movie);
 
   const handleDoneClick = () => {
     void router.push('/vote');
@@ -70,11 +77,10 @@ const Search = () => {
       <Timer initialTime={60} />
       <Input
         placeholder="Search"
-        value={movieTitle}
-        onChange={handleSearchOnInput}
+        onChange={debouncedSearch}
       />
-      {filterMovies &&
-        filterMovies.map((movie, idx) => (
+      {movies &&
+        movies.map((movie, idx) => (
           <MovieCard
             key={idx}
             title={movie.name}
@@ -96,4 +102,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default SearchPage;

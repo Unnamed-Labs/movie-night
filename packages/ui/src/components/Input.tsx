@@ -2,7 +2,7 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi2';
 
 type InputProps = {
   label?: string;
-  value: string;
+  defaultValue?: string;
   type?: 'text' | 'email' | 'password' | 'tel';
   placeholder?: string;
   required?: boolean;
@@ -14,7 +14,7 @@ type InputProps = {
 
 export const Input: React.FC<InputProps> = ({
   label,
-  value,
+  defaultValue,
   onChange,
   type = 'text',
   placeholder,
@@ -37,7 +37,7 @@ export const Input: React.FC<InputProps> = ({
           className="ui-bg-transparent ui-outline-none"
           data-testid="input"
           type={type}
-          value={value}
+          defaultValue={defaultValue}
           placeholder={placeholder}
           onChange={handleOnChange}
         />
