@@ -21,6 +21,7 @@ model Movie {
   genres      Genre[]
   results     Result[]
   votes       Vote[]
+  proposed    Proposed[]
   rating      Rating   @relation(fields: [ratingId], references: [id])
   ratingId    String
   createdDate DateTime @default(now())
@@ -34,25 +35,28 @@ model Genre {
 
 model Room {
   id           String        @id @default(cuid())
-  qrCode       Bytes         @unique()
   code         String        @unique()
   amount       Int           @default(8)
+  isActive     Boolean
   createdDate  DateTime      @default(now())
   updatedDate  DateTime      @default(now())
   participants Participant[]
   results      Result[]
+  votes        Vote[]
+  proposed     Proposed[]
   logs         AuditLog[]
 }
 
 model Participant {
-  id      String  @id @default(cuid())
-  name    String
-  isHost  Boolean @default(false)
-  isGuest Boolean @default(true)
-  room    Room    @relation(fields: [roomId], references: [id])
-  roomId  String
-  users   User[]
-  votes   Vote[]
+  id       String  @id @default(cuid())
+  name     String
+  isHost   Boolean @default(false)
+  isGuest  Boolean @default(true)
+  room     Room    @relation(fields: [roomId], references: [id])
+  roomId   String
+  users    User[]
+  votes    Vote[]
+  proposed Proposed[]
 }
 
 model Action {
@@ -86,6 +90,19 @@ model Vote {
   movieId       String
   participant   Participant @relation(fields: [participantId], references: [id])
   participantId String
+  room          Room        @relation(fields: [roomId], references: [id])
+  roomId        String
+  createdDate   DateTime    @default(now())
+}
+
+model Proposed {
+  id            String      @id @default(cuid())
+  movie         Movie       @relation(fields: [movieId], references: [id])
+  movieId       String
+  participant   Participant @relation(fields: [participantId], references: [id])
+  participantId String
+  room          Room        @relation(fields: [roomId], references: [id])
+  roomId        String
   createdDate   DateTime    @default(now())
 }
 

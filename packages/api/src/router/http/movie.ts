@@ -105,4 +105,21 @@ export const movie = createTRPCRouter({
 
     return movies;
   }),
+  submitSelected: publicProcedure
+    .input(
+      z.object({
+        participantId: z.string().cuid(),
+        movieId: z.string().cuid(),
+        roomId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ input: { participantId, movieId, roomId } }) => {
+      await prisma.proposed.create({
+        data: {
+          participantId,
+          movieId,
+          roomId,
+        },
+      });
+    }),
 });
