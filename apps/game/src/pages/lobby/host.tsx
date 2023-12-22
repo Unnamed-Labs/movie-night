@@ -14,8 +14,8 @@ const Host = () => {
   }, [setBody]);
 
   const handleHostClick = async () => {
-    const room = await openRoom(displayName);
-    void router.push(`/lobby/${room.id}`);
+    const lobbyId = await openRoom(displayName);
+    void router.push(`/lobby/${lobbyId}`);
   };
 
   const handleDisplayNameChange = (val: string) => {

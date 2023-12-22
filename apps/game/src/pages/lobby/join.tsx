@@ -4,7 +4,7 @@ import { Button, Input } from '@movie/ui';
 import { useLobby } from '~/hooks/useLobby';
 import { Page } from '~/components/Page';
 
-export const Join = () => {
+const Join = () => {
   const router = useRouter();
   const [displayName, setDisplayName] = useState('');
   const [roomCode, setRoomCode] = useState('');
@@ -23,8 +23,8 @@ export const Join = () => {
   };
 
   const handleJoinLobbyClick = async () => {
-    const room = await joinRoomByCode(displayName, roomCode);
-    void router.push(`/lobby/${room.id}`);
+    const lobbyId = await joinRoomByCode(displayName, roomCode);
+    void router.push(`/lobby/${lobbyId}`);
   };
 
   return (
@@ -61,3 +61,5 @@ export const Join = () => {
     </Page>
   );
 };
+
+export default Join;

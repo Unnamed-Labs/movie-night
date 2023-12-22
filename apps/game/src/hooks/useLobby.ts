@@ -6,11 +6,13 @@ export const useLobby = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [hasJoinedLobby, setHasJoinedLobby] = useState(false);
-  const { body, room, setRoom, setBody } = useLobbyStore((state) => ({
+  const { body, room, user, setRoom, setBody, setUser } = useLobbyStore((state) => ({
     body: state.body,
     room: state.room,
+    user: state.user,
     setBody: state.setBody,
     setRoom: state.setRoom,
+    setUser: state.setUser,
   }));
 
   const { mutateAsync: openRoomAsync } = api.lobby.open.useMutation();
@@ -18,37 +20,40 @@ export const useLobby = () => {
 
   const openRoom = async (name: string) => {
     setIsLoading(true);
-    const newRoom = await openRoomAsync({ name });
-    if (newRoom) {
-      setRoom(newRoom);
+    const lobby = await openRoomAsync({ name });
+    if (lobby) {
+      setRoom(lobby.room);
+      setUser(lobby.user);
     } else {
       setError('Uh oh! Something went wrong when creating the room...');
     }
     setIsLoading(false);
-    return newRoom;
+    return lobby.room.id;
   };
 
   const joinRoomByCode = async (name: string, code: string) => {
     setIsLoading(true);
-    const room = await joinRoomByCodeAsync({
+    const lobby = await joinRoomByCodeAsync({
       name,
       isHost: false,
       code,
     });
-    if (room) {
-      setRoom(room);
+    if (lobby) {
+      setRoom(lobby.room);
+      setUser(lobby.user);
     } else {
       setError('Uh oh! Something went wrong when joining the room...');
     }
     setIsLoading(false);
     setHasJoinedLobby(true);
     setBody('You’re in the lobby! The host will press start when everyone is in.');
-    return room;
+    return lobby.room.id;
   };
 
   return {
     body,
     room,
+    user,
     isLoading,
     error,
     hasJoinedLobby,

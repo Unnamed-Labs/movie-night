@@ -3,11 +3,12 @@ import { prisma } from '@movie/db';
 import { createTRPCRouter, publicProcedure } from '../../trpc';
 import type { Room } from '../../types/Room';
 import type { Participant } from '../../types/Participant';
+import type { Lobby } from '../../types/Lobby';
 
 export const lobby = createTRPCRouter({
   open: publicProcedure
     .input(z.object({ userId: z.string().cuid().optional(), name: z.string().min(1) }))
-    .mutation(async ({ input: { userId, name } }): Promise<Room | null> => {
+    .mutation(async ({ input: { userId, name } }) => {
       // TODO: how to better do a valid room code lookup? redis? find next valid room code in db table?
       let validRoomCode = null;
       while (!validRoomCode) {
@@ -29,22 +30,6 @@ export const lobby = createTRPCRouter({
           data: {
             code: validRoomCode,
             isActive: true,
-            participants: {
-              create: {
-                name,
-                isHost: true,
-                isGuest: false,
-                ...(userId
-                  ? {
-                      users: {
-                        connect: {
-                          id: userId,
-                        },
-                      },
-                    }
-                  : {}),
-              },
-            },
           },
           select: {
             id: true,
@@ -54,19 +39,52 @@ export const lobby = createTRPCRouter({
           },
         });
 
+        const pUser = await prisma.participant.create({
+          data: {
+            name,
+            isHost: true,
+            isGuest: false,
+            roomId: pNewRoom.id,
+            ...(userId
+              ? {
+                  users: {
+                    connect: {
+                      id: userId,
+                    },
+                  },
+                }
+              : {}),
+          },
+        });
+
+        const user: Participant = {
+          id: pUser.id,
+          name: pUser.name,
+          isHost: pUser.isHost,
+          isGuest: pUser.isGuest,
+        };
+
         const room: Room = {
           id: pNewRoom.id,
           code: pNewRoom.code,
           amount: pNewRoom.amount,
-          participants: pNewRoom.participants.map((participant) => ({
-            id: participant.id,
-            name: participant.name,
-            isHost: participant.isHost,
-            isGuest: participant.isGuest,
-          })),
+          participants: [
+            ...pNewRoom.participants.map((participant) => ({
+              id: participant.id,
+              name: participant.name,
+              isHost: participant.isHost,
+              isGuest: participant.isGuest,
+            })),
+            user,
+          ],
         };
 
-        return room;
+        const lobby: Lobby = {
+          user,
+          room,
+        };
+
+        return lobby;
       } catch (e) {
         // TODO: Improve log statement here for SQL errors
         console.error(e);
@@ -118,7 +136,7 @@ export const lobby = createTRPCRouter({
         },
       });
 
-      const participant: Participant = {
+      const user: Participant = {
         id: pParticipant.id,
         name: pParticipant.name,
         isHost: pParticipant.isHost,
@@ -129,10 +147,23 @@ export const lobby = createTRPCRouter({
         id: pRoom.id,
         code: pRoom.code,
         amount: pRoom.amount,
-        participants: [...pRoom.participants, participant],
+        participants: [
+          ...pRoom.participants.map((participant) => ({
+            id: participant.id,
+            name: participant.name,
+            isHost: participant.isHost,
+            isGuest: participant.isGuest,
+          })),
+          user,
+        ],
       };
 
-      return room;
+      const lobby: Lobby = {
+        user,
+        room,
+      };
+
+      return lobby;
     }),
   // *** NOT READY YET ***
   // findByParticipantName: publicProcedure
