@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Input, Button } from '@movie/ui';
 import { useLobby } from '~/hooks/useLobby';
@@ -7,11 +7,7 @@ import { Page } from '~/components/Page';
 const Host = () => {
   const router = useRouter();
   const [displayName, setDisplayName] = useState('');
-  const { body, isLoading, error, openRoom, setBody } = useLobby();
-
-  useEffect(() => {
-    setBody('Enter your name and create a room!');
-  }, [setBody]);
+  const { isLoading, error, openRoom } = useLobby();
 
   const handleHostClick = async () => {
     const lobbyId = await openRoom(displayName);
@@ -25,7 +21,7 @@ const Host = () => {
   return (
     <Page
       title="Movie Night"
-      body={body}
+      body="Enter your name and create a room!"
     >
       {isLoading ? (
         <div>Creating room...</div>

@@ -2,17 +2,20 @@ import { useState } from 'react';
 import { useLobbyStore } from '~/stores/lobby';
 import { api } from '~/utils/api';
 
-export const useLobby = () => {
+type UseLobbyOptions = {
+  enableParticipantUpdates?: boolean;
+};
+
+export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [hasJoinedLobby, setHasJoinedLobby] = useState(false);
-  const { body, room, user, setRoom, setBody, setUser } = useLobbyStore((state) => ({
-    body: state.body,
+  const { room, user, setRoom, setUser, addParticipant } = useLobbyStore((state) => ({
     room: state.room,
     user: state.user,
-    setBody: state.setBody,
     setRoom: state.setRoom,
     setUser: state.setUser,
+    addParticipant: state.addParticipant,
   }));
 
   const { mutateAsync: openRoomAsync } = api.lobby.open.useMutation();
@@ -46,18 +49,26 @@ export const useLobby = () => {
     }
     setIsLoading(false);
     setHasJoinedLobby(true);
-    setBody('You’re in the lobby! The host will press start when everyone is in.');
     return lobby.room.id;
   };
 
+  if (enableParticipantUpdates) {
+    api.lobbyWs.onAddParticipant.useSubscription(
+      { roomId: room.id },
+      {
+        onData(data) {
+          addParticipant(data);
+        },
+      },
+    );
+  }
+
   return {
-    body,
     room,
     user,
     isLoading,
     error,
     hasJoinedLobby,
-    setBody,
     openRoom,
     joinRoomByCode,
   };

@@ -1,16 +1,9 @@
-import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Button } from '@movie/ui';
 import { Page } from '~/components/Page';
-import { useLobby } from '~/hooks/useLobby';
-import { useRouter } from 'next/router';
 
 const Lobby = () => {
   const router = useRouter();
-  const { body, setBody } = useLobby();
-
-  useEffect(() => {
-    setBody('Would you like to host or join a lobby?');
-  }, [setBody]);
 
   const handleHostClick = () => {
     void router.push(`/lobby/host`);
@@ -23,7 +16,7 @@ const Lobby = () => {
   return (
     <Page
       title="Movie Night"
-      body={body}
+      body="Would you like to host or join a lobby?"
     >
       <>
         <Button

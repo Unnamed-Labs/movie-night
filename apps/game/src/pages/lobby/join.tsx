@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, Input } from '@movie/ui';
 import { useLobby } from '~/hooks/useLobby';
@@ -8,11 +8,7 @@ const Join = () => {
   const router = useRouter();
   const [displayName, setDisplayName] = useState('');
   const [roomCode, setRoomCode] = useState('');
-  const { body, isLoading, error, setBody, joinRoomByCode } = useLobby();
-
-  useEffect(() => {
-    setBody('Enter your name and create a room!');
-  }, [setBody]);
+  const { isLoading, error, joinRoomByCode } = useLobby();
 
   const handleDisplayNameChange = (val: string) => {
     setDisplayName(val);
@@ -30,7 +26,7 @@ const Join = () => {
   return (
     <Page
       title="Movie Night"
-      body={body}
+      body="Enter your name and join a room!"
     >
       {isLoading ? (
         <div>Joining room...</div>
