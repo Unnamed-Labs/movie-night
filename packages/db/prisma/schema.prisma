@@ -48,15 +48,16 @@ model Room {
 }
 
 model Participant {
-  id       String  @id @default(cuid())
-  name     String
-  isHost   Boolean @default(false)
-  isGuest  Boolean @default(true)
-  room     Room    @relation(fields: [roomId], references: [id])
-  roomId   String
-  users    User[]
-  votes    Vote[]
-  proposed Proposed[]
+  id          String  @id @default(cuid())
+  name        String
+  isHost      Boolean @default(false)
+  hasProposed Boolean @default(false)
+  hasVoted    Boolean @default(false)
+  room        Room    @relation(fields: [roomId], references: [id])
+  roomId      String
+  users       User[]
+  votes       Vote[]
+  proposed    Proposed[]
 }
 
 model Action {

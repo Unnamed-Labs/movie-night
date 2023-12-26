@@ -20,6 +20,8 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
 
   const { mutateAsync: openRoomAsync } = api.lobby.open.useMutation();
   const { mutateAsync: joinRoomByCodeAsync } = api.lobby.joinRoomByCode.useMutation();
+  const { mutateAsync: submitProposedAsync } = api.movie.submitProposed.useMutation();
+  const { mutateAsync: startGameAsync } = api.lobby.startGame.useMutation();
 
   const openRoom = async (name: string) => {
     setIsLoading(true);
@@ -52,6 +54,28 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
     return lobby.room.id;
   };
 
+  const submitProposed = async (movieId: string) => {
+    setIsLoading(true);
+    const res = await submitProposedAsync({
+      participantId: user.id,
+      roomId: room.id,
+      movieId,
+    });
+
+    if (res.error) {
+      setError('Uh oh! Something went wrong when submitting the selected movies...');
+    }
+
+    setIsLoading(false);
+    return res;
+  };
+
+  const startGame = async () => {
+    setIsLoading(true);
+    await startGameAsync({ roomId: room.id });
+    setIsLoading(false);
+  };
+
   if (enableParticipantUpdates) {
     api.lobbyWs.onAddParticipant.useSubscription(
       { roomId: room.id },
@@ -71,5 +95,7 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
     hasJoinedLobby,
     openRoom,
     joinRoomByCode,
+    submitProposed,
+    startGame,
   };
 };

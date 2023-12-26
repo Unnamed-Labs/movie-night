@@ -68,12 +68,8 @@ const createActions = async () => {
 
 const createMovies = async () => {
   for (const movie of movies) {
-    await prisma.movie.upsert({
-      where: {
-        id: movie.id,
-      },
-      create: {
-        id: movie.id,
+    await prisma.movie.create({
+      data: {
         name: movie.name,
         description: movie.description,
         runtime: movie.runtime,
@@ -86,7 +82,6 @@ const createMovies = async () => {
         imageSrc: movie.imageSrc,
         imageAlt: movie.imageAlt,
       },
-      update: {},
       include: {
         rating: true,
         genres: true,

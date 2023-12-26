@@ -4,7 +4,6 @@ export type Participant = {
   id: string;
   name: string;
   isHost: boolean;
-  isGuest: boolean;
   room?: Room;
   image?: {
     src: string;

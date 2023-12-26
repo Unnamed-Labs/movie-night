@@ -44,7 +44,6 @@ export const lobby = createTRPCRouter({
           data: {
             name,
             isHost: true,
-            isGuest: false,
             roomId: pNewRoom.id,
             ...(userId
               ? {
@@ -62,7 +61,6 @@ export const lobby = createTRPCRouter({
           id: pUser.id,
           name: pUser.name,
           isHost: pUser.isHost,
-          isGuest: pUser.isGuest,
         };
 
         const room: Room = {
@@ -74,7 +72,6 @@ export const lobby = createTRPCRouter({
               id: participant.id,
               name: participant.name,
               isHost: participant.isHost,
-              isGuest: participant.isGuest,
             })),
             user,
           ],
@@ -135,7 +132,6 @@ export const lobby = createTRPCRouter({
           data: {
             roomId: pRoom.id,
             isHost,
-            isGuest: !isHost,
             name,
           },
         });
@@ -144,7 +140,6 @@ export const lobby = createTRPCRouter({
           id: pParticipant.id,
           name: pParticipant.name,
           isHost: pParticipant.isHost,
-          isGuest: pParticipant.isGuest,
         };
 
         const room: Room = {
@@ -156,7 +151,6 @@ export const lobby = createTRPCRouter({
               id: participant.id,
               name: participant.name,
               isHost: participant.isHost,
-              isGuest: participant.isGuest,
             })),
             user,
           ],
@@ -177,5 +171,10 @@ export const lobby = createTRPCRouter({
         console.error(e);
         return null;
       }
+    }),
+  startGame: publicProcedure
+    .input(z.object({ roomId: z.string().cuid() }))
+    .mutation(({ input }) => {
+      ee.emit('startGame', input.roomId);
     }),
 });

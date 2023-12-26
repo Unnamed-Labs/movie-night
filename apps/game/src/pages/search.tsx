@@ -3,10 +3,11 @@ import { useRouter } from 'next/router';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import superjson from 'superjson';
 import debounce from 'lodash.debounce';
-import { Button, Input, MovieCard, Timer } from '@movie/ui';
+import { Button, Input, MovieCard } from '@movie/ui';
 import { appRouter, createInnerTRPCContext, type Movie } from '@movie/api';
 import { Page } from '~/components/Page';
 import { api } from '~/utils/api';
+import { useLobby } from '~/hooks/useLobby';
 
 export const getServerSideProps = async () => {
   const serverHelpers = createServerSideHelpers({
@@ -26,6 +27,7 @@ export const getServerSideProps = async () => {
 
 const SearchPage = () => {
   const router = useRouter();
+  const { isLoading, error, submitProposed } = useLobby();
   const [movieTitle, setMovieTitle] = useState<string>('');
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   const { data: popular } = api.movie.getPopular.useQuery();
@@ -63,10 +65,18 @@ const SearchPage = () => {
   };
 
   const isDisabled = (movie: Movie) =>
-    selectedMovies.length >= 2 && !selectedMovies.includes(movie);
+    selectedMovies.length >= 1 && !selectedMovies.includes(movie);
 
-  const handleDoneClick = () => {
-    void router.push('/vote');
+  const handleDoneClick = async () => {
+    const res = await submitProposed(selectedMovies[0].id);
+
+    if (res.waiting) {
+      void router.push('/waiting');
+    }
+
+    if (res.vote) {
+      void router.push('/vote');
+    }
   };
 
   return (
@@ -74,30 +84,37 @@ const SearchPage = () => {
       title="Movie Night"
       body="Search movie titles. Find 2 before time runs out!"
     >
-      <Timer initialTime={60} />
-      <Input
-        placeholder="Search"
-        onChange={debouncedSearch}
-      />
-      {movies &&
-        movies.map((movie, idx) => (
-          <MovieCard
-            key={idx}
-            title={movie.name}
-            description={movie.description}
-            image={movie.image}
-            categories={movie.genres}
-            date={movie.date}
-            location={movie.location}
-            rating={movie.rating}
-            runtime={movie.runtime}
-            score={movie.score * 100}
-            selectable
-            disabled={isDisabled(movie)}
-            onClick={() => handleCardClick(movie)}
+      {isLoading ? (
+        <div>Submitting selected movies...</div>
+      ) : error ? (
+        <div>{error}</div>
+      ) : (
+        <>
+          <Input
+            placeholder="Search"
+            onChange={debouncedSearch}
           />
-        ))}
-      <Button onClick={handleDoneClick}>Done</Button>
+          {movies &&
+            movies.map((movie, idx) => (
+              <MovieCard
+                key={idx}
+                title={movie.name}
+                description={movie.description}
+                image={movie.image}
+                categories={movie.genres}
+                date={movie.date}
+                location={movie.location}
+                rating={movie.rating}
+                runtime={movie.runtime}
+                score={movie.score * 100}
+                selectable
+                disabled={isDisabled(movie)}
+                onClick={() => handleCardClick(movie)}
+              />
+            ))}
+          <Button onClick={handleDoneClick}>Done</Button>
+        </>
+      )}
     </Page>
   );
 };

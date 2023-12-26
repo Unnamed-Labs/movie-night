@@ -5,10 +5,11 @@ import { useLobby } from '~/hooks/useLobby';
 import { RoomCode } from '~/components/lobby/RoomCode';
 import { Button } from '@movie/ui';
 import { useEffect } from 'react';
+import { api } from '~/utils/api';
 
 const LobbyById = () => {
   const router = useRouter();
-  const { room, user } = useLobby({ enableParticipantUpdates: true });
+  const { room, user, startGame } = useLobby({ enableParticipantUpdates: true });
 
   useEffect(() => {
     if (!room || !user) {
@@ -21,8 +22,19 @@ const LobbyById = () => {
     : 'You’re in the lobby! The host will press start when everyone is in.';
 
   const handleStartGameOnClick = () => {
-    void router.push('/search');
+    void startGame();
   };
+
+  api.lobbyWs.onStartGame.useSubscription(
+    { roomId: room.id },
+    {
+      onData(data) {
+        if (data) {
+          void router.push('/search');
+        }
+      },
+    },
+  );
 
   return (
     <Page

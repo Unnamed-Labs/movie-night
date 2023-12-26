@@ -5,6 +5,8 @@ import type { Participant } from '../types/Participant';
 
 interface MyEvents {
   addParticipant: (data: Participant) => void;
+  startGame: (roomId: string) => void;
+  movieProposed: (roomId: string) => Promise<void>;
 }
 
 declare interface MyEventEmitter {
