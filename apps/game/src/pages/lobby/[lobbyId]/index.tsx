@@ -1,10 +1,10 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { Button } from '@movie/ui';
 import { Page } from '~/components/Page';
 import { Participants } from '~/components/lobby/Participants';
 import { useLobby } from '~/hooks/useLobby';
 import { RoomCode } from '~/components/lobby/RoomCode';
-import { Button } from '@movie/ui';
-import { useEffect } from 'react';
 import { api } from '~/utils/api';
 
 const LobbyById = () => {
@@ -30,7 +30,7 @@ const LobbyById = () => {
     {
       onData(data) {
         if (data) {
-          void router.push('/search');
+          void router.push(`/lobby/${room.id}/search`);
         }
       },
     },

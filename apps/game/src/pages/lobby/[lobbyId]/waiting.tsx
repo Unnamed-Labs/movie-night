@@ -12,7 +12,7 @@ const Waiting = () => {
     {
       onData(data) {
         if (data) {
-          void router.push('/vote');
+          void router.push(`/lobby/${room.id}/vote`);
         }
       },
     },
@@ -23,7 +23,7 @@ const Waiting = () => {
     {
       onData(data) {
         if (data) {
-          void router.push('/results');
+          void router.push(`/lobby/${room.id}/result`);
         }
       },
     },

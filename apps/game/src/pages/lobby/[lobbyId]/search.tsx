@@ -27,7 +27,7 @@ export const getServerSideProps = async () => {
 
 const SearchPage = () => {
   const router = useRouter();
-  const { loading, error, submitProposed } = useLobby();
+  const { room, loading, error, submitProposed } = useLobby();
   const [movieTitle, setMovieTitle] = useState<string>('');
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   const { data: popular } = api.movie.getPopular.useQuery();
@@ -71,11 +71,11 @@ const SearchPage = () => {
     const res = await submitProposed(selectedMovies[0].id);
 
     if (res.waiting) {
-      void router.push('/waiting');
+      void router.push(`/lobby/${room.id}/waiting`);
     }
 
     if (res.vote) {
-      void router.push('/vote');
+      void router.push(`/lobby/${room.id}/vote`);
     }
   };
 

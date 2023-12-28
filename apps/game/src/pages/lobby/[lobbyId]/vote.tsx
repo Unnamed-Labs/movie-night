@@ -8,7 +8,7 @@ import { Page } from '~/components/Page';
 import { api } from '~/utils/api';
 import { useLobby } from '~/hooks/useLobby';
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async ({ params: { lobbyId } }) => {
   const serverHelpers = createServerSideHelpers({
     router: appRouter,
     ctx: createInnerTRPCContext({
@@ -16,7 +16,7 @@ export const getServerSideProps = async () => {
     }),
     transformer: superjson,
   });
-  await serverHelpers.movie.getProposed.prefetch();
+  await serverHelpers.movie.getProposed.prefetch({ roomId: lobbyId as string });
   return {
     props: {
       trpcState: serverHelpers.dehydrate(),
@@ -40,11 +40,11 @@ const Vote = () => {
     const res = await submitVote(selectedMovie.id);
 
     if (res.waiting) {
-      void router.push('/waiting');
+      void router.push(`/lobby/${room.id}/waiting`);
     }
 
     if (res.results) {
-      void router.push('/results');
+      void router.push(`/lobby/${room.id}/result`);
     }
   };
 
