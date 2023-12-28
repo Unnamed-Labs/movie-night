@@ -8,7 +8,7 @@ const Join = () => {
   const router = useRouter();
   const [displayName, setDisplayName] = useState('');
   const [roomCode, setRoomCode] = useState('');
-  const { isLoading, error, joinRoomByCode } = useLobby();
+  const { loading, error, joinRoomByCode } = useLobby();
 
   const handleDisplayNameChange = (val: string) => {
     setDisplayName(val);
@@ -27,33 +27,27 @@ const Join = () => {
     <Page
       title="Movie Night"
       body="Enter your name and join a room!"
+      loading={loading}
+      error={error}
     >
-      {isLoading ? (
-        <div>Joining room...</div>
-      ) : error ? (
-        <div>Uh oh! An error occurred when joining the room...</div>
-      ) : (
-        <>
-          <Input
-            label="Name"
-            required
-            helpText="Enter your display name"
-            onChange={handleDisplayNameChange}
-          />
-          <Input
-            label="Room #"
-            required
-            helpText="Four digit room code provided by host"
-            onChange={handleRoomNumberChange}
-          />
-          <Button
-            disabled={!displayName || !roomCode}
-            onClick={handleJoinLobbyClick}
-          >
-            Join room
-          </Button>
-        </>
-      )}
+      <Input
+        label="Name"
+        required
+        helpText="Enter your display name"
+        onChange={handleDisplayNameChange}
+      />
+      <Input
+        label="Room #"
+        required
+        helpText="Four digit room code provided by host"
+        onChange={handleRoomNumberChange}
+      />
+      <Button
+        disabled={!displayName || !roomCode}
+        onClick={handleJoinLobbyClick}
+      >
+        Join room
+      </Button>
     </Page>
   );
 };

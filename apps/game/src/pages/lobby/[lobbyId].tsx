@@ -9,7 +9,7 @@ import { api } from '~/utils/api';
 
 const LobbyById = () => {
   const router = useRouter();
-  const { room, user, startGame } = useLobby({ enableParticipantUpdates: true });
+  const { room, user, loading, error, startGame } = useLobby({ enableParticipantUpdates: true });
 
   useEffect(() => {
     if (!room || !user) {
@@ -40,6 +40,8 @@ const LobbyById = () => {
     <Page
       title="Movie Night"
       body={body}
+      loading={loading}
+      error={error}
     >
       {user?.isHost && <RoomCode code={room?.code} />}
       <Participants

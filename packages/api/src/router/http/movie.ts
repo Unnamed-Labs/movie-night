@@ -179,7 +179,64 @@ export const movie = createTRPCRouter({
 
       return proposed;
     }),
-  // getResult: publicProcedure.input().query(),
+  getResult: publicProcedure
+    .input(z.object({ roomId: z.string().cuid() }))
+    .query(async ({ input: { roomId } }) => {
+      const pResult = await prisma.result.findFirst({
+        select: {
+          movie: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              year: true,
+              date: true,
+              score: true,
+              location: true,
+              runtime: true,
+              imageSrc: true,
+              imageAlt: true,
+              rating: {
+                select: {
+                  name: true,
+                },
+              },
+              genres: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+        where: {
+          roomId,
+        },
+      });
+
+      if (!pResult) {
+        return null;
+      }
+
+      const result: Movie = {
+        id: pResult.movie.id,
+        name: pResult.movie.name,
+        description: pResult.movie.description,
+        year: pResult.movie.year,
+        date: pResult.movie.date,
+        score: pResult.movie.score,
+        location: pResult.movie.location,
+        runtime: pResult.movie.runtime,
+        image: {
+          src: pResult.movie.imageSrc,
+          alt: pResult.movie.imageAlt,
+        },
+        rating: pResult.movie.rating.name,
+        genres: pResult.movie.genres.map((genre) => genre.name),
+      };
+
+      return result;
+    }),
   submitProposed: publicProcedure
     .input(
       z.object({
@@ -207,31 +264,23 @@ export const movie = createTRPCRouter({
           },
         });
 
-        // lookup and verify
         const pParticipants = await prisma.participant.findMany({
           select: {
             id: true,
+            hasProposed: true,
           },
           where: {
             roomId,
           },
         });
 
-        const pParticipantsProposed = await prisma.participant.findMany({
-          select: {
-            id: true,
-          },
-          where: {
-            roomId,
-            hasProposed: true,
-          },
-        });
+        const haveAllProposed = pParticipants.every((pParticipant) => pParticipant.hasProposed);
 
         ee.emit('movieProposed', roomId);
 
         return {
-          waiting: !(pParticipants.length === pParticipantsProposed.length),
-          vote: pParticipants.length === pParticipantsProposed.length,
+          waiting: !haveAllProposed,
+          vote: haveAllProposed,
           error: false,
         };
       } catch (e) {
@@ -252,12 +301,75 @@ export const movie = createTRPCRouter({
       }),
     )
     .mutation(async ({ input: { participantId, movieId, roomId } }) => {
-      await prisma.vote.create({
-        data: {
-          participantId,
-          movieId,
-          roomId,
-        },
-      });
+      try {
+        await prisma.vote.create({
+          data: {
+            participantId,
+            movieId,
+            roomId,
+          },
+        });
+
+        await prisma.participant.update({
+          data: {
+            hasVoted: true,
+          },
+          where: {
+            id: participantId,
+          },
+        });
+
+        const pParticipants = await prisma.participant.findMany({
+          select: {
+            id: true,
+            hasVoted: true,
+          },
+          where: {
+            roomId,
+          },
+        });
+
+        const haveAllVoted = pParticipants.every((pParticipant) => pParticipant.hasVoted);
+
+        if (haveAllVoted) {
+          // find the movie with the most votes
+          const pVotes = await prisma.vote.groupBy({
+            by: ['movieId'],
+            _count: {
+              movieId: true,
+            },
+            where: {
+              roomId,
+            },
+            orderBy: {
+              _count: {
+                movieId: 'desc',
+              },
+            },
+          });
+
+          await prisma.result.create({
+            data: {
+              movieId: pVotes[0].movieId,
+              roomId,
+            },
+          });
+        }
+
+        ee.emit('movieVoted', roomId);
+
+        return {
+          waiting: !haveAllVoted,
+          results: haveAllVoted,
+          error: false,
+        };
+      } catch (e) {
+        console.error(e);
+        return {
+          waiting: false,
+          results: false,
+          error: true,
+        };
+      }
     }),
 });

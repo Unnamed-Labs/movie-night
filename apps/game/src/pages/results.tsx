@@ -1,25 +1,51 @@
 // import type { Movie } from '@movie/api';
 // import { MovieCard } from '@movie/ui';
+import { createServerSideHelpers } from '@trpc/react-query/server';
+import superjson from 'superjson';
+import { appRouter, createInnerTRPCContext } from '@movie/api';
+import { MovieCard } from '@movie/ui';
 import { Page } from '~/components/Page';
+import { useLobby } from '~/hooks/useLobby';
+import { api } from '~/utils/api';
+
+export const getServerSideProps = async () => {
+  const serverHelpers = createServerSideHelpers({
+    router: appRouter,
+    ctx: createInnerTRPCContext({
+      session: null,
+    }),
+    transformer: superjson,
+  });
+  await serverHelpers.movie.getResult.prefetch();
+  return {
+    props: {
+      trpcState: serverHelpers.dehydrate(),
+    },
+  };
+};
 
 const Results = () => {
-  // const movies: Movie[] = [];
+  const { room } = useLobby();
+  const { data: result } = api.movie.getResult.useQuery({ roomId: room.id });
+  const body = `Congrats to ${result.name}. Enjoy!`;
   return (
     <Page
       title="Movie Night"
-      body="Congrats to Shrek. Enjoy!"
+      body={body}
     >
-      {/* <MovieCard
-        title={movies[1].name}
-        description={movies[1].description}
-        image={movies[1].image}
-        categories={movies[1].genres}
-        date={movies[1].date}
-        location={movies[1].location}
-        rating={movies[1].rating}
-        runtime={movies[1].runtime}
-        score={movies[1].score * 100}
-      /> */}
+      {result && (
+        <MovieCard
+          title={result.name}
+          description={result.description}
+          image={result.image}
+          categories={result.genres}
+          date={result.date}
+          location={result.location}
+          rating={result.rating}
+          runtime={result.runtime}
+          score={result.score * 100}
+        />
+      )}
     </Page>
   );
 };

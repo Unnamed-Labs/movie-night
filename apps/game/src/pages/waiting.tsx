@@ -18,6 +18,17 @@ const Waiting = () => {
     },
   );
 
+  api.lobbyWs.onMovieVoted.useSubscription(
+    { roomId: room.id },
+    {
+      onData(data) {
+        if (data) {
+          void router.push('/results');
+        }
+      },
+    },
+  );
+
   return (
     <Page
       title="Movie Night"

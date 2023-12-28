@@ -27,7 +27,7 @@ export const getServerSideProps = async () => {
 
 const SearchPage = () => {
   const router = useRouter();
-  const { isLoading, error, submitProposed } = useLobby();
+  const { loading, error, submitProposed } = useLobby();
   const [movieTitle, setMovieTitle] = useState<string>('');
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   const { data: popular } = api.movie.getPopular.useQuery();
@@ -83,38 +83,32 @@ const SearchPage = () => {
     <Page
       title="Movie Night"
       body="Search movie titles. Find 2 before time runs out!"
+      loading={loading}
+      error={error}
     >
-      {isLoading ? (
-        <div>Submitting selected movies...</div>
-      ) : error ? (
-        <div>{error}</div>
-      ) : (
-        <>
-          <Input
-            placeholder="Search"
-            onChange={debouncedSearch}
+      <Input
+        placeholder="Search"
+        onChange={debouncedSearch}
+      />
+      {movies &&
+        movies.map((movie, idx) => (
+          <MovieCard
+            key={idx}
+            title={movie.name}
+            description={movie.description}
+            image={movie.image}
+            categories={movie.genres}
+            date={movie.date}
+            location={movie.location}
+            rating={movie.rating}
+            runtime={movie.runtime}
+            score={movie.score * 100}
+            selectable
+            disabled={isDisabled(movie)}
+            onClick={() => handleCardClick(movie)}
           />
-          {movies &&
-            movies.map((movie, idx) => (
-              <MovieCard
-                key={idx}
-                title={movie.name}
-                description={movie.description}
-                image={movie.image}
-                categories={movie.genres}
-                date={movie.date}
-                location={movie.location}
-                rating={movie.rating}
-                runtime={movie.runtime}
-                score={movie.score * 100}
-                selectable
-                disabled={isDisabled(movie)}
-                onClick={() => handleCardClick(movie)}
-              />
-            ))}
-          <Button onClick={handleDoneClick}>Done</Button>
-        </>
-      )}
+        ))}
+      <Button onClick={handleDoneClick}>Done</Button>
     </Page>
   );
 };

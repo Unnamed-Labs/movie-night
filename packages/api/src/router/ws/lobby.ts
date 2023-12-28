@@ -41,40 +41,52 @@ export const lobby = createTRPCRouter({
     .subscription(({ input }) => {
       return observable<boolean>((emit) => {
         const onMovieProposed = async (roomId: string) => {
-          console.log('\n\n\n=== input.roomId ===\n', input.roomId, '\n\n\n');
-          console.log('\n\n\n=== roomId ===\n', roomId, '\n\n\n');
           if (input.roomId === roomId) {
             const pParticipants = await prisma.participant.findMany({
               select: {
                 id: true,
-              },
-              where: {
-                roomId,
-              },
-            });
-
-            const pParticipantsProposed = await prisma.participant.findMany({
-              select: {
-                id: true,
-              },
-              where: {
-                roomId,
                 hasProposed: true,
               },
+              where: {
+                roomId,
+              },
             });
 
-            console.log(
-              '\n\n\n=== are all participants locked in? ===\n',
-              pParticipants.length === pParticipantsProposed.length,
-              '\n\n\n',
-            );
+            const haveAllProposed = pParticipants.every((pParticipant) => pParticipant.hasProposed);
 
-            emit.next(pParticipants.length === pParticipantsProposed.length);
+            emit.next(haveAllProposed);
           }
         };
         ee.on('movieProposed', onMovieProposed);
         return () => {
           ee.off('movieProposed', onMovieProposed);
+        };
+      });
+    }),
+  onMovieVoted: publicProcedure
+    .input(z.object({ roomId: z.string().cuid() }))
+    .subscription(({ input }) => {
+      return observable<boolean>((emit) => {
+        const onMovieVoted = async (roomId: string) => {
+          if (input.roomId === roomId) {
+            const pParticipants = await prisma.participant.findMany({
+              select: {
+                id: true,
+                hasVoted: true,
+              },
+              where: {
+                roomId,
+              },
+            });
+
+            const haveAllVoted = pParticipants.every((pParticipant) => pParticipant.hasVoted);
+
+            emit.next(haveAllVoted);
+          }
+        };
+        ee.on('movieVoted', onMovieVoted);
+        return () => {
+          ee.off('movieVoted', onMovieVoted);
         };
       });
     }),

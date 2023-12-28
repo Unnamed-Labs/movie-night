@@ -7,7 +7,7 @@ import { Page } from '~/components/Page';
 const Host = () => {
   const router = useRouter();
   const [displayName, setDisplayName] = useState('');
-  const { isLoading, error, openRoom } = useLobby();
+  const { loading, error, openRoom } = useLobby();
 
   const handleHostClick = async () => {
     const lobbyId = await openRoom(displayName);
@@ -22,27 +22,21 @@ const Host = () => {
     <Page
       title="Movie Night"
       body="Enter your name and create a room!"
+      loading={loading}
+      error={error}
     >
-      {isLoading ? (
-        <div>Creating room...</div>
-      ) : error ? (
-        <div>Uh oh! An error occurred when creating the room...</div>
-      ) : (
-        <>
-          <Input
-            label="Name"
-            required
-            helpText="Enter your display name"
-            onChange={handleDisplayNameChange}
-          />
-          <Button
-            disabled={!displayName}
-            onClick={handleHostClick}
-          >
-            Create room
-          </Button>
-        </>
-      )}
+      <Input
+        label="Name"
+        required
+        helpText="Enter your display name"
+        onChange={handleDisplayNameChange}
+      />
+      <Button
+        disabled={!displayName}
+        onClick={handleHostClick}
+      >
+        Create room
+      </Button>
     </Page>
   );
 };
