@@ -139,8 +139,8 @@ importers:
         specifier: ^0.1.0
         version: link:../../packages/api
       '@trpc/server':
-        specifier: ^10.18.0
-        version: 10.18.0
+        specifier: ^10.44.1
+        version: 10.44.1
       fastify:
         specifier: ^4.19.2
         version: 4.19.2
@@ -170,8 +170,8 @@ importers:
         specifier: 0.1.0
         version: link:../db
       '@trpc/server':
-        specifier: ^10.18.0
-        version: 10.18.0
+        specifier: ^10.44.1
+        version: 10.44.1
       superjson:
         specifier: 1.12.2
         version: 1.12.2
@@ -2001,10 +2001,6 @@ packages:
       '@trpc/server': 10.44.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
-  /@trpc/server@10.18.0:
-    resolution: {integrity: sha512-nVMqdDIF9YLOeC3g6RdAvdCPqkHFjpshSqZGThZ+fyjiWSUXj2ZKCduhJFnY77TjtgODojeaaghmzcnjxb+Onw==}
     dev: false
 
   /@trpc/server@10.44.1:
