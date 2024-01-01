@@ -87,7 +87,7 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
     return res;
   };
 
-  if (enableParticipantUpdates) {
+  if (room && enableParticipantUpdates) {
     api.lobbyWs.onAddParticipant.useSubscription(
       { roomId: room.id },
       {

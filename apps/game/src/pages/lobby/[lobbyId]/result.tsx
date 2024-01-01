@@ -5,6 +5,11 @@ import { api } from '~/utils/api';
 
 const Result = () => {
   const { room } = useLobby();
+
+  if (!room) {
+    return <div>Room not available...</div>;
+  }
+
   const { data: result } = api.lobby.getResult.useQuery({ roomId: room.id });
   const body = result ? `Congrats to ${result.name}. Enjoy!` : '';
   return (

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, MovieCard } from '@movie/ui';
 import { type Movie } from '@movie/api';
@@ -8,8 +8,15 @@ import { useLobby } from '~/hooks/useLobby';
 
 const Vote = () => {
   const router = useRouter();
-  const { room, loading, error, submitVote } = useLobby();
-  const { data: proposed } = api.lobby.getProposed.useQuery({ roomId: room.id });
+  const { room, user, loading, error, submitVote } = useLobby();
+
+  useEffect(() => {
+    if (!room || !user) {
+      void router.push('/lobby/join');
+    }
+  }, [room, user, router]);
+
+  const { data: proposed } = api.lobby.getProposed.useQuery({ roomId: room?.id });
   const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
   const isDisabled = (movie: Movie) => selectedMovie && selectedMovie.name != movie.name;
@@ -22,11 +29,11 @@ const Vote = () => {
     const res = await submitVote(selectedMovie.id);
 
     if (res.waiting) {
-      void router.push(`/lobby/${room.id}/waiting`);
+      void router.push(`/lobby/${room?.id}/waiting`);
     }
 
     if (res.results) {
-      void router.push(`/lobby/${room.id}/result`);
+      void router.push(`/lobby/${room?.id}/result`);
     }
   };
 

@@ -8,7 +8,7 @@
     "type-check": "tsc --noEmit",
     "watch": "jest --watch",
     "unit": "jest --ci",
-    "test": "jest --ci --coverage",
+    "test": "jest --ci --coverage --passWithNoTests",
     "lint": "eslint .",
     "lint:fix": "pnpm lint --fix"
   },

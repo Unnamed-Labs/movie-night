@@ -26,11 +26,11 @@ const LobbyById = () => {
   };
 
   api.lobbyWs.onStartGame.useSubscription(
-    { roomId: room.id },
+    { roomId: room?.id },
     {
       onData(data) {
         if (data) {
-          void router.push(`/lobby/${room.id}/search`);
+          void router.push(`/lobby/${room?.id}/search`);
         }
       },
     },
