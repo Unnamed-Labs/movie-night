@@ -1,31 +1,12 @@
-import { createServerSideHelpers } from '@trpc/react-query/server';
-import superjson from 'superjson';
-import { appRouter, createInnerTRPCContext } from '@movie/api';
 import { MovieCard } from '@movie/ui';
 import { Page } from '~/components/Page';
 import { useLobby } from '~/hooks/useLobby';
 import { api } from '~/utils/api';
 
-export const getServerSideProps = async ({ params: { lobbyId } }) => {
-  const serverHelpers = createServerSideHelpers({
-    router: appRouter,
-    ctx: createInnerTRPCContext({
-      session: null,
-    }),
-    transformer: superjson,
-  });
-  await serverHelpers.movie.getResult.prefetch({ roomId: lobbyId as string });
-  return {
-    props: {
-      trpcState: serverHelpers.dehydrate(),
-    },
-  };
-};
-
 const Result = () => {
   const { room } = useLobby();
-  const { data: result } = api.movie.getResult.useQuery({ roomId: room.id });
-  const body = `Congrats to ${result.name}. Enjoy!`;
+  const { data: result } = api.lobby.getResult.useQuery({ roomId: room.id });
+  const body = result ? `Congrats to ${result.name}. Enjoy!` : '';
   return (
     <Page
       title="Movie Night"

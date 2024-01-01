@@ -1,33 +1,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { createServerSideHelpers } from '@trpc/react-query/server';
-import superjson from 'superjson';
 import { Button, MovieCard } from '@movie/ui';
-import { appRouter, createInnerTRPCContext, type Movie } from '@movie/api';
+import { type Movie } from '@movie/api';
 import { Page } from '~/components/Page';
 import { api } from '~/utils/api';
 import { useLobby } from '~/hooks/useLobby';
 
-export const getServerSideProps = async ({ params: { lobbyId } }) => {
-  const serverHelpers = createServerSideHelpers({
-    router: appRouter,
-    ctx: createInnerTRPCContext({
-      session: null,
-    }),
-    transformer: superjson,
-  });
-  await serverHelpers.movie.getProposed.prefetch({ roomId: lobbyId as string });
-  return {
-    props: {
-      trpcState: serverHelpers.dehydrate(),
-    },
-  };
-};
-
 const Vote = () => {
   const router = useRouter();
   const { room, loading, error, submitVote } = useLobby();
-  const { data: proposed } = api.movie.getProposed.useQuery({ roomId: room.id });
+  const { data: proposed } = api.lobby.getProposed.useQuery({ roomId: room.id });
   const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
   const isDisabled = (movie: Movie) => selectedMovie && selectedMovie.name != movie.name;

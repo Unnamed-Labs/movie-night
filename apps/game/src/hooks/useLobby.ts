@@ -20,8 +20,8 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
   const { mutateAsync: openRoomAsync } = api.lobby.open.useMutation();
   const { mutateAsync: joinRoomByCodeAsync } = api.lobby.joinRoomByCode.useMutation();
   const { mutateAsync: startGameAsync } = api.lobby.startGame.useMutation();
-  const { mutateAsync: submitProposedAsync } = api.movie.submitProposed.useMutation();
-  const { mutateAsync: submitVoteAsync } = api.movie.submitVote.useMutation();
+  const { mutateAsync: submitProposedAsync } = api.lobby.submitProposed.useMutation();
+  const { mutateAsync: submitVoteAsync } = api.lobby.submitVote.useMutation();
 
   const openRoom = async (name: string) => {
     setLoading('Opening room...');
