@@ -3,7 +3,7 @@ import { httpRouter, type HttpRouter, wsRouter, type WSRouter } from './src/inde
 import { mergeTRPCRouter } from './src/trpc';
 
 export { httpRouter, type HttpRouter, wsRouter, type WSRouter } from './src/index';
-export { createTRPCContext } from './src/trpc';
+export { createTRPCContext, createInnerTRPCContext } from './src/trpc';
 
 export type HttpRouterInputs = inferRouterInputs<HttpRouter>;
 export type HttpRouterOutputs = inferRouterOutputs<HttpRouter>;
@@ -17,3 +17,7 @@ export type AppRouter = typeof appRouter;
 
 export type RouterInputs = inferRouterInputs<AppRouter>;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
+
+export type { Movie } from './src/types/Movie';
+export type { Room } from './src/types/Room';
+export type { Participant } from './src/types/Participant';

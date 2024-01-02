@@ -15,7 +15,7 @@ describe('<Input />', () => {
     const { getByLabelText } = render(
       <Input
         label={label}
-        value={value}
+        defaultValue={value}
         onChange={handleOnChange}
       />,
     );
@@ -28,7 +28,7 @@ describe('<Input />', () => {
       const { getByLabelText } = render(
         <Input
           label={label}
-          value={value}
+          defaultValue={value}
           onChange={handleOnChange}
         />,
       );
@@ -39,7 +39,7 @@ describe('<Input />', () => {
       const { getByLabelText } = render(
         <Input
           label={label}
-          value={value}
+          defaultValue={value}
           onChange={handleOnChange}
           required
         />,
@@ -50,7 +50,7 @@ describe('<Input />', () => {
     it('should not show the label when not present', () => {
       const { getByTestId, queryByLabelText } = render(
         <Input
-          value={value}
+          defaultValue={value}
           onChange={handleOnChange}
           required
         />,
@@ -67,7 +67,7 @@ describe('<Input />', () => {
       const { getByTestId } = render(
         <Input
           label={label}
-          value={value}
+          defaultValue={value}
           onChange={handleOnChange}
           helpText={helpText}
         />,
@@ -79,7 +79,7 @@ describe('<Input />', () => {
       const { getByTestId } = render(
         <Input
           label={label}
-          value={value}
+          defaultValue={value}
           onChange={handleOnChange}
           error={error}
         />,
@@ -91,7 +91,7 @@ describe('<Input />', () => {
       const { queryByTestId } = render(
         <Input
           label={label}
-          value={value}
+          defaultValue={value}
           onChange={handleOnChange}
           error={error}
         />,
@@ -110,7 +110,7 @@ describe('<Input />', () => {
       const { getByLabelText } = render(
         <Input
           label={label}
-          value={value}
+          defaultValue={value}
           onChange={handleOnChangeMock}
         />,
       );

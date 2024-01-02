@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { prisma } from '../index';
 import ratings from './data/ratings.json';
 import genres from './data/genres.json';
@@ -71,20 +68,20 @@ const createActions = async () => {
 
 const createMovies = async () => {
   for (const movie of movies) {
-    await prisma.movie.upsert({
-      where: {
-        id: movie.id,
-      },
-      create: {
-        id: movie.id,
+    await prisma.movie.create({
+      data: {
         name: movie.name,
+        description: movie.description,
         runtime: movie.runtime,
         score: movie.score,
         year: movie.year,
         rating: movie.rating,
         genres: movie.genres,
+        date: movie.date,
+        location: movie.location,
+        imageSrc: movie.imageSrc,
+        imageAlt: movie.imageAlt,
       },
-      update: {},
       include: {
         rating: true,
         genres: true,

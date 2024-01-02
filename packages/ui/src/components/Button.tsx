@@ -5,7 +5,7 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'standalone';
   disabled?: boolean;
   'data-testid'?: string;
-  onClick?: () => void;
+  onClick?: () => void | Promise<void>;
 }
 
 export const Button: React.FC<ButtonProps> = ({

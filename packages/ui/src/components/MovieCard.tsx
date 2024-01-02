@@ -19,6 +19,7 @@ type MovieCardProps = {
   collapsible?: boolean;
   selectable?: boolean;
   disabled?: boolean;
+  onClick?: () => void;
 };
 
 export const MovieCard = ({
@@ -35,6 +36,7 @@ export const MovieCard = ({
   collapsible,
   selectable,
   disabled,
+  onClick,
 }: MovieCardProps) => {
   const [showDescription, setShowDescription] = useState<boolean>(!collapsible);
   const [selected, setSelected] = useState<boolean>(false);
@@ -43,8 +45,13 @@ export const MovieCard = ({
     setShowDescription(!showDescription);
   };
   const handleCardClick = () => {
-    if (selectable) {
-      setSelected(!selected);
+    if (!disabled) {
+      if (selectable) {
+        setSelected(!selected);
+      }
+      if (onClick) {
+        onClick();
+      }
     }
   };
 

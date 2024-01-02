@@ -42,13 +42,16 @@ jobs:
         run: pnpm install
 
       - name: Install playwright
-        run: npx playwright install chromium --with-deps
+        run: npx playwright@1.37.1 install chromium --with-deps
 
       - name: Build
         run: pnpm build
+
       - name: Type Check
         run: pnpm type-check
+
       - name: Lint
         run: pnpm lint
+
       - name: Test
         run: pnpm test
