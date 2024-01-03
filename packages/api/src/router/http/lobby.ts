@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { prisma } from '@movie/db';
 import { createTRPCRouter, publicProcedure } from '../../trpc';
-import { ee } from '../../utils/eventEmitter';
+import { client } from '../../utils/redisClient';
 import type { Room } from '../../types/Room';
 import type { Participant } from '../../types/Participant';
 import type { Lobby } from '../../types/Lobby';
@@ -165,7 +165,7 @@ export const lobby = createTRPCRouter({
           room,
         };
 
-        ee.emit('addParticipant', user);
+        client.emit('addParticipant', user);
 
         return lobby;
       } catch (e) {
@@ -177,7 +177,7 @@ export const lobby = createTRPCRouter({
   startGame: publicProcedure
     .input(z.object({ roomId: z.string().cuid() }))
     .mutation(({ input }) => {
-      ee.emit('startGame', input.roomId);
+      client.emit('startGame', input.roomId);
     }),
   getProposed: publicProcedure
     .input(z.object({ roomId: z.string().cuid() }))
@@ -348,7 +348,7 @@ export const lobby = createTRPCRouter({
 
         const haveAllProposed = pParticipants.every((pParticipant) => pParticipant.hasProposed);
 
-        ee.emit('movieProposed', roomId);
+        client.emit('movieProposed', roomId);
 
         return {
           waiting: !haveAllProposed,
@@ -437,7 +437,7 @@ export const lobby = createTRPCRouter({
           });
         }
 
-        ee.emit('movieVoted', roomId);
+        client.emit('movieVoted', roomId);
 
         return {
           waiting: !haveAllVoted,

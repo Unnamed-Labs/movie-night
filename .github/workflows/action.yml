@@ -23,6 +23,8 @@ jobs:
       NODE_ENV: ${{ vars.NODE_ENV }}
       NEXT_PUBLIC_SERVER_URL: ${{ vars.NEXT_PUBLIC_SERVER_URL }}
       SERVER_PORT: ${{ vars.SERVER_PORT }}
+      UPSTASH_REDIS_URL: ${{ vars.UPSTASH_REDIS_URL }}
+      UPSTASH_REDIS_PASSWORD: ${{ secrets.UPSTASH_REDIS_PASSWORD }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3

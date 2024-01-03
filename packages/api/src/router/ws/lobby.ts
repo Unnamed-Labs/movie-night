@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { observable } from '@trpc/server/observable';
 import { createTRPCRouter, publicProcedure } from '../../trpc';
-import { ee } from '../../utils/eventEmitter';
+import { client } from '../../utils/redisClient';
 import type { Participant } from '../../types/Participant';
 import { prisma } from '@movie/db';
 
@@ -15,9 +15,9 @@ export const lobby = createTRPCRouter({
             emit.next(data);
           }
         };
-        ee.on('addParticipant', onAddParticipant);
+        client.on('addParticipant', onAddParticipant);
         return () => {
-          ee.off('addParticipant', onAddParticipant);
+          client.off('addParticipant', onAddParticipant);
         };
       });
     }),
@@ -30,9 +30,9 @@ export const lobby = createTRPCRouter({
             emit.next(true);
           }
         };
-        ee.on('startGame', onStartGame);
+        client.on('startGame', onStartGame);
         return () => {
-          ee.off('startGame', onStartGame);
+          client.off('startGame', onStartGame);
         };
       });
     }),
@@ -40,7 +40,7 @@ export const lobby = createTRPCRouter({
     .input(z.object({ roomId: z.string().cuid() }))
     .subscription(({ input }) => {
       return observable<boolean>((emit) => {
-        const onMovieProposed = async (roomId: string) => {
+        const onMovieProposedAsync = async (roomId: string) => {
           if (input.roomId === roomId) {
             const pParticipants = await prisma.participant.findMany({
               select: {
@@ -57,9 +57,12 @@ export const lobby = createTRPCRouter({
             emit.next(haveAllProposed);
           }
         };
-        ee.on('movieProposed', onMovieProposed);
+        const onMovieProposed = (roomId: string) => {
+          void onMovieProposedAsync(roomId);
+        };
+        client.on('movieProposed', onMovieProposed);
         return () => {
-          ee.off('movieProposed', onMovieProposed);
+          client.off('movieProposed', onMovieProposed);
         };
       });
     }),
@@ -67,7 +70,7 @@ export const lobby = createTRPCRouter({
     .input(z.object({ roomId: z.string().cuid() }))
     .subscription(({ input }) => {
       return observable<boolean>((emit) => {
-        const onMovieVoted = async (roomId: string) => {
+        const onMovieVotedAsync = async (roomId: string) => {
           if (input.roomId === roomId) {
             const pParticipants = await prisma.participant.findMany({
               select: {
@@ -84,9 +87,12 @@ export const lobby = createTRPCRouter({
             emit.next(haveAllVoted);
           }
         };
-        ee.on('movieVoted', onMovieVoted);
+        const onMovieVoted = (roomId: string) => {
+          void onMovieVotedAsync(roomId);
+        };
+        client.on('movieVoted', onMovieVoted);
         return () => {
-          ee.off('movieVoted', onMovieVoted);
+          client.off('movieVoted', onMovieVoted);
         };
       });
     }),
