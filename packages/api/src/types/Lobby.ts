@@ -1,13 +1,13 @@
 import type { Movie } from './Movie';
-import type { Participant } from './Participant';
-import type { Proposed } from './Proposed';
+import type { User } from './User';
+import type { MovieUser } from './MovieUser';
 
 export type Lobby = {
   id: string;
   amount: number;
   code: string;
-  participants: Participant[];
-  proposed: Proposed[];
-  votes: any[];
+  participants: User[];
+  proposed: MovieUser[];
+  votes: MovieUser[];
   result?: Movie;
 };

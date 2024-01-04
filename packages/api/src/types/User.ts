@@ -1,8 +1,8 @@
-export type Participant = {
+export type User = {
   id: string;
   name: string;
   isHost: boolean;
-  userId?: string;
+  accountId?: string;
   image?: {
     src: string;
     alt: string;

@@ -8,15 +8,15 @@ import { useLobby } from '~/hooks/useLobby';
 
 const Vote = () => {
   const router = useRouter();
-  const { room, user, loading, error, submitVote } = useLobby();
+  const { lobby, user, loading, error, submitVoteForMovieById } = useLobby();
 
   useEffect(() => {
-    if (!room || !user) {
+    if (!lobby || !user) {
       void router.push('/lobby/join');
     }
-  }, [room, user, router]);
+  }, [lobby, user, router]);
 
-  const { data: proposed } = api.lobby.getProposed.useQuery({ roomId: room?.id });
+  const { data: proposed } = api.lobby.getProposedById.useQuery({ lobbyId: lobby?.id });
   const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
   const isDisabled = (movie: Movie) => selectedMovie && selectedMovie.name != movie.name;
@@ -26,14 +26,14 @@ const Vote = () => {
   };
 
   const handleLockInClick = async () => {
-    const res = await submitVote(selectedMovie.id);
+    const res = await submitVoteForMovieById(selectedMovie);
 
     if (res.waiting) {
-      void router.push(`/lobby/${room?.id}/waiting`);
+      void router.push(`/lobby/${lobby?.id}/waiting`);
     }
 
     if (res.results) {
-      void router.push(`/lobby/${room?.id}/result`);
+      void router.push(`/lobby/${lobby?.id}/result`);
     }
   };
 

@@ -2,17 +2,35 @@ import { z } from 'zod';
 import { observable } from '@trpc/server/observable';
 import { createTRPCRouter, publicProcedure } from '../../trpc';
 import { client } from '../../utils/redisClient';
-import type { Participant } from '../../types/Participant';
-import { prisma } from '@movie/db';
+import type { User } from '../../types/User';
+import type { Lobby } from '../../types/Lobby';
+
+type AddParticipantProps = {
+  lobbyId: string;
+  user: User;
+};
+
+const getLobby = async (lobbyId: string) => {
+  const lobbyFromRedis = await client.get(lobbyId);
+
+  if (!lobbyFromRedis) {
+    // TODO: Improve error for room not found
+    return null;
+  }
+
+  const lobby = JSON.parse(lobbyFromRedis) as Lobby;
+
+  return lobby;
+};
 
 export const lobby = createTRPCRouter({
   onAddParticipant: publicProcedure
-    .input(z.object({ roomId: z.string().cuid() }))
-    .subscription(({ input: { roomId } }) => {
-      return observable<Participant>((emit) => {
-        const onAddParticipant = (data: Participant) => {
-          if (roomId === data.room?.id) {
-            emit.next(data);
+    .input(z.object({ lobbyId: z.string().cuid2() }))
+    .subscription(({ input: { lobbyId } }) => {
+      return observable<User>((emit) => {
+        const onAddParticipant = (data: AddParticipantProps) => {
+          if (lobbyId === data.lobbyId) {
+            emit.next(data.user);
           }
         };
         client.on('addParticipant', onAddParticipant);
@@ -22,11 +40,11 @@ export const lobby = createTRPCRouter({
       });
     }),
   onStartGame: publicProcedure
-    .input(z.object({ roomId: z.string().cuid() }))
+    .input(z.object({ lobbyId: z.string().cuid2() }))
     .subscription(({ input }) => {
       return observable<boolean>((emit) => {
-        const onStartGame = (roomId: string) => {
-          if (input.roomId === roomId) {
+        const onStartGame = (lobbyId: string) => {
+          if (input.lobbyId === lobbyId) {
             emit.next(true);
           }
         };
@@ -37,28 +55,25 @@ export const lobby = createTRPCRouter({
       });
     }),
   onMovieProposed: publicProcedure
-    .input(z.object({ roomId: z.string().cuid() }))
+    .input(z.object({ lobbyId: z.string().cuid2() }))
     .subscription(({ input }) => {
       return observable<boolean>((emit) => {
-        const onMovieProposedAsync = async (roomId: string) => {
-          if (input.roomId === roomId) {
-            const pParticipants = await prisma.participant.findMany({
-              select: {
-                id: true,
-                hasProposed: true,
-              },
-              where: {
-                roomId,
-              },
-            });
+        const onMovieProposedAsync = async (lobbyId: string) => {
+          if (input.lobbyId === lobbyId) {
+            const lobby = await getLobby(lobbyId);
 
-            const haveAllProposed = pParticipants.every((pParticipant) => pParticipant.hasProposed);
+            if (!lobby) {
+              emit.next(false);
+              return;
+            }
+
+            const haveAllProposed = lobby.proposed.length === lobby.participants.length;
 
             emit.next(haveAllProposed);
           }
         };
-        const onMovieProposed = (roomId: string) => {
-          void onMovieProposedAsync(roomId);
+        const onMovieProposed = (lobbyId: string) => {
+          void onMovieProposedAsync(lobbyId);
         };
         client.on('movieProposed', onMovieProposed);
         return () => {
@@ -67,28 +82,25 @@ export const lobby = createTRPCRouter({
       });
     }),
   onMovieVoted: publicProcedure
-    .input(z.object({ roomId: z.string().cuid() }))
+    .input(z.object({ lobbyId: z.string().cuid2() }))
     .subscription(({ input }) => {
       return observable<boolean>((emit) => {
-        const onMovieVotedAsync = async (roomId: string) => {
-          if (input.roomId === roomId) {
-            const pParticipants = await prisma.participant.findMany({
-              select: {
-                id: true,
-                hasVoted: true,
-              },
-              where: {
-                roomId,
-              },
-            });
+        const onMovieVotedAsync = async (lobbyId: string) => {
+          if (input.lobbyId === lobbyId) {
+            const lobby = await getLobby(lobbyId);
 
-            const haveAllVoted = pParticipants.every((pParticipant) => pParticipant.hasVoted);
+            if (!lobby) {
+              emit.next(false);
+              return;
+            }
+
+            const haveAllVoted = lobby.votes.length === lobby.participants.length;
 
             emit.next(haveAllVoted);
           }
         };
-        const onMovieVoted = (roomId: string) => {
-          void onMovieVotedAsync(roomId);
+        const onMovieVoted = (lobbyId: string) => {
+          void onMovieVotedAsync(lobbyId);
         };
         client.on('movieVoted', onMovieVoted);
         return () => {

@@ -19,5 +19,5 @@ export type RouterInputs = inferRouterInputs<AppRouter>;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 export type { Movie } from './src/types/Movie';
-export type { Room } from './src/types/Room';
-export type { Participant } from './src/types/Participant';
+export type { Lobby } from './src/types/Lobby';
+export type { User } from './src/types/User';

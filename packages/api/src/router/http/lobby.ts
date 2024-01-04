@@ -3,13 +3,20 @@ import { prisma } from '@movie/db';
 import { createId } from '@paralleldrive/cuid2';
 import { createTRPCRouter, publicProcedure } from '../../trpc';
 import { client } from '../../utils/redisClient';
-import type { Participant } from '../../types/Participant';
+import type { User } from '../../types/User';
 import type { Lobby } from '../../types/Lobby';
 import type { Movie } from '../../types/Movie';
-import type { Proposed } from '../../types/Proposed';
+import type { MovieUser } from '../../types/MovieUser';
 
-const getLobby = async (code: string) => {
-  const lobbyFromRedis = await client.get(code);
+type VoteMap = {
+  [key: string]: {
+    count: number;
+    movie: Movie;
+  };
+};
+
+const getLobby = async (lobbyId: string) => {
+  const lobbyFromRedis = await client.get(lobbyId);
 
   if (!lobbyFromRedis) {
     // TODO: Improve error for room not found
@@ -23,17 +30,17 @@ const getLobby = async (code: string) => {
 
 export const lobby = createTRPCRouter({
   open: publicProcedure
-    .input(z.object({ userId: z.string().cuid().optional(), name: z.string().min(1) }))
-    .mutation(async ({ input: { userId, name } }) => {
+    .input(z.object({ accountId: z.string().cuid().optional(), name: z.string().min(1) }))
+    .mutation(async ({ input: { accountId, name } }) => {
       // TODO: how to better do a valid room code lookup? redis? find next valid room code in db table?
       try {
         const code = ('0000' + Math.floor(Math.random() * 9999).toString()).slice(-4);
 
-        const user: Participant = {
+        const user: User = {
           id: createId(),
           name: name,
           isHost: true,
-          userId,
+          accountId,
         };
 
         const lobby: Lobby = {
@@ -45,7 +52,15 @@ export const lobby = createTRPCRouter({
           votes: [],
         };
 
-        await client.set(code, JSON.stringify(lobby));
+        await prisma.room.create({
+          data: {
+            id: lobby.id,
+            code,
+            isActive: true,
+          },
+        });
+
+        await client.set(lobby.id, JSON.stringify(lobby));
 
         return {
           user,
@@ -73,7 +88,21 @@ export const lobby = createTRPCRouter({
     .input(z.object({ name: z.string(), isHost: z.boolean(), code: z.string().length(4) }))
     .mutation(async ({ input: { name, isHost, code } }) => {
       try {
-        const lobby = await getLobby(code);
+        const pRoom = await prisma.room.findFirst({
+          select: {
+            id: true,
+          },
+          where: {
+            code,
+            isActive: true,
+          },
+        });
+
+        if (!pRoom) {
+          return null;
+        }
+
+        const lobby = await getLobby(pRoom.id);
 
         if (!lobby) {
           return null;
@@ -84,7 +113,7 @@ export const lobby = createTRPCRouter({
           return null;
         }
 
-        const user: Participant = {
+        const user: User = {
           id: createId(),
           name,
           isHost,
@@ -95,52 +124,101 @@ export const lobby = createTRPCRouter({
           participants: [...lobby.participants, user],
         };
 
-        await client.set(code, JSON.stringify(newLobby));
+        await client.set(newLobby.id, JSON.stringify(newLobby));
 
-        client.emit('addParticipant', newLobby);
+        client.emit('addParticipant', {
+          lobbyId: newLobby.id,
+          user,
+        });
 
-        return newLobby;
+        return {
+          lobby: newLobby,
+          user,
+        };
       } catch (e) {
         // TODO: Improve logging for SQL error
         console.error(e);
         return null;
       }
     }),
-  startGameByCode: publicProcedure
-    .input(z.object({ code: z.string().length(4) }))
-    .mutation(({ input: { code } }) => {
-      client.emit('startGame', code);
+  startGameById: publicProcedure
+    .input(z.object({ lobbyId: z.string().cuid2() }))
+    .mutation(({ input: { lobbyId } }) => {
+      client.emit('startGame', lobbyId);
     }),
-  getProposedByCode: publicProcedure
-    .input(z.object({ code: z.string().length(4) }))
-    .query(async ({ input: { code } }) => {
-      const lobby = await getLobby(code);
+  getProposedById: publicProcedure
+    .input(z.object({ lobbyId: z.string().cuid2() }))
+    .query(async ({ input: { lobbyId } }) => {
+      const lobby = await getLobby(lobbyId);
 
       if (!lobby) {
-        return null;
-      }
-
-      if (lobby.proposed.length === 0) {
         return null;
       }
 
       return lobby.proposed;
     }),
-  getResultByCode: publicProcedure
-    .input(z.object({ code: z.string().length(4) }))
-    .query(async ({ input: { code } }) => {
-      const lobby = await getLobby(code);
+  getResultById: publicProcedure
+    .input(z.object({ lobbyId: z.string().cuid2() }))
+    .query(async ({ input: { lobbyId } }) => {
+      const result = await prisma.result.findFirst({
+        where: {
+          roomId: lobbyId,
+        },
+        select: {
+          movie: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              location: true,
+              date: true,
+              score: true,
+              year: true,
+              runtime: true,
+              imageSrc: true,
+              imageAlt: true,
+              rating: {
+                select: {
+                  name: true,
+                },
+              },
+              genres: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      });
 
-      if (!lobby) {
+      if (!result) {
         return null;
       }
 
-      return lobby.result;
+      const movie: Movie = {
+        id: result.movie.id,
+        name: result.movie.name,
+        description: result.movie.description,
+        location: result.movie.location,
+        date: result.movie.date,
+        score: result.movie.score,
+        year: result.movie.year,
+        runtime: result.movie.runtime,
+        image: {
+          src: result.movie.imageSrc,
+          alt: result.movie.imageAlt,
+        },
+        rating: result.movie.rating.name,
+        genres: result.movie.genres.map((genre) => genre.name),
+      };
+
+      return movie;
     }),
-  submitProposedMovieByCode: publicProcedure
+  submitProposedMovieById: publicProcedure
     .input(
       z.object({
-        participantId: z.string().cuid2(),
+        userId: z.string().cuid2(),
         movie: z.object({
           id: z.string().cuid2(),
           description: z.string(),
@@ -157,28 +235,32 @@ export const lobby = createTRPCRouter({
             alt: z.string(),
           }),
         }),
-        code: z.string().length(4),
+        lobbyId: z.string().cuid2(),
       }),
     )
-    .mutation(async ({ input: { participantId, movie, code } }) => {
+    .mutation(async ({ input: { userId, movie, lobbyId } }) => {
       try {
-        const lobby = await getLobby(code);
+        const lobby = await getLobby(lobbyId);
 
         if (!lobby) {
           return null;
         }
 
-        const participant = lobby.participants.find(
-          (participant) => participant.id === participantId,
-        );
+        const user = lobby.participants.find((participant) => participant.id === userId);
 
-        if (!participant) {
+        if (!user) {
           return null;
         }
 
-        const proposed: Proposed = {
+        const hasParticipantProposed = !!lobby.proposed.find((p) => p.user.id === userId);
+
+        if (hasParticipantProposed) {
+          return null;
+        }
+
+        const proposed: MovieUser = {
           movie,
-          user: participant,
+          user,
         };
 
         const newLobby = {
@@ -186,9 +268,11 @@ export const lobby = createTRPCRouter({
           proposed: [...lobby.proposed, proposed],
         };
 
-        const haveAllProposed = pParticipants.every((pParticipant) => pParticipant.hasProposed);
+        await client.set(lobbyId, JSON.stringify(newLobby));
 
-        client.emit('movieProposed', lobby.id);
+        const haveAllProposed = newLobby.proposed.length === newLobby.participants.length;
+
+        client.emit('movieProposed', lobbyId);
 
         return {
           waiting: !haveAllProposed,
@@ -204,80 +288,122 @@ export const lobby = createTRPCRouter({
         };
       }
     }),
-  submitVote: publicProcedure
+  submitVoteForMovieById: publicProcedure
     .input(
       z.object({
-        participantId: z.string().cuid(),
-        movieId: z.string().cuid(),
-        roomId: z.string().cuid(),
+        userId: z.string().cuid2(),
+        movie: z.object({
+          id: z.string().cuid2(),
+          description: z.string(),
+          date: z.string(),
+          name: z.string(),
+          location: z.string(),
+          rating: z.string(),
+          runtime: z.string(),
+          score: z.number(),
+          year: z.string(),
+          genres: z.array(z.string()),
+          image: z.object({
+            src: z.string(),
+            alt: z.string(),
+          }),
+        }),
+        lobbyId: z.string().cuid2(),
       }),
     )
-    .mutation(async ({ input: { participantId, movieId, roomId } }) => {
+    .mutation(async ({ input: { userId, movie, lobbyId } }) => {
       try {
-        await prisma.vote.create({
-          data: {
-            participantId,
-            movieId,
-            roomId,
-          },
-        });
+        const lobby = await getLobby(lobbyId);
 
-        await prisma.participant.update({
-          data: {
-            hasVoted: true,
-          },
-          where: {
-            id: participantId,
-          },
-        });
+        if (!lobby) {
+          return null;
+        }
 
-        const pParticipants = await prisma.participant.findMany({
-          select: {
-            id: true,
-            hasVoted: true,
-          },
-          where: {
-            roomId,
-          },
-        });
+        const user = lobby.participants.find((participant) => participant.id === userId);
 
-        const haveAllVoted = pParticipants.every((pParticipant) => pParticipant.hasVoted);
+        if (!user) {
+          return null;
+        }
+
+        const hasUserVoted = !!lobby.votes.find((vote) => vote.user.id === userId);
+
+        if (hasUserVoted) {
+          return null;
+        }
+
+        const vote: MovieUser = {
+          movie,
+          user,
+        };
+
+        const newLobby = {
+          ...lobby,
+          votes: [...lobby.votes, vote],
+        };
+
+        await client.set(lobbyId, JSON.stringify(newLobby));
+
+        const haveAllVoted = newLobby.votes.length === newLobby.participants.length;
 
         if (haveAllVoted) {
-          // find the movie with the most votes
-          const pVotes = await prisma.vote.groupBy({
-            by: ['movieId'],
-            _count: {
-              movieId: true,
+          const voteMap = newLobby.votes.reduce((prev: VoteMap, curr, idx) => {
+            const exists = !!prev[curr.movie.id];
+            if (!exists) {
+              return {
+                ...prev,
+                [curr.movie.id]: {
+                  idx,
+                  count: 0,
+                  movie: curr.movie,
+                },
+              };
+            }
+            return {
+              ...prev,
+              [curr.movie.id]: {
+                ...prev[curr.movie.id],
+                count: prev[curr.movie.id].count + 1,
+              },
+            };
+          }, {});
+
+          const keys = Object.keys(voteMap);
+          let result: Movie | null = null;
+          let maxCount = 0;
+
+          for (const key of keys) {
+            const item = voteMap[key];
+            if (item.count >= maxCount) {
+              result = item.movie;
+              maxCount = item.count;
+            }
+          }
+
+          const newLobbyWithResult = {
+            ...newLobby,
+            result,
+          };
+
+          await client.del(lobbyId);
+
+          const pRoom = await prisma.room.update({
+            data: {
+              isActive: false,
             },
             where: {
-              roomId,
-            },
-            orderBy: {
-              _count: {
-                movieId: 'desc',
-              },
+              id: newLobbyWithResult.id,
             },
           });
 
           await prisma.result.create({
             data: {
-              movieId: pVotes[0].movieId,
-              roomId,
-            },
-          });
-
-          await prisma.room.update({
-            data: {
-              isActive: false,
-            },
-            where: {
-              id: roomId,
+              movieId: (result as Movie).id,
+              roomId: pRoom.id,
             },
           });
         }
 
-        client.emit('movieVoted', roomId);
+        client.emit('movieVoted', lobbyId);
 
         return {
           waiting: !haveAllVoted,
