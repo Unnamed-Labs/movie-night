@@ -6,14 +6,6 @@ import { client } from '../../utils/redisClient';
 import type { User } from '../../types/User';
 import type { Lobby } from '../../types/Lobby';
 import type { Movie } from '../../types/Movie';
-import type { MovieUser } from '../../types/MovieUser';
-
-type VoteMap = {
-  [key: string]: {
-    count: number;
-    movie: Movie;
-  };
-};
 
 const getLobby = async (lobbyId: string) => {
   const lobbyFromRedis = await client.get(lobbyId);
@@ -26,6 +18,40 @@ const getLobby = async (lobbyId: string) => {
   const lobby = JSON.parse(lobbyFromRedis) as Lobby;
 
   return lobby;
+};
+
+const addMovieUserToLobby = (lobby: Lobby, movie: Movie, user: User, key: 'proposed' | 'votes') => {
+  const itemIdx = lobby[key].findIndex((item) => item.movie.id === movie.id);
+  let newLobby: Lobby;
+
+  if (itemIdx > -1) {
+    const item = lobby[key][itemIdx];
+
+    const updatedItem = {
+      ...item,
+      users: [...item.users, user],
+    };
+
+    const newList = lobby[key].slice();
+    newList.splice(itemIdx, 1, updatedItem);
+
+    newLobby = {
+      ...lobby,
+      [key]: newList,
+    };
+  } else {
+    const newItem = {
+      movie,
+      users: [user],
+    };
+
+    newLobby = {
+      ...lobby,
+      [key]: [...lobby[key], newItem],
+    };
+  }
+
+  return newLobby;
 };
 
 export const lobby = createTRPCRouter({
@@ -155,7 +181,17 @@ export const lobby = createTRPCRouter({
         return null;
       }
 
-      return lobby.proposed;
+      const movieExists: { [key: string]: boolean } = {};
+
+      const proposed = lobby.proposed.filter((p) => {
+        if (!movieExists[p.movie.id]) {
+          movieExists[p.movie.id] = true;
+          return true;
+        }
+        return false;
+      });
+
+      return proposed;
     }),
   getResultById: publicProcedure
     .input(z.object({ lobbyId: z.string().cuid2() }))
@@ -244,34 +280,41 @@ export const lobby = createTRPCRouter({
         const lobby = await getLobby(lobbyId);
 
         if (!lobby) {
-          return null;
+          return {
+            waiting: false,
+            vote: false,
+            error: true,
+          };
         }
 
         const user = lobby.participants.find((participant) => participant.id === userId);
 
         if (!user) {
-          return null;
+          return {
+            waiting: false,
+            vote: false,
+            error: true,
+          };
         }
 
-        const hasParticipantProposed = !!lobby.proposed.find((p) => p.user.id === userId);
+        const hasParticipantProposed = !!lobby.proposed.find(
+          (p) => !!p.users.find((u) => u.id === userId),
+        );
 
         if (hasParticipantProposed) {
-          return null;
+          return {
+            waiting: false,
+            vote: false,
+            error: true,
+          };
         }
 
-        const proposed: MovieUser = {
-          movie,
-          user,
-        };
-
-        const newLobby = {
-          ...lobby,
-          proposed: [...lobby.proposed, proposed],
-        };
+        const newLobby = addMovieUserToLobby(lobby, movie, user, 'proposed');
 
         await client.set(lobbyId, JSON.stringify(newLobby));
 
-        const haveAllProposed = newLobby.proposed.length === newLobby.participants.length;
+        const proposedCount = newLobby.proposed.reduce((prev, curr) => prev + curr.users.length, 0);
+        const haveAllProposed = proposedCount === newLobby.participants.length;
 
         if (haveAllProposed) {
           client.emit('movieProposed', lobbyId);
@@ -318,66 +361,50 @@ export const lobby = createTRPCRouter({
         const lobby = await getLobby(lobbyId);
 
         if (!lobby) {
-          return null;
+          return {
+            waiting: false,
+            results: false,
+            error: true,
+          };
         }
 
         const user = lobby.participants.find((participant) => participant.id === userId);
 
         if (!user) {
-          return null;
+          return {
+            waiting: false,
+            results: false,
+            error: true,
+          };
         }
 
-        const hasUserVoted = !!lobby.votes.find((vote) => vote.user.id === userId);
+        const hasUserVoted = !!lobby.votes.find(
+          (vote) => !!vote.users.find((u) => u.id === userId),
+        );
 
         if (hasUserVoted) {
-          return null;
+          return {
+            waiting: false,
+            results: false,
+            error: true,
+          };
         }
 
-        const vote: MovieUser = {
-          movie,
-          user,
-        };
-
-        const newLobby = {
-          ...lobby,
-          votes: [...lobby.votes, vote],
-        };
+        const newLobby = addMovieUserToLobby(lobby, movie, user, 'votes');
 
         await client.set(lobbyId, JSON.stringify(newLobby));
 
-        const haveAllVoted = newLobby.votes.length === newLobby.participants.length;
+        const votedCount = newLobby.votes.reduce((prev, curr) => prev + curr.users.length, 0);
+        const haveAllVoted = votedCount === newLobby.participants.length;
 
         if (haveAllVoted) {
-          const voteMap = newLobby.votes.reduce((prev: VoteMap, curr, idx) => {
-            const exists = !!prev[curr.movie.id];
-            if (!exists) {
-              return {
-                ...prev,
-                [curr.movie.id]: {
-                  idx,
-                  count: 0,
-                  movie: curr.movie,
-                },
-              };
-            }
-            return {
-              ...prev,
-              [curr.movie.id]: {
-                ...prev[curr.movie.id],
-                count: prev[curr.movie.id].count + 1,
-              },
-            };
-          }, {});
-
-          const keys = Object.keys(voteMap);
           let result: Movie | null = null;
-          let maxCount = 0;
+          let maxVotes = 0;
 
-          for (const key of keys) {
-            const item = voteMap[key];
-            if (item.count >= maxCount) {
-              result = item.movie;
-              maxCount = item.count;
+          for (const vote of newLobby.votes) {
+            if (vote.users.length >= maxVotes) {
+              result = vote.movie;
+              maxVotes = vote.users.length;
             }
           }
 
