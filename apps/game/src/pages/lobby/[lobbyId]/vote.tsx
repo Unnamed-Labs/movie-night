@@ -51,7 +51,7 @@ const Vote = () => {
             title={option.movie.title}
             description={option.movie.description}
             image={option.movie.image}
-            categories={option.movie.genres}
+            genres={option.movie.genres}
             date={option.movie.date}
             location={option.movie.location}
             rating={option.movie.rating}

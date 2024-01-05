@@ -7,6 +7,24 @@ import type { User } from '../../types/User';
 import type { Lobby } from '../../types/Lobby';
 import type { Movie } from '../../types/Movie';
 
+const zodMovieObject = z.object({
+  id: z.string().cuid2(),
+  description: z.string(),
+  date: z.string(),
+  title: z.string(),
+  location: z.string(),
+  rating: z.string(),
+  runtime: z.string(),
+  score: z.number(),
+  genres: z.array(z.string()),
+  image: z.object({
+    src: z.string(),
+    alt: z.string(),
+  }),
+});
+
+type ZodMovie = z.infer<typeof zodMovieObject>;
+
 const getLobby = async (lobbyId: string) => {
   const lobbyFromRedis = await client.get(lobbyId);
 
@@ -20,7 +38,12 @@ const getLobby = async (lobbyId: string) => {
   return lobby;
 };
 
-const addMovieUserToLobby = (lobby: Lobby, movie: Movie, user: User, key: 'proposed' | 'votes') => {
+const addMovieUserToLobby = (
+  lobby: Lobby,
+  movie: ZodMovie,
+  user: User,
+  key: 'proposed' | 'votes',
+) => {
   const itemIdx = lobby[key].findIndex((item) => item.movie.id === movie.id);
   let newLobby: Lobby;
 

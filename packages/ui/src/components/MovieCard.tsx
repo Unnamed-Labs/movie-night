@@ -124,7 +124,7 @@ export const MovieCard = ({
             <span data-testid="movie-card-location">&#40;{location}&#41;</span>
             <span data-testid="movie-card-runtime">{runtime}</span>
           </div>
-          <span data-testid="movie-card-categories">{genresJoined}</span>
+          <span data-testid="movie-card-genres">{genresJoined}</span>
         </div>
 
         <div className="ui-mt-4 ui-flex ui-flex-col ui-items-center ui-justify-center ui-text-sm">

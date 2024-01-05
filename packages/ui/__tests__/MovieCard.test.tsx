@@ -7,7 +7,7 @@ describe('<MovieCard />', () => {
   it('should mount', () => {
     const { getByTestId } = render(
       <MovieCard
-        categories={Shrek.categories}
+        genres={Shrek.genres}
         date={Shrek.date}
         description={Shrek.description}
         image={Shrek.image}
@@ -24,7 +24,7 @@ describe('<MovieCard />', () => {
   it('should toggle the description visibility', async () => {
     const { getByTestId } = render(
       <MovieCard
-        categories={Shrek.categories}
+        genres={Shrek.genres}
         date={Shrek.date}
         description={Shrek.description}
         image={Shrek.image}
@@ -44,7 +44,7 @@ describe('<MovieCard />', () => {
   it('should select the card when clicked', async () => {
     const { getByTestId } = render(
       <MovieCard
-        categories={Shrek.categories}
+        genres={Shrek.genres}
         date={Shrek.date}
         description={Shrek.description}
         image={Shrek.image}
@@ -64,7 +64,7 @@ describe('<MovieCard />', () => {
   it('should not select the card when disabled and clicked', async () => {
     const { getByTestId } = render(
       <MovieCard
-        categories={Shrek.categories}
+        genres={Shrek.genres}
         date={Shrek.date}
         description={Shrek.description}
         image={Shrek.image}

@@ -97,7 +97,7 @@ const SearchPage = () => {
             title={movie.title}
             description={movie.description}
             image={movie.image}
-            categories={movie.genres}
+            genres={movie.genres}
             date={movie.date}
             location={movie.location}
             rating={movie.rating}

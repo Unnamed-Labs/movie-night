@@ -22,7 +22,7 @@ const Result = () => {
           title={result.title}
           description={result.description}
           image={result.image}
-          categories={result.genres}
+          genres={result.genres}
           date={result.date}
           location={result.location}
           rating={result.rating}
