@@ -1,7 +1,6 @@
 import { prisma } from '../index';
 import ratings from './data/ratings.json';
 import genres from './data/genres.json';
-import actions from './data/actions.json';
 import movies from './data/movies.json';
 
 type Nvp = {
@@ -47,34 +46,14 @@ const createGenres = async () => {
   }
 };
 
-const createActions = async () => {
-  const createAction = async (action: Nvp) => {
-    await prisma.action.upsert({
-      where: {
-        id: action.id,
-      },
-      create: {
-        id: action.id,
-        name: action.name,
-      },
-      update: {},
-    });
-  };
-
-  for (const action of actions) {
-    await createAction(action);
-  }
-};
-
 const createMovies = async () => {
   for (const movie of movies) {
     await prisma.movie.create({
       data: {
-        name: movie.name,
+        title: movie.title,
         description: movie.description,
         runtime: movie.runtime,
         score: movie.score,
-        year: movie.year,
         rating: movie.rating,
         genres: movie.genres,
         date: movie.date,
@@ -93,7 +72,6 @@ const createMovies = async () => {
 const main = async () => {
   await createRatings();
   await createGenres();
-  await createActions();
   await createMovies();
 };
 

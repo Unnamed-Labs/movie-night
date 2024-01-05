@@ -11,7 +11,7 @@ const Result = () => {
   }
 
   const { data: result } = api.lobby.getResultById.useQuery({ lobbyId: lobby.id });
-  const body = result ? `Congrats to ${result.name}. Enjoy!` : '';
+  const body = result ? `Congrats to ${result.title}. Enjoy!` : '';
   return (
     <Page
       title="Movie Night"
@@ -19,7 +19,7 @@ const Result = () => {
     >
       {result && (
         <MovieCard
-          title={result.name}
+          title={result.title}
           description={result.description}
           image={result.image}
           categories={result.genres}

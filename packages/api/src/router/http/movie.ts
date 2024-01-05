@@ -8,9 +8,8 @@ export const movie = createTRPCRouter({
     const pMovies = await prisma.movie.findMany({
       select: {
         id: true,
-        name: true,
+        title: true,
         description: true,
-        year: true,
         date: true,
         score: true,
         location: true,
@@ -38,9 +37,8 @@ export const movie = createTRPCRouter({
 
     const movies: Movie[] = pMovies.map((pMovie) => ({
       id: pMovie.id,
-      name: pMovie.name,
+      title: pMovie.title,
       description: pMovie.description,
-      year: pMovie.year,
       date: pMovie.date,
       score: pMovie.score,
       location: pMovie.location,
@@ -59,9 +57,8 @@ export const movie = createTRPCRouter({
     const pMovies = await prisma.movie.findMany({
       select: {
         id: true,
-        name: true,
+        title: true,
         description: true,
-        year: true,
         date: true,
         score: true,
         location: true,
@@ -80,7 +77,7 @@ export const movie = createTRPCRouter({
         },
       },
       where: {
-        name: {
+        title: {
           contains: input.query,
         },
       },
@@ -88,9 +85,8 @@ export const movie = createTRPCRouter({
 
     const movies: Movie[] = pMovies.map((pMovie) => ({
       id: pMovie.id,
-      name: pMovie.name,
+      title: pMovie.title,
       description: pMovie.description,
-      year: pMovie.year,
       date: pMovie.date,
       score: pMovie.score,
       location: pMovie.location,

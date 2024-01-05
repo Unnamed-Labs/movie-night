@@ -19,7 +19,7 @@ const Vote = () => {
   const { data: proposed } = api.lobby.getProposedById.useQuery({ lobbyId: lobby?.id });
   const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
-  const isDisabled = (movie: Movie) => selectedMovie && selectedMovie.name != movie.name;
+  const isDisabled = (movie: Movie) => selectedMovie && selectedMovie.title != movie.title;
 
   const handleCardClick = (movie: Movie) => {
     setSelectedMovie(movie);
@@ -48,7 +48,7 @@ const Vote = () => {
         proposed.map((option) => (
           <MovieCard
             key={option.movie.id}
-            title={option.movie.name}
+            title={option.movie.title}
             description={option.movie.description}
             image={option.movie.image}
             categories={option.movie.genres}

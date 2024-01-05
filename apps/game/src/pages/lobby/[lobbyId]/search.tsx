@@ -94,7 +94,7 @@ const SearchPage = () => {
         movies.map((movie, idx) => (
           <MovieCard
             key={idx}
-            title={movie.name}
+            title={movie.title}
             description={movie.description}
             image={movie.image}
             categories={movie.genres}
