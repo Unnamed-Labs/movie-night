@@ -1,25 +1,25 @@
-import type { Participant, Room } from '@movie/api';
+import type { User, Lobby } from '@movie/api';
 import { create } from 'zustand';
 
 type LobbyStore = {
-  room?: Room;
-  user?: Participant;
-  setRoom: (room: Room) => void;
-  setUser: (user: Participant) => void;
-  addParticipant: (participant: Participant) => void;
+  lobby?: Lobby;
+  user?: User;
+  setLobby: (lobby: Lobby) => void;
+  setUser: (user: User) => void;
+  addParticipant: (participant: User) => void;
 };
 
 export const useLobbyStore = create<LobbyStore>((set) => ({
-  setRoom: (room: Room) => set({ room }),
-  setUser: (user: Participant) => set({ user }),
-  addParticipant: (participant: Participant) =>
+  setLobby: (lobby: Lobby) => set({ lobby }),
+  setUser: (user: User) => set({ user }),
+  addParticipant: (participant: User) =>
     set((state) => {
-      const updatedRoom = {
-        ...state.room,
-        participants: [...(state.room?.participants ?? []), participant],
+      const updatedLobby = {
+        ...state.lobby,
+        participants: [...(state.lobby?.participants ?? []), participant],
       };
       return {
-        room: updatedRoom,
+        lobby: updatedLobby,
       };
     }),
 }));

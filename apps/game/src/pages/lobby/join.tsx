@@ -8,7 +8,7 @@ const Join = () => {
   const router = useRouter();
   const [displayName, setDisplayName] = useState('');
   const [roomCode, setRoomCode] = useState('');
-  const { loading, error, joinRoomByCode } = useLobby();
+  const { loading, error, joinByCode } = useLobby();
 
   const handleDisplayNameChange = (val: string) => {
     setDisplayName(val);
@@ -19,7 +19,7 @@ const Join = () => {
   };
 
   const handleJoinLobbyClick = async () => {
-    const lobbyId = await joinRoomByCode(displayName, roomCode);
+    const lobbyId = await joinByCode(displayName, roomCode);
     void router.push(`/lobby/${lobbyId}`);
   };
 

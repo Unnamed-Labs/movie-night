@@ -4,17 +4,17 @@ import { Button } from './Button';
 
 type MovieCardProps = {
   title: string;
+  description: string;
+  runtime: string;
+  score: number;
+  location: string;
+  date: string;
   image: {
     src: string;
     alt: string;
   };
-  score: number;
+  genres: string[];
   rating: string;
-  date: string;
-  location: string;
-  runtime: string;
-  categories: string[];
-  description: string;
   streaming?: string;
   collapsible?: boolean;
   selectable?: boolean;
@@ -30,7 +30,7 @@ export const MovieCard = ({
   date,
   location,
   runtime,
-  categories,
+  genres,
   description,
   streaming,
   collapsible,
@@ -55,7 +55,7 @@ export const MovieCard = ({
     }
   };
 
-  const cats = categories.join(', ');
+  const genresJoined = genres.join(', ');
   const variants = {
     hidden: {
       opacity: 0,
@@ -124,7 +124,7 @@ export const MovieCard = ({
             <span data-testid="movie-card-location">&#40;{location}&#41;</span>
             <span data-testid="movie-card-runtime">{runtime}</span>
           </div>
-          <span data-testid="movie-card-categories">{cats}</span>
+          <span data-testid="movie-card-genres">{genresJoined}</span>
         </div>
 
         <div className="ui-mt-4 ui-flex ui-flex-col ui-items-center ui-justify-center ui-text-sm">

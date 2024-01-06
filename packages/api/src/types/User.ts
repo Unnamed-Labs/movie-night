@@ -1,10 +1,8 @@
-import type { Room } from './Room';
-
-export type Participant = {
+export type User = {
   id: string;
   name: string;
   isHost: boolean;
-  room?: Room;
+  accountId?: string;
   image?: {
     src: string;
     alt: string;

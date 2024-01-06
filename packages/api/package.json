@@ -15,6 +15,7 @@
   "dependencies": {
     "@movie/auth": "^0.1.0",
     "@movie/db": "0.1.0",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@trpc/server": "^10.44.1",
     "ioredis": "^5.3.2",
     "superjson": "1.12.2",

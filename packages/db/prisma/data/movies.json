@@ -1,9 +1,7 @@
 [
   {
-    "id": "1",
-    "name": "The Super Mario Bros. Movie",
+    "title": "The Super Mario Bros. Movie",
     "description": "While working underground to fix a water main, Brooklyn plumbers—and brothers—Mario and Luigi are transported down a mysterious pipe and wander into a magical new world. But when the brothers are separated, Mario embarks on an epic quest to find Luigi.",
-    "year": "2023",
     "runtime": "1h 32m",
     "rating": {
       "connect": {
@@ -32,14 +30,12 @@
     },
     "location": "US",
     "date": "04/05/2023",
-    "imageSrc": "./super-mario.jpg",
+    "imageSrc": "http://localhost:3000/super-mario.jpg",
     "imageAlt": "The Super Mario Bros. Movie poster"
   },
   {
-    "id": "2",
-    "name": "Guardians of the Galaxy Vol. 3",
+    "title": "Guardians of the Galaxy Vol. 3",
     "description": "Peter Quill, still reeling from the loss of Gamora, must rally his team around him to defend the universe along with protecting one of their own. A mission that, if not completed successfully, could quite possibly lead to the end of the Guardians as we know them.",
-    "year": "2023",
     "runtime": "2h 30m",
     "rating": {
       "connect": {
@@ -62,14 +58,12 @@
     },
     "location": "US",
     "date": "05/05/2023",
-    "imageSrc": "./guardians-3.jpg",
+    "imageSrc": "http://localhost:3000/guardians-3.jpg",
     "imageAlt": "Guardians of the Galaxy Vol. 3 poster"
   },
   {
-    "id": "3",
-    "name": "Shrek",
+    "title": "Shrek",
     "description": "It ain't easy bein' green -- especially if you're a likable (albeit smelly) ogre named Shrek. On a mission to retrieve a gorgeous princess from the clutches of a fire-breathing dragon, Shrek teams up with an unlikely compatriot -- a wisecracking donkey.",
-    "year": "2001",
     "runtime": "1h 30m",
     "rating": {
       "connect": {
@@ -98,7 +92,7 @@
     },
     "location": "US",
     "date": "05/18/2001",
-    "imageSrc": "./shrek.jpg",
+    "imageSrc": "http://localhost:3000/shrek.jpg",
     "imageAlt": "Shrek poster"
   }
 ]

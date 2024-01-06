@@ -27,7 +27,7 @@ export const getServerSideProps = async () => {
 
 const SearchPage = () => {
   const router = useRouter();
-  const { room, loading, error, submitProposed } = useLobby();
+  const { lobby, loading, error, submitProposedMovieById } = useLobby();
   const [movieTitle, setMovieTitle] = useState<string>('');
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   const { data: popular } = api.movie.getPopular.useQuery();
@@ -68,14 +68,14 @@ const SearchPage = () => {
     selectedMovies.length >= 1 && !selectedMovies.includes(movie);
 
   const handleDoneClick = async () => {
-    const res = await submitProposed(selectedMovies[0].id);
+    const res = await submitProposedMovieById(selectedMovies[0]);
 
     if (res.waiting) {
-      void router.push(`/lobby/${room.id}/waiting`);
+      void router.push(`/lobby/${lobby.id}/waiting`);
     }
 
     if (res.vote) {
-      void router.push(`/lobby/${room.id}/vote`);
+      void router.push(`/lobby/${lobby.id}/vote`);
     }
   };
 
@@ -94,10 +94,10 @@ const SearchPage = () => {
         movies.map((movie, idx) => (
           <MovieCard
             key={idx}
-            title={movie.name}
+            title={movie.title}
             description={movie.description}
             image={movie.image}
-            categories={movie.genres}
+            genres={movie.genres}
             date={movie.date}
             location={movie.location}
             rating={movie.rating}

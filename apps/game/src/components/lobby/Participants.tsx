@@ -1,8 +1,8 @@
 import { Participant } from '@movie/ui';
-import type { Participant as ParticipantType } from '@movie/api';
+import type { User } from '@movie/api';
 
 type ParticipantsProps = {
-  participants: ParticipantType[];
+  participants: User[];
   amount: number;
 };
 

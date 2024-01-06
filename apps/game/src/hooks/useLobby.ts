@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { Movie } from '@movie/api';
 import { useLobbyStore } from '~/stores/lobby';
 import { api } from '~/utils/api';
 
@@ -9,62 +10,64 @@ type UseLobbyOptions = {
 export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => {
   const [loading, setLoading] = useState('');
   const [error, setError] = useState('');
-  const { room, user, setRoom, setUser, addParticipant } = useLobbyStore((state) => ({
-    room: state.room,
+  const { lobby, user, setLobby, setUser, addParticipant } = useLobbyStore((state) => ({
+    lobby: state.lobby,
     user: state.user,
-    setRoom: state.setRoom,
+    setLobby: state.setLobby,
     setUser: state.setUser,
     addParticipant: state.addParticipant,
   }));
 
   const { mutateAsync: openRoomAsync } = api.lobby.open.useMutation();
-  const { mutateAsync: joinRoomByCodeAsync } = api.lobby.joinRoomByCode.useMutation();
-  const { mutateAsync: startGameAsync } = api.lobby.startGame.useMutation();
-  const { mutateAsync: submitProposedAsync } = api.lobby.submitProposed.useMutation();
-  const { mutateAsync: submitVoteAsync } = api.lobby.submitVote.useMutation();
+  const { mutateAsync: joinByCodeAsync } = api.lobby.joinByCode.useMutation();
+  const { mutateAsync: startGameByIdAsync } = api.lobby.startGameById.useMutation();
+  const { mutateAsync: submitProposedMovieByIdAsync } =
+    api.lobby.submitProposedMovieById.useMutation();
+  const { mutateAsync: submitVoteForMovieByIdAsync } =
+    api.lobby.submitVoteForMovieById.useMutation();
 
   const openRoom = async (name: string) => {
     setLoading('Opening room...');
-    const lobby = await openRoomAsync({ name });
-    if (lobby) {
-      setRoom(lobby.room);
-      setUser(lobby.user);
+    const res = await openRoomAsync({ name });
+    if (res) {
+      setLobby(res.lobby);
+      setUser(res.user);
     } else {
       setError('Uh oh! Something went wrong when creating the room...');
     }
     setLoading('');
-    return lobby.room.id;
+    return res.lobby.id;
   };
 
-  const joinRoomByCode = async (name: string, code: string) => {
+  const joinByCode = async (name: string, code: string) => {
     setLoading('Joining room...');
-    const lobby = await joinRoomByCodeAsync({
+    const res = await joinByCodeAsync({
       name,
       isHost: false,
       code,
     });
-    if (lobby) {
-      setRoom(lobby.room);
-      setUser(lobby.user);
+    if (res) {
+      setLobby(res.lobby);
+      setUser(res.user);
     } else {
       setError('Uh oh! Something went wrong when joining the room...');
     }
     setLoading('');
-    return lobby.room.id;
+    return res.lobby?.id;
   };
 
-  const startGame = async () => {
+  const startGameById = async () => {
     setLoading('Starting game...');
-    await startGameAsync({ roomId: room.id });
+    await startGameByIdAsync({ lobbyId: lobby.id });
     setLoading('');
   };
 
-  const submitProposed = async (movieId: string) => {
+  const submitProposedMovieById = async (movie: Movie) => {
     setLoading('Submitting selected movies...');
-    const res = await submitProposedAsync({
-      participantId: user.id,
-      roomId: room.id,
-      movieId,
+    const res = await submitProposedMovieByIdAsync({
+      userId: user.id,
+      lobbyId: lobby.id,
+      movie,
     });
     if (res.error) {
       setError('Uh oh! Something went wrong when submitting the selected movies...');
@@ -73,12 +76,12 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
     return res;
   };
 
-  const submitVote = async (movieId: string) => {
+  const submitVoteForMovieById = async (movie: Movie) => {
     setLoading('Submitting vote...');
-    const res = await submitVoteAsync({
-      participantId: user.id,
-      roomId: room.id,
-      movieId,
+    const res = await submitVoteForMovieByIdAsync({
+      userId: user.id,
+      lobbyId: lobby.id,
+      movie,
     });
     if (res.error) {
       setError('Uh oh! Something went wrong when submitting the selected movies...');
@@ -87,9 +90,9 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
     return res;
   };
 
-  if (room && enableParticipantUpdates) {
+  if (lobby && enableParticipantUpdates) {
     api.lobbyWs.onAddParticipant.useSubscription(
-      { roomId: room.id },
+      { lobbyId: lobby.id },
       {
         onData(data) {
           addParticipant(data);
@@ -99,14 +102,14 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
   }
 
   return {
-    room,
+    lobby,
     user,
     loading,
     error,
     openRoom,
-    joinRoomByCode,
-    startGame,
-    submitProposed,
-    submitVote,
+    joinByCode,
+    startGameById,
+    submitProposedMovieById,
+    submitVoteForMovieById,
   };
 };

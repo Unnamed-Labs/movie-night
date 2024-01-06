@@ -9,28 +9,30 @@ import { api } from '~/utils/api';
 
 const LobbyById = () => {
   const router = useRouter();
-  const { room, user, loading, error, startGame } = useLobby({ enableParticipantUpdates: true });
+  const { lobby, user, loading, error, startGameById } = useLobby({
+    enableParticipantUpdates: true,
+  });
 
   useEffect(() => {
-    if (!room || !user) {
+    if (!lobby || !user) {
       void router.push('/lobby/join');
     }
-  }, [room, user, router]);
+  }, [lobby, user, router]);
 
   const body = user?.isHost
     ? 'Press start when everyone has joined!'
     : 'You’re in the lobby! The host will press start when everyone is in.';
 
   const handleStartGameOnClick = () => {
-    void startGame();
+    void startGameById();
   };
 
   api.lobbyWs.onStartGame.useSubscription(
-    { roomId: room?.id },
+    { lobbyId: lobby?.id },
     {
       onData(data) {
         if (data) {
-          void router.push(`/lobby/${room?.id}/search`);
+          void router.push(`/lobby/${lobby?.id}/search`);
         }
       },
     },
@@ -43,10 +45,10 @@ const LobbyById = () => {
       loading={loading}
       error={error}
     >
-      {user?.isHost && <RoomCode code={room?.code} />}
+      {user?.isHost && <RoomCode code={lobby?.code} />}
       <Participants
-        participants={room?.participants ?? []}
-        amount={room?.amount ?? 8}
+        participants={lobby?.participants ?? []}
+        amount={lobby?.amount ?? 8}
       />
       {user?.isHost && <Button onClick={handleStartGameOnClick}>Start game</Button>}
     </Page>

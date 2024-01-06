@@ -2,17 +2,21 @@ import { z } from 'zod';
 import { observable } from '@trpc/server/observable';
 import { createTRPCRouter, publicProcedure } from '../../trpc';
 import { client } from '../../utils/redisClient';
-import type { Participant } from '../../types/Participant';
-import { prisma } from '@movie/db';
+import type { User } from '../../types/User';
+
+type AddParticipantProps = {
+  lobbyId: string;
+  user: User;
+};
 
 export const lobby = createTRPCRouter({
   onAddParticipant: publicProcedure
-    .input(z.object({ roomId: z.string().cuid() }))
-    .subscription(({ input: { roomId } }) => {
-      return observable<Participant>((emit) => {
-        const onAddParticipant = (data: Participant) => {
-          if (roomId === data.room?.id) {
-            emit.next(data);
+    .input(z.object({ lobbyId: z.string().cuid2() }))
+    .subscription(({ input: { lobbyId } }) => {
+      return observable<User>((emit) => {
+        const onAddParticipant = (data: AddParticipantProps) => {
+          if (lobbyId === data.lobbyId) {
+            emit.next(data.user);
           }
         };
         client.on('addParticipant', onAddParticipant);
@@ -22,11 +26,11 @@ export const lobby = createTRPCRouter({
       });
     }),
   onStartGame: publicProcedure
-    .input(z.object({ roomId: z.string().cuid() }))
+    .input(z.object({ lobbyId: z.string().cuid2() }))
     .subscription(({ input }) => {
       return observable<boolean>((emit) => {
-        const onStartGame = (roomId: string) => {
-          if (input.roomId === roomId) {
+        const onStartGame = (lobbyId: string) => {
+          if (input.lobbyId === lobbyId) {
             emit.next(true);
           }
         };
@@ -37,28 +41,13 @@ export const lobby = createTRPCRouter({
       });
     }),
   onMovieProposed: publicProcedure
-    .input(z.object({ roomId: z.string().cuid() }))
+    .input(z.object({ lobbyId: z.string().cuid2() }))
     .subscription(({ input }) => {
       return observable<boolean>((emit) => {
-        const onMovieProposedAsync = async (roomId: string) => {
-          if (input.roomId === roomId) {
-            const pParticipants = await prisma.participant.findMany({
-              select: {
-                id: true,
-                hasProposed: true,
-              },
-              where: {
-                roomId,
-              },
-            });
-
-            const haveAllProposed = pParticipants.every((pParticipant) => pParticipant.hasProposed);
-
-            emit.next(haveAllProposed);
+        const onMovieProposed = (lobbyId: string) => {
+          if (input.lobbyId === lobbyId) {
+            emit.next(true);
           }
-        };
-        const onMovieProposed = (roomId: string) => {
-          void onMovieProposedAsync(roomId);
         };
         client.on('movieProposed', onMovieProposed);
         return () => {
@@ -67,28 +56,13 @@ export const lobby = createTRPCRouter({
       });
     }),
   onMovieVoted: publicProcedure
-    .input(z.object({ roomId: z.string().cuid() }))
+    .input(z.object({ lobbyId: z.string().cuid2() }))
     .subscription(({ input }) => {
       return observable<boolean>((emit) => {
-        const onMovieVotedAsync = async (roomId: string) => {
-          if (input.roomId === roomId) {
-            const pParticipants = await prisma.participant.findMany({
-              select: {
-                id: true,
-                hasVoted: true,
-              },
-              where: {
-                roomId,
-              },
-            });
-
-            const haveAllVoted = pParticipants.every((pParticipant) => pParticipant.hasVoted);
-
-            emit.next(haveAllVoted);
+        const onMovieVoted = (lobbyId: string) => {
+          if (input.lobbyId === lobbyId) {
+            emit.next(true);
           }
-        };
-        const onMovieVoted = (roomId: string) => {
-          void onMovieVotedAsync(roomId);
         };
         client.on('movieVoted', onMovieVoted);
         return () => {

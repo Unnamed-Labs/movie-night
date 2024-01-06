@@ -6,31 +6,31 @@ import { api } from '~/utils/api';
 
 const Waiting = () => {
   const router = useRouter();
-  const { room, user } = useLobby();
+  const { lobby, user } = useLobby();
 
   useEffect(() => {
-    if (!room || !user) {
+    if (!lobby || !user) {
       void router.push('/lobby/join');
     }
-  }, [room, user, router]);
+  }, [lobby, user, router]);
 
   api.lobbyWs.onMovieProposed.useSubscription(
-    { roomId: room?.id },
+    { lobbyId: lobby?.id },
     {
       onData(data) {
         if (data) {
-          void router.push(`/lobby/${room?.id}/vote`);
+          void router.push(`/lobby/${lobby?.id}/vote`);
         }
       },
     },
   );
 
   api.lobbyWs.onMovieVoted.useSubscription(
-    { roomId: room?.id },
+    { lobbyId: lobby?.id },
     {
       onData(data) {
         if (data) {
-          void router.push(`/lobby/${room?.id}/result`);
+          void router.push(`/lobby/${lobby?.id}/result`);
         }
       },
     },
