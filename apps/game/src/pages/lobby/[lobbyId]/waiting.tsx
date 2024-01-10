@@ -14,8 +14,8 @@ const Waiting = () => {
     ? previousRoute.includes('search')
       ? 'waiting for suggestions...'
       : previousRoute.includes('vote')
-      ? 'waiting for votes...'
-      : 'waiting...'
+        ? 'waiting for votes...'
+        : 'waiting...'
     : 'waiting...';
 
   useEffect(() => {

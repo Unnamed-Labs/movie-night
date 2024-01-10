@@ -1,6 +1,7 @@
 {
   "name": "@movie/ui",
   "version": "0.1.0",
+  "private": true,
   "sideEffects": [
     "**/*.css"
   ],
@@ -21,27 +22,28 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
-    "framer-motion": "^10.12.12",
+    "framer-motion": "^10.18.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-icons": "^4.9.0"
+    "react-icons": "^5.0.0"
   },
   "devDependencies": {
-    "@movie/eslint-config": "0.1.0",
-    "@movie/tailwind-config": "0.1.0",
-    "@movie/tsconfig": "0.1.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.3",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@types/testing-library__jest-dom": "^5.14.6",
-    "eslint": "^8.43.0",
-    "jest": "^29.5.0",
-    "jest-environment-jsdom": "^29.5.0",
-    "tailwindcss": "^3.3.0",
-    "ts-jest": "^29.1.0",
-    "ts-node": "^10.9.1",
-    "tsup": "^7.1.0"
+    "@jest/globals": "^29.7.0",
+    "@movie/eslint-config": "workspace:*",
+    "@movie/tailwind-config": "workspace:*",
+    "@movie/tsconfig": "workspace:*",
+    "@testing-library/jest-dom": "^6.2.0",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/jest": "^29.5.11",
+    "@types/react": "^18.2.47",
+    "@types/react-dom": "^18.2.18",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "tailwindcss": "^3.4.1",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.1"
   }
 }
