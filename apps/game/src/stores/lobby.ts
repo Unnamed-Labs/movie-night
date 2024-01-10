@@ -4,9 +4,11 @@ import { create } from 'zustand';
 type LobbyStore = {
   lobby?: Lobby;
   user?: User;
+  previousRoute?: string;
   setLobby: (lobby: Lobby) => void;
   setUser: (user: User) => void;
   addParticipant: (participant: User) => void;
+  setPreviousRoute: (previousRoute: string) => void;
 };
 
 export const useLobbyStore = create<LobbyStore>((set) => ({
@@ -22,4 +24,5 @@ export const useLobbyStore = create<LobbyStore>((set) => ({
         lobby: updatedLobby,
       };
     }),
+  setPreviousRoute: (previousRoute: string) => set({ previousRoute }),
 }));
