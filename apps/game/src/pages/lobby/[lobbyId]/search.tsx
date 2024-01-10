@@ -27,7 +27,7 @@ export const getServerSideProps = async () => {
 
 const SearchPage = () => {
   const router = useRouter();
-  const { lobby, loading, error, submitProposedMovieById } = useLobby();
+  const { lobby, loading, error, submitProposedMovieById, setPreviousRoute } = useLobby();
   const [movieTitle, setMovieTitle] = useState<string>('');
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   const { data: popular } = api.movie.getPopular.useQuery();
@@ -36,6 +36,10 @@ const SearchPage = () => {
     { enabled: !!movieTitle, refetchOnWindowFocus: false },
   );
   const movies = searchResults && searchResults.length > 0 ? searchResults : popular;
+
+  useEffect(() => {
+    setPreviousRoute(router.asPath);
+  }, [router, setPreviousRoute]);
 
   const handleSearchOnInput = (name: string) => {
     setMovieTitle(name);

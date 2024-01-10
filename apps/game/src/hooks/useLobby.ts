@@ -10,13 +10,16 @@ type UseLobbyOptions = {
 export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => {
   const [loading, setLoading] = useState('');
   const [error, setError] = useState('');
-  const { lobby, user, setLobby, setUser, addParticipant } = useLobbyStore((state) => ({
-    lobby: state.lobby,
-    user: state.user,
-    setLobby: state.setLobby,
-    setUser: state.setUser,
-    addParticipant: state.addParticipant,
-  }));
+  const { lobby, user, previousRoute, setLobby, setUser, addParticipant, setPreviousRoute } =
+    useLobbyStore((state) => ({
+      lobby: state.lobby,
+      user: state.user,
+      previousRoute: state.previousRoute,
+      setLobby: state.setLobby,
+      setUser: state.setUser,
+      addParticipant: state.addParticipant,
+      setPreviousRoute: state.setPreviousRoute,
+    }));
 
   const { mutateAsync: openRoomAsync } = api.lobby.open.useMutation();
   const { mutateAsync: joinByCodeAsync } = api.lobby.joinByCode.useMutation();
@@ -106,10 +109,12 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
     user,
     loading,
     error,
+    previousRoute,
     openRoom,
     joinByCode,
     startGameById,
     submitProposedMovieById,
     submitVoteForMovieById,
+    setPreviousRoute,
   };
 };

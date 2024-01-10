@@ -8,7 +8,11 @@ import { useLobby } from '~/hooks/useLobby';
 
 const Vote = () => {
   const router = useRouter();
-  const { lobby, user, loading, error, submitVoteForMovieById } = useLobby();
+  const { lobby, user, loading, error, submitVoteForMovieById, setPreviousRoute } = useLobby();
+
+  useEffect(() => {
+    setPreviousRoute(router.asPath);
+  }, [router, setPreviousRoute]);
 
   useEffect(() => {
     if (!lobby || !user) {

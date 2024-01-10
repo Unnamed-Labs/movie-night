@@ -5,3 +5,4 @@ export * from './components/Input';
 export * from './components/Timer';
 export * from './components/MovieCard';
 export * from './components/Participant';
+export * from './components/ImageWithText';
