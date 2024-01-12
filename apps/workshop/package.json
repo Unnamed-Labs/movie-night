@@ -1,0 +1,33 @@
+{
+  "name": "@movie/workshop",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "clean": "git clean -xdf .turbo node_modules",
+    "lint": "eslint . --ext ts,tsx",
+    "dev": "storybook dev -p 6006",
+    "build": "storybook build"
+  },
+  "dependencies": {
+    "@movie/ui": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@movie/tsconfig": "workspace:*",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.2.2",
+    "vite": "^4.1.0",
+    "storybook": "^7.6.7",
+    "@storybook/react": "^7.6.7",
+    "@storybook/react-vite": "^7.6.7",
+    "@storybook/addon-links": "^7.6.7",
+    "@storybook/addon-essentials": "^7.6.7",
+    "@storybook/blocks": "^7.6.7",
+    "@storybook/addon-onboarding": "^1.0.10",
+    "@storybook/addon-interactions": "^7.6.7",
+    "@storybook/test": "^7.6.7"
+  }
+}

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 
-interface TimerProps {
+export type TimerProps = {
   initialTime: number;
-}
+};
 
-export const Timer: React.FC<TimerProps> = ({ initialTime }) => {
+export const Timer = ({ initialTime }: TimerProps) => {
   const [timeRemaining, setTimeRemaining] = useState(initialTime);
   const [backgroundColor, setBackgroundColor] = useState('');
   const [shimmerColor, setShimmerColor] = useState('');

@@ -1,0 +1,5 @@
+{
+  "extends": "@movie/tsconfig/react-library.json",
+  "include": ["."],
+  "exclude": []
+}

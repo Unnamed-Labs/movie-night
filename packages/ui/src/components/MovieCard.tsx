@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from './Button';
 
-type MovieCardProps = {
+export type MovieCardProps = {
   title: string;
   description: string;
   runtime: string;

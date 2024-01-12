@@ -1,4 +1,4 @@
-type ImageWithTextProps = {
+export type ImageWithTextProps = {
   src: string;
   text: string;
   'data-testid'?: string;

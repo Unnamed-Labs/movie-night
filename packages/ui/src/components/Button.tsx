@@ -1,20 +1,20 @@
-import React, { type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-interface ButtonProps {
+export type ButtonProps = {
   children: ReactNode;
   variant?: 'primary' | 'secondary' | 'standalone';
   disabled?: boolean;
   'data-testid'?: string;
   onClick?: () => void | Promise<void>;
-}
+};
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button = ({
   children,
   variant = 'primary',
   disabled = false,
   'data-testid': dataTestId = 'button',
   onClick,
-}) => {
+}: ButtonProps) => {
   let buttonType =
     'ui-flex ui-rounded ui-min-w-[144px] ui-justify-center ui-px-4 ui-items-center ui-py-3';
 

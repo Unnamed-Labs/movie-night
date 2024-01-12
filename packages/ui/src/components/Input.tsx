@@ -1,6 +1,6 @@
 import { HiOutlineExclamationCircle } from 'react-icons/hi2';
 
-type InputProps = {
+export type InputProps = {
   label?: string;
   defaultValue?: string;
   type?: 'text' | 'email' | 'password' | 'tel';
@@ -12,7 +12,7 @@ type InputProps = {
   onChange: (val: string) => void;
 };
 
-export const Input: React.FC<InputProps> = ({
+export const Input = ({
   label,
   defaultValue,
   onChange,
@@ -22,7 +22,7 @@ export const Input: React.FC<InputProps> = ({
   helpText,
   error,
   leftIcon,
-}) => {
+}: InputProps) => {
   const internalLabel = label ? (required ? `${label} *` : label) : '';
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
