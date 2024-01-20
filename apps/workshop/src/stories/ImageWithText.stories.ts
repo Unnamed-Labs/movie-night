@@ -35,7 +35,7 @@ const meta = {
     },
   },
   args: {
-    src: '/waiting-1.jpeg',
+    src: '/movie-night/waiting-1.jpeg',
     text: 'waiting for suggestions...',
     'data-testid': 'image-with-text',
   },
