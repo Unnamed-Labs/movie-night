@@ -20,17 +20,14 @@ const Lobby = () => {
     >
       <>
         <Button
-          variant="primary"
+          label="host"
           onClick={handleHostClick}
-        >
-          Host
-        </Button>
+        />
         <Button
+          label="join"
           variant="secondary"
           onClick={handleJoinClick}
-        >
-          Join
-        </Button>
+        />
       </>
     </Page>
   );

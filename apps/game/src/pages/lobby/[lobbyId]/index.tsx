@@ -50,7 +50,12 @@ const LobbyById = () => {
         participants={lobby?.participants ?? []}
         amount={lobby?.amount ?? 8}
       />
-      {user?.isHost && <Button onClick={handleStartGameOnClick}>Start game</Button>}
+      {user?.isHost && (
+        <Button
+          label="start"
+          onClick={handleStartGameOnClick}
+        />
+      )}
     </Page>
   );
 };

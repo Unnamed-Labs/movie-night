@@ -43,11 +43,10 @@ const Join = () => {
         onChange={handleRoomNumberChange}
       />
       <Button
+        label="join room"
         disabled={!displayName || !roomCode}
         onClick={handleJoinLobbyClick}
-      >
-        Join room
-      </Button>
+      />
     </Page>
   );
 };
