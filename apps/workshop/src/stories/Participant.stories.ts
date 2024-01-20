@@ -37,7 +37,7 @@ const meta = {
   args: {
     name: 'Aaron',
     image: {
-      src: 'src/stories/assets/saitaang.jpg',
+      src: '/saitaang.jpg',
       alt: "Aaron's profile pic",
     },
     'data-testid': 'participant',

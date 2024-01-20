@@ -35,7 +35,7 @@ const meta = {
     },
   },
   args: {
-    src: 'src/stories/assets/waiting-1.jpeg',
+    src: '/waiting-1.jpeg',
     text: 'waiting for suggestions...',
     'data-testid': 'image-with-text',
   },

@@ -66,7 +66,7 @@ const meta = {
     runtime: '1h 30m',
     date: '05/18/2001',
     image: {
-      src: 'src/stories/assets/shrek.jpg',
+      src: '/shrek.jpg',
       alt: 'Shrek poster',
     },
     rating: 'PG',
@@ -90,7 +90,7 @@ export const Disabled: Story = {
 export const Selectable: Story = {
   args: {
     user: {
-      src: 'src/stories/assets/saitaang.jpg',
+      src: '/saitaang.jpg',
       alt: 'user profile pic',
     },
   },
