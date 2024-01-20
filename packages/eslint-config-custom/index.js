@@ -1,6 +1,6 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
-  plugins: ['@typescript-eslint', 'prettier', 'react-refresh'],
+  plugins: ['@typescript-eslint', 'prettier'],
   extends: [
     'next',
     'turbo',
@@ -25,10 +25,6 @@ module.exports = {
       { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
     ],
     'prettier/prettier': 2,
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
   },
   ignorePatterns: [
     '**/*.config.*',
