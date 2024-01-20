@@ -20,14 +20,10 @@ const Result = () => {
       {result && (
         <MovieCard
           title={result.title}
-          description={result.description}
           image={result.image}
-          genres={result.genres}
           date={result.date}
-          location={result.location}
           rating={result.rating}
           runtime={result.runtime}
-          score={result.score * 100}
         />
       )}
     </Page>

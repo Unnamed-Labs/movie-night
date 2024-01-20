@@ -4,36 +4,51 @@ import { Button } from '../src/components/Button';
 
 describe('<Button />', () => {
   it('should mount', () => {
-    const { getByText } = render(<Button>Ready</Button>);
-    const elem = getByText('Ready');
+    const { getByText } = render(<Button label="ready" />);
+    const elem = getByText('ready');
 
     expect(elem).toBeTruthy();
   });
 
   it('should be a primary variant', () => {
-    const { getByText } = render(<Button>Ready</Button>);
-    const elem = getByText('Ready');
+    const { getByText } = render(<Button label="ready" />);
+    const elem = getByText('ready');
 
     expect(elem).toHaveClass('ui-bg-emerald-300');
   });
 
   it('should be a secondary variant', () => {
-    const { getByText } = render(<Button variant="secondary">Ready</Button>);
-    const elem = getByText('Ready');
+    const { getByText } = render(
+      <Button
+        label="ready"
+        variant="secondary"
+      />,
+    );
+    const elem = getByText('ready');
 
     expect(elem).toHaveClass('ui-bg-purple-300');
   });
 
   it('should be a standalone variant', () => {
-    const { getByText } = render(<Button variant="standalone">Ready</Button>);
-    const elem = getByText('Ready');
+    const { getByText } = render(
+      <Button
+        label="ready"
+        variant="standalone"
+      />,
+    );
+    const elem = getByText('ready');
 
     expect(elem).toHaveClass('ui-underline');
   });
 
   it('should be disabled', () => {
-    const { getByText } = render(<Button disabled>Ready</Button>);
-    const elem = getByText('Ready');
+    const { getByText } = render(
+      <Button
+        label="ready"
+        disabled
+      />,
+    );
+    const elem = getByText('ready');
 
     expect(elem).toHaveProperty('disabled');
     expect(elem).toHaveClass('ui-bg-slate-700');
@@ -44,8 +59,13 @@ describe('<Button />', () => {
     const onClick = () => {
       flag = true;
     };
-    const { getByText } = render(<Button onClick={onClick}>Ready</Button>);
-    const elem = getByText('Ready');
+    const { getByText } = render(
+      <Button
+        label="ready"
+        onClick={onClick}
+      />,
+    );
+    const elem = getByText('ready');
 
     expect(flag).toBeFalsy();
     await userEvent.click(elem);

@@ -52,10 +52,16 @@ export const MovieCard = ({
       onClick={handleCardClick}
     >
       {disabled && (
-        <div className="ui-absolute ui-left-0 ui-top-0 ui-z-10 ui-h-full ui-w-full ui-rounded-lg ui-bg-slate-900 ui-opacity-50" />
+        <div
+          className="ui-absolute ui-left-0 ui-top-0 ui-z-10 ui-h-full ui-w-full ui-rounded-lg ui-bg-slate-900 ui-opacity-50"
+          data-testid={`${dataTestId}-disabled-filter`}
+        />
       )}
       {selected && (
-        <div className="ui-absolute ui-left-0 ui-top-0 ui-z-10 ui-h-full ui-w-full ui-bg-slate-900 ui-opacity-15" />
+        <div
+          className="ui-absolute ui-left-0 ui-top-0 ui-z-10 ui-h-full ui-w-full ui-bg-slate-900 ui-opacity-15"
+          data-testid={`${dataTestId}-selected-filter`}
+        />
       )}
       {selected && user && (
         <img
