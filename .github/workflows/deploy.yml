@@ -1,0 +1,45 @@
+name: Deploy
+run-name: ${{ github.actor }} is deploying their build 🚀
+on:
+  push:
+    branches:
+      - "main"
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  deploy:
+    name: Deploy
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ vars.DATABASE_URL }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+      NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
+      DISCORD_CLIENT_ID: ${{ vars.DISCORD_CLIENT_ID }}
+      DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
+      NODE_ENV: ${{ vars.NODE_ENV }}
+      NEXT_PUBLIC_SERVER_URL: ${{ vars.NEXT_PUBLIC_SERVER_URL }}
+      SERVER_PORT: ${{ vars.SERVER_PORT }}
+      UPSTASH_REDIS_URL: ${{ vars.UPSTASH_REDIS_URL }}
+      UPSTASH_REDIS_PASSWORD: ${{ secrets.UPSTASH_REDIS_PASSWORD }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.19.0
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+
+      - id: build-publish-workshop
+        uses: bitovi/github-actions-storybook-to-github-pages@v1.0.2
+        with:
+          checkout: false
+          install_command: pnpm install
+          build_command: pnpm build --filter=workshop
+          path: apps/workshop/storybook-static

@@ -50,6 +50,7 @@ describe('<Input />', () => {
     it('should not show the label when not present', () => {
       const { getByTestId, queryByLabelText } = render(
         <Input
+          label={label}
           defaultValue={value}
           onChange={handleOnChange}
           required

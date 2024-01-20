@@ -1,4 +1,4 @@
-type ImageWithTextProps = {
+export type ImageWithTextProps = {
   src: string;
   text: string;
   'data-testid'?: string;
@@ -22,7 +22,7 @@ export const ImageWithText = ({
       data-testid={`${dataTestId}-img`}
     />
     <p
-      className="ui-font-base ui-text-center"
+      className="ui-font-base ui-text-center ui-text-slate-50"
       data-testid={`${dataTestId}-text`}
     >
       {text}

@@ -32,11 +32,10 @@ const Host = () => {
         onChange={handleDisplayNameChange}
       />
       <Button
+        label="create room"
         disabled={!displayName}
         onClick={handleHostClick}
-      >
-        Create room
-      </Button>
+      />
     </Page>
   );
 };

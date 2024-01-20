@@ -91,7 +91,7 @@ const SearchPage = () => {
       error={error}
     >
       <Input
-        placeholder="Search"
+        label="search"
         onChange={debouncedSearch}
       />
       {movies &&
@@ -99,20 +99,18 @@ const SearchPage = () => {
           <MovieCard
             key={idx}
             title={movie.title}
-            description={movie.description}
             image={movie.image}
-            genres={movie.genres}
             date={movie.date}
-            location={movie.location}
             rating={movie.rating}
             runtime={movie.runtime}
-            score={movie.score * 100}
-            selectable
             disabled={isDisabled(movie)}
             onClick={() => handleCardClick(movie)}
           />
         ))}
-      <Button onClick={handleDoneClick}>Done</Button>
+      <Button
+        label="submit"
+        onClick={handleDoneClick}
+      />
     </Page>
   );
 };

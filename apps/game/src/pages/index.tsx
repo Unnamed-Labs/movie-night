@@ -19,17 +19,15 @@ const Home = () => {
       body="Welcome to Movie Night! Login or start a room as a guest."
     >
       <Button
+        label="sign in with discord"
         variant="secondary"
         onClick={handleDiscordLogin}
-      >
-        Login with Discord
-      </Button>
+      />
       <Button
+        label="continue as guest"
         variant="standalone"
         onClick={handleGuestContinue}
-      >
-        Continue as guest
-      </Button>
+      />
     </Page>
   );
 };

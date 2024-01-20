@@ -53,20 +53,18 @@ const Vote = () => {
           <MovieCard
             key={option.movie.id}
             title={option.movie.title}
-            description={option.movie.description}
             image={option.movie.image}
-            genres={option.movie.genres}
             date={option.movie.date}
-            location={option.movie.location}
             rating={option.movie.rating}
             runtime={option.movie.runtime}
-            score={option.movie.score * 100}
             disabled={isDisabled(option.movie)}
-            selectable
             onClick={() => handleCardClick(option.movie)}
           />
         ))}
-      <Button onClick={handleLockInClick}>Lock in</Button>
+      <Button
+        label="submit"
+        onClick={handleLockInClick}
+      />
     </Page>
   );
 };
