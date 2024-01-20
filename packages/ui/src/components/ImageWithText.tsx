@@ -22,7 +22,7 @@ export const ImageWithText = ({
       data-testid={`${dataTestId}-img`}
     />
     <p
-      className="ui-font-base ui-text-center"
+      className="ui-font-base ui-text-center ui-text-slate-50"
       data-testid={`${dataTestId}-text`}
     >
       {text}

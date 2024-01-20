@@ -1,7 +1,5 @@
-import { type ReactNode } from 'react';
-
 export type ButtonProps = {
-  children: ReactNode;
+  label: string;
   variant?: 'primary' | 'secondary' | 'standalone';
   disabled?: boolean;
   'data-testid'?: string;
@@ -9,14 +7,14 @@ export type ButtonProps = {
 };
 
 export const Button = ({
-  children,
+  label,
   variant = 'primary',
   disabled = false,
   'data-testid': dataTestId = 'button',
   onClick,
 }: ButtonProps) => {
   let buttonType =
-    'ui-flex ui-rounded ui-min-w-[144px] ui-justify-center ui-px-4 ui-items-center ui-py-3';
+    'ui-flex ui-rounded ui-min-w-[144px] ui-justify-center ui-px-4 ui-items-center ui-py-3 ui-font-bold';
 
   if (disabled) {
     buttonType += ' ui-text-slate-500 ui-bg-slate-700 hover:ui-cursor-not-allowed';
@@ -26,15 +24,15 @@ export const Button = ({
     switch (variant) {
       case 'primary':
         buttonType +=
-          ' ui-bg-emerald-300 ui-transition-colors hover:ui-bg-emerald-600 hover:ui-text-white';
+          ' ui-bg-emerald-300 ui-transition-colors hover:ui-bg-emerald-600 hover:ui-text-slate-50';
         break;
       case 'secondary':
         buttonType +=
-          ' ui-bg-purple-300 ui-transition-colors hover:ui-bg-purple-500 hover:ui-text-white';
+          ' ui-bg-purple-300 ui-transition-colors hover:ui-bg-purple-500 hover:ui-text-slate-50';
         break;
       case 'standalone':
         buttonType =
-          'ui-flex ui-min-w-fit ui-basis-4 ui-py-3 ui-text-white ui-underline hover:ui-no-underline';
+          'ui-flex ui-min-w-fit ui-basis-4 ui-py-3 ui-text-slate-50 ui-underline hover:ui-no-underline';
         break;
     }
   }
@@ -46,7 +44,7 @@ export const Button = ({
       onClick={onClick}
       data-testid={dataTestId}
     >
-      {children}
+      {label.toLowerCase()}
     </button>
   );
 };

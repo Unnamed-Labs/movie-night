@@ -1,0 +1,36 @@
+name: Deploy
+run-name: ${{ github.actor }} is deploying their build 🚀
+on:
+  push:
+    branches:
+      - "main"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.19.0
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Install
+        run: pnpm install
+
+      - id: build-publish-workshop
+        uses: bitovi/github-actions-storybook-to-github-pages@v1.0.2
+        with:
+          checkout: false
+          ins
+          path: build # change to your build folder

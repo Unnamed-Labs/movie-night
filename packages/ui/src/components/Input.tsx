@@ -1,7 +1,7 @@
 import { HiOutlineExclamationCircle } from 'react-icons/hi2';
 
 export type InputProps = {
-  label?: string;
+  label: string;
   defaultValue?: string;
   type?: 'text' | 'email' | 'password' | 'tel';
   placeholder?: string;
@@ -9,6 +9,7 @@ export type InputProps = {
   helpText?: string;
   error?: string;
   leftIcon?: React.ReactNode;
+  'data-testid'?: string;
   onChange: (val: string) => void;
 };
 
@@ -22,6 +23,7 @@ export const Input = ({
   helpText,
   error,
   leftIcon,
+  'data-testid': dataTestId = 'input',
 }: InputProps) => {
   const internalLabel = label ? (required ? `${label} *` : label) : '';
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +37,7 @@ export const Input = ({
         {leftIcon && <span className="ui-text-lg">{leftIcon}</span>}
         <input
           className="ui-bg-transparent ui-outline-none"
-          data-testid="input"
+          data-testid={dataTestId}
           type={type}
           defaultValue={defaultValue}
           placeholder={placeholder}
@@ -45,7 +47,7 @@ export const Input = ({
       {error ? (
         <span
           className="ui-flex ui-flex-row ui-items-center ui-gap-2 ui-px-2 ui-text-sm ui-text-rose-300"
-          data-testid="input-error"
+          data-testid={`${dataTestId}-error`}
         >
           <HiOutlineExclamationCircle className="ui-text-2xl" />
           {error}
@@ -54,7 +56,7 @@ export const Input = ({
         helpText && (
           <span
             className="ui-px-2 ui-text-sm"
-            data-testid="input-help-text"
+            data-testid={`${dataTestId}-help-text`}
           >
             {helpText}
           </span>
