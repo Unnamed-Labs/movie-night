@@ -24,19 +24,18 @@ jobs:
       SERVER_PORT: ${{ vars.SERVER_PORT }}
       UPSTASH_REDIS_URL: ${{ vars.UPSTASH_REDIS_URL }}
       UPSTASH_REDIS_PASSWORD: ${{ secrets.UPSTASH_REDIS_PASSWORD }}
+      STORYBOOK_URL: ${{ vars.STORYBOOK_URL }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-
       - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version: 18.19.0
-      
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
-
       - id: build-publish-workshop
+        name: Deploy Storybook
         uses: bitovi/github-actions-storybook-to-github-pages@v1.0.2
         with:
           checkout: false

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Participant } from '@movie/ui';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const meta = {
   title: 'Participant',
@@ -37,7 +38,7 @@ const meta = {
   args: {
     name: 'Aaron',
     image: {
-      src: '/movie-night/saitaang.jpg',
+      src: getImageUrl('/saitaang.jpg'),
       alt: "Aaron's profile pic",
     },
     'data-testid': 'participant',

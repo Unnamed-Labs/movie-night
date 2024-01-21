@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { MovieCard } from '@movie/ui';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const meta = {
   title: 'MovieCard',
@@ -66,7 +67,7 @@ const meta = {
     runtime: '1h 30m',
     date: '05/18/2001',
     image: {
-      src: '/movie-night/shrek.jpg',
+      src: getImageUrl('/shrek.jpg'),
       alt: 'Shrek poster',
     },
     rating: 'PG',
@@ -90,7 +91,7 @@ export const Disabled: Story = {
 export const Selectable: Story = {
   args: {
     user: {
-      src: '/movie-night/saitaang.jpg',
+      src: getImageUrl('/saitaang.jpg'),
       alt: 'user profile pic',
     },
   },
