@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ImageWithText } from '@movie/ui';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const meta = {
   title: 'ImageWithText',
@@ -35,7 +36,7 @@ const meta = {
     },
   },
   args: {
-    src: '/movie-night/waiting-1.jpeg',
+    src: getImageUrl('/waiting-1.jpeg'),
     text: 'waiting for suggestions...',
     'data-testid': 'image-with-text',
   },

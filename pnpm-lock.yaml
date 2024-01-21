@@ -209,6 +209,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.2.1
         version: 4.2.1(vite@4.5.1)
+      dotenv-cli:
+        specifier: ^7.3.0
+        version: 7.3.0
       storybook:
         specifier: ^7.6.7
         version: 7.6.7

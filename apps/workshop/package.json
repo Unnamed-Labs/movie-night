@@ -5,8 +5,9 @@
   "scripts": {
     "clean": "git clean -xdf .turbo node_modules storybook-static",
     "lint": "eslint . --ext ts,tsx",
-    "dev": "storybook dev -p 6006",
-    "build": "storybook build"
+    "dev": "pnpm with-env storybook dev -p 6006",
+    "build": "pnpm with-env storybook build",
+    "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "@movie/ui": "workspace:*",
@@ -27,6 +28,7 @@
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
+    "dotenv-cli": "^7.3.0",
     "storybook": "^7.6.7",
     "typescript": "^5.2.2",
     "vite": "^4.1.0"

@@ -1,5 +1,8 @@
 {
   "extends": "@movie/tsconfig/react-library.json",
   "include": ["."],
-  "exclude": []
+  "exclude": [],
+  "compilerOptions": {
+    "types": ["vite/client"]
+  }
 }
