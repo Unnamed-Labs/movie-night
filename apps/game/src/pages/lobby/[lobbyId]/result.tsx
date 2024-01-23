@@ -7,11 +7,11 @@ const Result = () => {
   const { lobby } = useLobby();
 
   if (!lobby) {
-    return <div>Room not available...</div>;
+    return <div>results not available...</div>;
   }
 
   const { data: result } = api.lobby.getResultById.useQuery({ lobbyId: lobby.id });
-  const body = result ? `Congrats to ${result.title}. Enjoy!` : '';
+  const body = result ? `congrats to ${result.title}. enjoy!` : '';
   return (
     <Page
       title="Movie Night"

@@ -44,7 +44,7 @@ const Vote = () => {
   return (
     <Page
       title="Movie Night"
-      body="Vote on what you want to watch."
+      body="vote on your favorite movie."
       loading={loading}
       error={error}
     >

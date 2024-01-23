@@ -26,7 +26,7 @@ export const Participant = ({
       />
     )}
     <span
-      className="ui-text-base ui-text-slate-50"
+      className="ui-text-base ui-text-slate-50 ui-font-raleway"
       data-testid={`${dataTestId}-name`}
     >
       {name}

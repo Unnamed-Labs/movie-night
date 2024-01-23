@@ -26,20 +26,20 @@ const Join = () => {
   return (
     <Page
       title="Movie Night"
-      body="Enter your name and join a room!"
+      body="enter your name and join a room!"
       loading={loading}
       error={error}
     >
       <Input
-        label="Name"
+        label="name"
         required
-        helpText="Enter your display name"
+        helpText="enter your display name"
         onChange={handleDisplayNameChange}
       />
       <Input
-        label="Room #"
+        label="room #"
         required
-        helpText="Four digit room code provided by host"
+        helpText="four digit room code provided by host"
         onChange={handleRoomNumberChange}
       />
       <Button

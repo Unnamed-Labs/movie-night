@@ -21,14 +21,14 @@ const Host = () => {
   return (
     <Page
       title="Movie Night"
-      body="Enter your name and create a room!"
+      body="enter your name and create a room!"
       loading={loading}
       error={error}
     >
       <Input
-        label="Name"
+        label="name"
         required
-        helpText="Enter your display name"
+        helpText="enter your display name"
         onChange={handleDisplayNameChange}
       />
       <Button

@@ -20,8 +20,8 @@ const LobbyById = () => {
   }, [lobby, user, router]);
 
   const body = user?.isHost
-    ? 'Press start when everyone has joined!'
-    : 'You’re in the lobby! The host will press start when everyone is in.';
+    ? 'press start when everyone has joined!'
+    : 'you’re in the lobby! the host will press start when everyone is in.';
 
   const handleStartGameOnClick = () => {
     void startGameById();

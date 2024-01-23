@@ -16,7 +16,7 @@ const Lobby = () => {
   return (
     <Page
       title="Movie Night"
-      body="Would you like to host or join a lobby?"
+      body="would you like to host or join a lobby?"
     >
       <>
         <Button
