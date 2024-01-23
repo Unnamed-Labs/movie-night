@@ -86,7 +86,7 @@ const SearchPage = () => {
   return (
     <Page
       title="Movie Night"
-      body="Search movie titles. Find 2 before time runs out!"
+      body="search for a movie everyone might enjoy!"
       loading={loading}
       error={error}
     >

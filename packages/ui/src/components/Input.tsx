@@ -31,12 +31,12 @@ export const Input = ({
   };
 
   return (
-    <label className="ui-flex ui-w-full ui-max-w-xs ui-flex-col ui-gap-2 ui-text-base ui-text-slate-100">
-      <strong>{internalLabel}</strong>
+    <label className="ui-flex ui-w-full ui-max-w-xs ui-flex-col ui-gap-2 ui-text-base ui-text-slate-50">
+      <strong className="ui-font-raleway">{internalLabel}</strong>
       <div className="ui-flex ui-flex-row ui-items-center ui-gap-2 ui-rounded-lg ui-bg-slate-700 ui-px-3 ui-py-4">
         {leftIcon && <span className="ui-text-lg">{leftIcon}</span>}
         <input
-          className="ui-bg-transparent ui-outline-none"
+          className="ui-bg-transparent ui-outline-none ui-font-work-sans"
           data-testid={dataTestId}
           type={type}
           defaultValue={defaultValue}
@@ -46,7 +46,7 @@ export const Input = ({
       </div>
       {error ? (
         <span
-          className="ui-flex ui-flex-row ui-items-center ui-gap-2 ui-px-2 ui-text-sm ui-text-rose-300"
+          className="ui-flex ui-flex-row ui-items-center ui-gap-2 ui-px-2 ui-text-sm ui-text-rose-300 ui-font-raleway"
           data-testid={`${dataTestId}-error`}
         >
           <HiOutlineExclamationCircle className="ui-text-2xl" />
@@ -55,7 +55,7 @@ export const Input = ({
       ) : (
         helpText && (
           <span
-            className="ui-px-2 ui-text-sm"
+            className="ui-px-2 ui-text-sm ui-font-raleway"
             data-testid={`${dataTestId}-help-text`}
           >
             {helpText}

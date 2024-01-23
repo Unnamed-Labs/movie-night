@@ -16,7 +16,7 @@ const Home = () => {
   return (
     <Page
       title="Movie Night"
-      body="Welcome to Movie Night! Login or start a room as a guest."
+      body="welcome to Movie Night! login or start a room as a guest."
     >
       <Button
         label="sign in with discord"

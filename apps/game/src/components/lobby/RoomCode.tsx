@@ -3,5 +3,7 @@ type RoomCodeProps = {
 };
 
 export const RoomCode = ({ code }: RoomCodeProps) => (
-  <div className="rounded-lg bg-slate-700 py-3 text-center text-2xl">{code}</div>
+  <div className="font-raleway rounded-lg bg-slate-700 py-3 text-center text-4xl font-bold">
+    {code}
+  </div>
 );

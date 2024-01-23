@@ -46,7 +46,7 @@ export const MovieCard = ({
 
   return (
     <div
-      className={`ui-relative ui-flex ui-w-full ui-max-w-xs ui-flex-col ui-gap-2 ui-rounded-lg ui-bg-slate-700 ui-text-slate-100 ui-drop-shadow-md ui-shadow-black ui-transition-all ${disabledClasses}`}
+      className={`ui-relative ui-flex ui-w-full ui-max-w-[256px] ui-flex-col ui-gap-2 ui-rounded-lg ui-bg-slate-700 ui-text-slate-50 ui-font-work-sans ui-drop-shadow-md ui-shadow-black ui-transition-all ${disabledClasses}`}
       title={title}
       data-testid={dataTestId}
       onClick={handleCardClick}

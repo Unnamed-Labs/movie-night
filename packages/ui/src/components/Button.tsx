@@ -14,12 +14,12 @@ export const Button = ({
   onClick,
 }: ButtonProps) => {
   let buttonType =
-    'ui-flex ui-rounded ui-min-w-[144px] ui-justify-center ui-px-4 ui-items-center ui-py-3 ui-font-bold';
+    'ui-flex ui-rounded ui-min-w-[144px] ui-justify-center ui-px-4 ui-items-center ui-py-3 ui-text-base ui-font-extrabold ui-font-work-sans';
 
   if (disabled) {
     buttonType += ' ui-text-slate-500 ui-bg-slate-700 hover:ui-cursor-not-allowed';
   } else {
-    buttonType += ' ui-text-slate-700';
+    buttonType += ' ui-text-slate-900';
 
     switch (variant) {
       case 'primary':
@@ -32,7 +32,7 @@ export const Button = ({
         break;
       case 'standalone':
         buttonType =
-          'ui-flex ui-min-w-fit ui-basis-4 ui-py-3 ui-text-slate-50 ui-underline hover:ui-no-underline';
+          'ui-flex ui-min-w-fit ui-basis-4 ui-py-3 ui-text-base ui-text-slate-50 ui-underline ui-font-bold ui-font-work-sans hover:ui-no-underline';
         break;
     }
   }

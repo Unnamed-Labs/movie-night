@@ -8,8 +8,8 @@ type ParticipantsProps = {
 
 export const Participants = ({ participants, amount }: ParticipantsProps) => (
   <div>
-    <h2 className="pb-4 text-2xl font-bold">
-      Participants {participants.length} / {amount}
+    <h2 className="font-raleway pb-4 text-2xl">
+      participants {participants.length} / {amount}
     </h2>
     <div className="flex flex-col gap-4">
       {participants.map((participant, idx) => (
