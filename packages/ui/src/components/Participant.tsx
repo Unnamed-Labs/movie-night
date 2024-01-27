@@ -1,3 +1,5 @@
+import { ProfileIcon } from './ProfileIcon';
+
 export type ParticipantProps = {
   name: string;
   image?: {
@@ -18,11 +20,10 @@ export const Participant = ({
     data-testid={dataTestId}
   >
     {image && (
-      <img
-        className="ui-h-12 ui-w-12 ui-rounded-full ui-object-cover"
+      <ProfileIcon
         src={image.src}
         alt={image.alt}
-        data-testid={`${dataTestId}-img`}
+        data-testid={`${dataTestId}-profile-icon`}
       />
     )}
     <span
