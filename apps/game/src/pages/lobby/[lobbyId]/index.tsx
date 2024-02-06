@@ -57,7 +57,7 @@ const LobbyById = () => {
       />
       {isError && (
         <p className="font-raleway text-sm text-red-300">
-          Uh oh! There are not enough participants. You need 3 or more to begin...
+          uh oh! there are not enough participants. you need 3 or more to begin...
         </p>
       )}
       {user?.isHost && (
