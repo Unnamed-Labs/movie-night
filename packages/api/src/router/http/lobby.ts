@@ -196,8 +196,8 @@ export const lobby = createTRPCRouter({
       client.emit('startGame', lobbyId);
     }),
   getProposedById: publicProcedure
-    .input(z.object({ lobbyId: z.string().cuid2() }))
-    .query(async ({ input: { lobbyId } }) => {
+    .input(z.object({ lobbyId: z.string().cuid2(), userId: z.string().cuid2() }))
+    .query(async ({ input: { lobbyId, userId } }) => {
       const lobby = await getLobby(lobbyId);
 
       if (!lobby) {
@@ -205,9 +205,14 @@ export const lobby = createTRPCRouter({
       }
 
       const movieExists: { [key: string]: boolean } = {};
+      const userSuggestion = lobby.proposed.find((p) => p.users.find((u) => u.id === userId));
+
+      if (!userSuggestion) {
+        return null;
+      }
 
       const proposed = lobby.proposed.filter((p) => {
-        if (!movieExists[p.movie.id]) {
+        if (!movieExists[p.movie.id] && p.movie.title !== userSuggestion.movie.title) {
           movieExists[p.movie.id] = true;
           return true;
         }

@@ -20,7 +20,10 @@ const Vote = () => {
     }
   }, [lobby, user, router]);
 
-  const { data: proposed } = api.lobby.getProposedById.useQuery({ lobbyId: lobby?.id });
+  const { data: proposed } = api.lobby.getProposedById.useQuery({
+    lobbyId: lobby?.id,
+    userId: user?.id,
+  });
   const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
   const isDisabled = (movie: Movie) => selectedMovie && selectedMovie.title != movie.title;
