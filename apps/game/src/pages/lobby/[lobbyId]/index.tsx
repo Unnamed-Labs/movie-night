@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button } from '@movie/ui';
 import { Page } from '~/components/Page';
@@ -12,6 +12,7 @@ const LobbyById = () => {
   const { lobby, user, loading, error, startGameById } = useLobby({
     enableParticipantUpdates: true,
   });
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     if (!lobby || !user) {
@@ -24,7 +25,11 @@ const LobbyById = () => {
     : 'you’re in the lobby! the host will press start when everyone is in.';
 
   const handleStartGameOnClick = () => {
-    void startGameById();
+    if (lobby.participants.length > 2) {
+      void startGameById();
+    } else {
+      setIsError(true);
+    }
   };
 
   api.lobbyWs.onStartGame.useSubscription(
@@ -50,6 +55,11 @@ const LobbyById = () => {
         participants={lobby?.participants ?? []}
         amount={lobby?.amount ?? 8}
       />
+      {isError && (
+        <p className="font-raleway text-sm text-red-300">
+          Uh oh! There are not enough participants. You need 3 or more to begin...
+        </p>
+      )}
       {user?.isHost && (
         <Button
           label="start"
