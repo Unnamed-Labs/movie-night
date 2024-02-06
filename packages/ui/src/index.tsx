@@ -7,3 +7,4 @@ export { MovieCard, type MovieCardProps } from './components/MovieCard';
 export { Participant, type ParticipantProps } from './components/Participant';
 export { ImageWithText, type ImageWithTextProps } from './components/ImageWithText';
 export { ProfileIcon, type ProfileIconProps } from './components/ProfileIcon';
+export { Error, type ErrorProps } from './components/Error';
