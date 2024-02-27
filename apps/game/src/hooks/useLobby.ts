@@ -36,7 +36,7 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
       setLobby(res.lobby);
       setUser(res.user);
     } else {
-      setError('Uh oh! Something went wrong when creating the room...');
+      setError("uh oh! we couldn't create a lobby for you...");
     }
     setLoading('');
     return res.lobby.id;
@@ -53,7 +53,7 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
       setLobby(res.lobby);
       setUser(res.user);
     } else {
-      setError('Uh oh! Something went wrong when joining the room...');
+      setError("uh oh! the lobby you tried to find doesn't exist...");
     }
     setLoading('');
     return res.lobby?.id;
@@ -73,7 +73,7 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
       movie,
     });
     if (res.error) {
-      setError('Uh oh! Something went wrong when submitting the selected movies...');
+      setError('uh oh! an error occurred submitting your suggestion...');
     }
     setLoading('');
     return res;
@@ -87,7 +87,7 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
       movie,
     });
     if (res.error) {
-      setError('Uh oh! Something went wrong when submitting the selected movies...');
+      setError('uh oh! an error occurred submitting your vote...');
     }
     setLoading('');
     return res;
@@ -116,5 +116,6 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
     submitProposedMovieById,
     submitVoteForMovieById,
     setPreviousRoute,
+    setError,
   };
 };

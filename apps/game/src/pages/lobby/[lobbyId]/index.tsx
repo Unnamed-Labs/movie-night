@@ -9,7 +9,7 @@ import { api } from '~/utils/api';
 
 const LobbyById = () => {
   const router = useRouter();
-  const { lobby, user, loading, error, startGameById } = useLobby({
+  const { lobby, user, startGameById } = useLobby({
     enableParticipantUpdates: true,
   });
   const [isError, setIsError] = useState(false);
@@ -47,8 +47,6 @@ const LobbyById = () => {
     <Page
       title="Movie Night"
       body={body}
-      loading={loading}
-      error={error}
     >
       {user?.isHost && <RoomCode code={lobby?.code} />}
       <Participants

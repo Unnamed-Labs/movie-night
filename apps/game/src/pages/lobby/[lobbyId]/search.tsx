@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import superjson from 'superjson';
 import debounce from 'lodash.debounce';
-import { Button, Input, MovieCard } from '@movie/ui';
+import { Button, Error, Input, MovieCard } from '@movie/ui';
 import { appRouter, createInnerTRPCContext, type Movie } from '@movie/api';
 import { Page } from '~/components/Page';
 import { api } from '~/utils/api';
@@ -27,7 +27,7 @@ export const getServerSideProps = async () => {
 
 const SearchPage = () => {
   const router = useRouter();
-  const { lobby, loading, error, submitProposedMovieById, setPreviousRoute } = useLobby();
+  const { lobby, error, submitProposedMovieById, setPreviousRoute } = useLobby();
   const [movieTitle, setMovieTitle] = useState<string>('');
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   const { data: popular } = api.movie.getPopular.useQuery();
@@ -36,6 +36,11 @@ const SearchPage = () => {
     { enabled: !!movieTitle, refetchOnWindowFocus: false },
   );
   const movies = searchResults && searchResults.length > 0 ? searchResults : popular;
+  const images = [
+    'http://localhost:3000/error-1.jpeg',
+    'http://localhost:3000/error-2.jpeg',
+    'http://localhost:3000/error-3.jpeg',
+  ];
 
   useEffect(() => {
     setPreviousRoute(router.asPath);
@@ -87,30 +92,37 @@ const SearchPage = () => {
     <Page
       title="Movie Night"
       body="search for a movie everyone might enjoy!"
-      loading={loading}
-      error={error}
     >
-      <Input
-        label="search"
-        onChange={debouncedSearch}
-      />
-      {movies &&
-        movies.map((movie, idx) => (
-          <MovieCard
-            key={idx}
-            title={movie.title}
-            image={movie.image}
-            date={movie.date}
-            rating={movie.rating}
-            runtime={movie.runtime}
-            disabled={isDisabled(movie)}
-            onClick={() => handleCardClick(movie)}
+      {error ? (
+        <Error
+          images={images}
+          text={error}
+        />
+      ) : (
+        <>
+          <Input
+            label="search"
+            onChange={debouncedSearch}
           />
-        ))}
-      <Button
-        label="submit"
-        onClick={handleDoneClick}
-      />
+          {movies &&
+            movies.map((movie, idx) => (
+              <MovieCard
+                key={idx}
+                title={movie.title}
+                image={movie.image}
+                date={movie.date}
+                rating={movie.rating}
+                runtime={movie.runtime}
+                disabled={isDisabled(movie)}
+                onClick={() => handleCardClick(movie)}
+              />
+            ))}
+          <Button
+            label="submit"
+            onClick={handleDoneClick}
+          />
+        </>
+      )}
     </Page>
   );
 };
