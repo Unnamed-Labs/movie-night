@@ -56,7 +56,7 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
       setError("uh oh! the lobby you tried to find doesn't exist...");
     }
     setLoading('');
-    return res.lobby?.id;
+    return res?.lobby?.id;
   };
 
   const startGameById = async () => {

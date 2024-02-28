@@ -20,12 +20,18 @@ const Lobby = () => {
 
   const handleHostClick = async () => {
     const lobbyId = await openRoom(name);
-    void router.push(`/lobby/${lobbyId}`);
+
+    if (lobbyId) {
+      void router.push(`/lobby/${lobbyId}`);
+    }
   };
 
   const handleJoinClick = async () => {
     const lobbyId = await joinByCode(name, roomCode);
-    void router.push(`/lobby/${lobbyId}`);
+
+    if (lobbyId) {
+      void router.push(`/lobby/${lobbyId}`);
+    }
   };
 
   const handleTryAgainClick = () => {
