@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, MovieCard } from '@movie/ui';
+import { Button, Error, MovieCard } from '@movie/ui';
 import { type Movie } from '@movie/api';
 import { Page } from '~/components/Page';
 import { api } from '~/utils/api';
@@ -8,7 +8,12 @@ import { useLobby } from '~/hooks/useLobby';
 
 const Vote = () => {
   const router = useRouter();
-  const { lobby, user, loading, error, submitVoteForMovieById, setPreviousRoute } = useLobby();
+  const { lobby, user, error, submitVoteForMovieById, setPreviousRoute } = useLobby();
+  const images = [
+    'http://localhost:3000/error-1.jpeg',
+    'http://localhost:3000/error-2.jpeg',
+    'http://localhost:3000/error-3.jpeg',
+  ];
 
   useEffect(() => {
     setPreviousRoute(router.asPath);
@@ -48,26 +53,33 @@ const Vote = () => {
     <Page
       title="Movie Night"
       body="vote on your favorite movie."
-      loading={loading}
-      error={error}
     >
-      {proposed &&
-        proposed.map((option) => (
-          <MovieCard
-            key={option.movie.id}
-            title={option.movie.title}
-            image={option.movie.image}
-            date={option.movie.date}
-            rating={option.movie.rating}
-            runtime={option.movie.runtime}
-            disabled={isDisabled(option.movie)}
-            onClick={() => handleCardClick(option.movie)}
+      {error ? (
+        <Error
+          images={images}
+          text={error}
+        />
+      ) : (
+        <>
+          {proposed &&
+            proposed.map((option) => (
+              <MovieCard
+                key={option.movie.id}
+                title={option.movie.title}
+                image={option.movie.image}
+                date={option.movie.date}
+                rating={option.movie.rating}
+                runtime={option.movie.runtime}
+                disabled={isDisabled(option.movie)}
+                onClick={() => handleCardClick(option.movie)}
+              />
+            ))}
+          <Button
+            label="submit"
+            onClick={handleLockInClick}
           />
-        ))}
-      <Button
-        label="submit"
-        onClick={handleLockInClick}
-      />
+        </>
+      )}
     </Page>
   );
 };

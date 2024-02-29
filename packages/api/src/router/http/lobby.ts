@@ -1,11 +1,14 @@
 import { z } from 'zod';
 import { prisma } from '@movie/db';
 import { createId } from '@paralleldrive/cuid2';
+import { Logger, type ILogObj } from 'tslog';
 import { createTRPCRouter, publicProcedure } from '../../trpc';
 import { client } from '../../utils/redisClient';
 import type { User } from '../../types/User';
 import type { Lobby } from '../../types/Lobby';
 import type { Movie } from '../../types/Movie';
+
+const log: Logger<ILogObj> = new Logger();
 
 const zodMovieObject = z.object({
   id: z.string().cuid2(),
@@ -29,7 +32,6 @@ const getLobby = async (lobbyId: string) => {
   const lobbyFromRedis = await client.get(lobbyId);
 
   if (!lobbyFromRedis) {
-    // TODO: Improve error for room not found
     return null;
   }
 
@@ -116,8 +118,7 @@ export const lobby = createTRPCRouter({
           lobby,
         };
       } catch (e) {
-        // TODO: Improve log statement here for SQL errors
-        console.error(e);
+        log.error('lobby failed to be created:', e);
         return null;
       }
     }),
@@ -148,17 +149,19 @@ export const lobby = createTRPCRouter({
         });
 
         if (!pRoom) {
+          log.error(`active lobby not found in db for code [${code}]`);
           return null;
         }
 
         const lobby = await getLobby(pRoom.id);
 
         if (!lobby) {
+          log.error(`lobby not found in cache for roomId [${pRoom.id}]`);
           return null;
         }
 
         if (lobby.participants.length >= 8) {
-          // TODO: Improve error for room full
+          log.warn(`lobby full, join attempt rejected for lobbyId [${lobby.id}]`);
           return null;
         }
 
@@ -185,8 +188,7 @@ export const lobby = createTRPCRouter({
           user,
         };
       } catch (e) {
-        // TODO: Improve logging for SQL error
-        console.error(e);
+        log.error('lobby failed to be joined:', e);
         return null;
       }
     }),
@@ -201,6 +203,7 @@ export const lobby = createTRPCRouter({
       const lobby = await getLobby(lobbyId);
 
       if (!lobby) {
+        log.error(`lobby not found in cache for lobbyId [${lobbyId}]`);
         return null;
       }
 
@@ -208,6 +211,7 @@ export const lobby = createTRPCRouter({
       const userSuggestion = lobby.proposed.find((p) => p.users.find((u) => u.id === userId));
 
       if (!userSuggestion) {
+        log.error(`user suggestion missing for lobbyId [${lobbyId}] and userId [${userId}]`);
         return null;
       }
 
@@ -256,10 +260,12 @@ export const lobby = createTRPCRouter({
       });
 
       if (!result) {
+        log.error(`no result found for lobbyId [${lobbyId}]`);
         return null;
       }
 
       if (!result.movie) {
+        log.error(`no movie found for the result of lobbyId [${lobbyId}]`);
         return null;
       }
 
@@ -308,6 +314,7 @@ export const lobby = createTRPCRouter({
         const lobby = await getLobby(lobbyId);
 
         if (!lobby) {
+          log.error(`lobby not found in cache for lobbyId [${lobbyId}]`);
           return {
             waiting: false,
             vote: false,
@@ -318,6 +325,7 @@ export const lobby = createTRPCRouter({
         const user = lobby.participants.find((participant) => participant.id === userId);
 
         if (!user) {
+          log.warn(`user [${userId}] not in participants list for lobbyId [${lobbyId}]`);
           return {
             waiting: false,
             vote: false,
@@ -330,6 +338,7 @@ export const lobby = createTRPCRouter({
         );
 
         if (hasParticipantProposed) {
+          log.warn(`user [${userId}] has already suggested a movie`);
           return {
             waiting: false,
             vote: false,
@@ -354,7 +363,7 @@ export const lobby = createTRPCRouter({
           error: false,
         };
       } catch (e) {
-        console.error(e);
+        log.error('user suggestion failed to submit:', e);
         return {
           waiting: false,
           vote: false,
@@ -389,6 +398,7 @@ export const lobby = createTRPCRouter({
         const lobby = await getLobby(lobbyId);
 
         if (!lobby) {
+          log.error(`lobby not found in cache for lobbyId [${lobbyId}]`);
           return {
             waiting: false,
             results: false,
@@ -399,6 +409,7 @@ export const lobby = createTRPCRouter({
         const user = lobby.participants.find((participant) => participant.id === userId);
 
         if (!user) {
+          log.warn(`user [${userId}] not in participants list for lobbyId [${lobbyId}]`);
           return {
             waiting: false,
             results: false,
@@ -411,6 +422,7 @@ export const lobby = createTRPCRouter({
         );
 
         if (hasUserVoted) {
+          log.warn(`user [${userId}] has already voted for a movie`);
           return {
             waiting: false,
             results: false,
@@ -462,7 +474,7 @@ export const lobby = createTRPCRouter({
           error: false,
         };
       } catch (e) {
-        console.error(e);
+        log.error('user vote failed to submit:', e);
         return {
           waiting: false,
           results: false,
