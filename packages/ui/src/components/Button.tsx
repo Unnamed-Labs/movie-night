@@ -37,11 +37,17 @@ export const Button = ({
     }
   }
 
+  const handleOnClick = () => {
+    if (onClick) {
+      void onClick();
+    }
+  };
+
   return (
     <button
       className={buttonType}
       disabled={disabled}
-      onClick={onClick}
+      onClick={handleOnClick}
       data-testid={dataTestId}
     >
       {label.toLowerCase()}

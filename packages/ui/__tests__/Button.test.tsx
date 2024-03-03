@@ -54,10 +54,28 @@ describe('<Button />', () => {
     expect(elem).toHaveClass('ui-bg-slate-700');
   });
 
-  it('onClick should fire', async () => {
+  it('should have onClick fire', async () => {
     let flag = false;
     const onClick = () => {
       flag = true;
+    };
+    const { getByText } = render(
+      <Button
+        label="ready"
+        onClick={onClick}
+      />,
+    );
+    const elem = getByText('ready');
+
+    expect(flag).toBeFalsy();
+    await userEvent.click(elem);
+    expect(flag).toBeTruthy();
+  });
+
+  it('should have async onClick fire', async () => {
+    let flag = false;
+    const onClick = async () => {
+      flag = await Promise.resolve(true);
     };
     const { getByText } = render(
       <Button
