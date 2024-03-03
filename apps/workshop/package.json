@@ -7,6 +7,7 @@
     "lint": "eslint . --ext ts,tsx",
     "dev": "pnpm with-env storybook dev -p 6006",
     "build": "pnpm with-env storybook build",
+    "type-check": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
