@@ -36,7 +36,7 @@ jobs:
         uses: pnpm/action-setup@v2
       - id: build-publish-workshop
         name: Deploy Storybook
-        uses: bitovi/github-actions-storybook-to-github-pages@v1.0.2
+        uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
         with:
           checkout: false
           install_command: pnpm install
