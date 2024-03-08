@@ -83,9 +83,54 @@ export const lobby = createTRPCRouter({
   open: publicProcedure
     .input(z.object({ accountId: z.string().cuid().optional(), name: z.string().min(1) }))
     .mutation(async ({ input: { accountId, name } }) => {
-      // TODO: how to better do a valid room code lookup? redis? find next valid room code in db table?
       try {
-        const code = ('0000' + Math.floor(Math.random() * 9999).toString()).slice(-4);
+        let availableCode = await prisma.roomCode.findFirst({
+          where: {
+            isActive: false,
+          },
+        });
+
+        if (!availableCode) {
+          return null;
+        }
+
+        let roomCode = await prisma.roomCode.updateMany({
+          data: {
+            isActive: true,
+            version: {
+              increment: 1,
+            },
+          },
+          where: {
+            id: availableCode.id,
+            version: availableCode.version,
+          },
+        });
+
+        while (roomCode.count === 0) {
+          availableCode = await prisma.roomCode.findFirst({
+            where: {
+              isActive: false,
+            },
+          });
+
+          if (!availableCode) {
+            return null;
+          }
+
+          roomCode = await prisma.roomCode.updateMany({
+            data: {
+              isActive: true,
+              version: {
+                increment: 1,
+              },
+            },
+            where: {
+              id: availableCode.id,
+              version: availableCode.version,
+            },
+          });
+        }
 
         const user: User = {
           id: createId(),
@@ -97,7 +142,7 @@ export const lobby = createTRPCRouter({
         const lobby: Lobby = {
           id: createId(),
           amount: 8,
-          code,
+          code: availableCode.code,
           participants: [user],
           proposed: [],
           votes: [],
@@ -106,7 +151,7 @@ export const lobby = createTRPCRouter({
         await prisma.lobby.create({
           data: {
             id: lobby.id,
-            code,
+            code: availableCode.code,
             isActive: true,
           },
         });
@@ -149,14 +194,14 @@ export const lobby = createTRPCRouter({
         });
 
         if (!pRoom) {
-          log.error(`active lobby not found in db for code [${code}]`);
+          log.warn(`active lobby not found in db for code [${code}]`);
           return null;
         }
 
         const lobby = await getLobby(pRoom.id);
 
         if (!lobby) {
-          log.error(`lobby not found in cache for roomId [${pRoom.id}]`);
+          log.warn(`lobby not found in cache for roomId [${pRoom.id}]`);
           return null;
         }
 
@@ -464,6 +509,16 @@ export const lobby = createTRPCRouter({
               },
               where: {
                 id: newLobbyWithResult.id,
+              },
+            });
+
+            await prisma.roomCode.update({
+              data: {
+                isActive: false,
+                updatedDate: new Date(),
+              },
+              where: {
+                code: newLobbyWithResult.code,
               },
             });
 

@@ -148,6 +148,12 @@ importers:
       '@movie/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
+      dotenv-cli:
+        specifier: ^7.3.0
+        version: 7.3.0
       eslint:
         specifier: ^8.56.0
         version: 8.56.0

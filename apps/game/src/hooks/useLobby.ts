@@ -39,7 +39,7 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
       setError("uh oh! we couldn't create a lobby for you...");
     }
     setLoading('');
-    return res.lobby.id;
+    return res?.lobby?.id;
   };
 
   const joinByCode = async (name: string, code: string) => {

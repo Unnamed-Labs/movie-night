@@ -69,10 +69,28 @@ const createMovies = async () => {
   }
 };
 
+const createRoomCodes = async () => {
+  const codes = [];
+  for (let i = 0; i <= 4; i++) {
+    const code = ('0000' + i).toString().slice(-4);
+    codes.push(code);
+  }
+
+  for (const code of codes) {
+    await prisma.roomCode.create({
+      data: {
+        code,
+        isActive: false,
+      },
+    });
+  }
+};
+
 const main = async () => {
   await createRatings();
   await createGenres();
   await createMovies();
+  await createRoomCodes();
 };
 
 main()

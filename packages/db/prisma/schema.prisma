@@ -90,3 +90,12 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model RoomCode {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  isActive    Boolean
+  createdDate DateTime @default(now())
+  updatedDate DateTime @default(now())
+  version     Int      @default(0)
+}
