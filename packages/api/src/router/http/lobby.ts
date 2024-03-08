@@ -198,8 +198,8 @@ export const lobby = createTRPCRouter({
       client.emit('startGame', lobbyId);
     }),
   getProposedById: publicProcedure
-    .input(z.object({ lobbyId: z.string().cuid2(), userId: z.string().cuid2() }))
-    .query(async ({ input: { lobbyId, userId } }) => {
+    .input(z.object({ lobbyId: z.string().cuid2() }))
+    .query(async ({ input: { lobbyId } }) => {
       const lobby = await getLobby(lobbyId);
 
       if (!lobby) {
@@ -207,23 +207,7 @@ export const lobby = createTRPCRouter({
         return null;
       }
 
-      const movieExists: { [key: string]: boolean } = {};
-      const userSuggestion = lobby.proposed.find((p) => p.users.find((u) => u.id === userId));
-
-      if (!userSuggestion) {
-        log.error(`user suggestion missing for lobbyId [${lobbyId}] and userId [${userId}]`);
-        return null;
-      }
-
-      const proposed = lobby.proposed.filter((p) => {
-        if (!movieExists[p.movie.id] && p.movie.title !== userSuggestion.movie.title) {
-          movieExists[p.movie.id] = true;
-          return true;
-        }
-        return false;
-      });
-
-      return proposed;
+      return lobby.proposed;
     }),
   getResultById: publicProcedure
     .input(z.object({ lobbyId: z.string().cuid2() }))
@@ -436,41 +420,63 @@ export const lobby = createTRPCRouter({
 
         const votedCount = newLobby.votes.reduce((prev, curr) => prev + curr.users.length, 0);
         const haveAllVoted = votedCount === newLobby.participants.length;
+        let hasTies = false;
 
         if (haveAllVoted) {
           let result: Movie | null = null;
           let maxVotes = 0;
+          const ties = [newLobby.votes[0]];
 
           for (const vote of newLobby.votes) {
-            if (vote.users.length >= maxVotes) {
+            if (vote.users.length > maxVotes) {
               result = vote.movie;
               maxVotes = vote.users.length;
+            } else if (vote.users.length === maxVotes) {
+              ties.push(vote);
             }
           }
 
-          const newLobbyWithResult = {
-            ...newLobby,
-            result: result as Movie,
-          };
+          // logic for ties
+          if (ties.length > 1) {
+            const newLobbyWithTies: Lobby = {
+              ...newLobby,
+              proposed: ties,
+              votes: [],
+            };
 
-          await client.del(lobbyId);
+            await client.set(lobbyId, JSON.stringify(newLobbyWithTies));
 
-          await prisma.lobby.update({
-            data: {
-              isActive: false,
-              movieId: newLobbyWithResult.result.id,
-            },
-            where: {
-              id: newLobbyWithResult.id,
-            },
-          });
+            hasTies = true;
 
-          client.emit('movieVoted', lobbyId);
+            log.info(`tie occurred in lobby [${newLobbyWithTies.id}]`);
+          } else {
+            const newLobbyWithResult = {
+              ...newLobby,
+              result: result as Movie,
+            };
+
+            await client.del(lobbyId);
+
+            await prisma.lobby.update({
+              data: {
+                isActive: false,
+                movieId: newLobbyWithResult.result.id,
+              },
+              where: {
+                id: newLobbyWithResult.id,
+              },
+            });
+
+            log.info(`lobby closing [${newLobbyWithResult.id}]`);
+          }
+
+          client.emit('movieVoted', lobbyId, hasTies);
         }
 
         return {
           waiting: !haveAllVoted,
           results: haveAllVoted,
+          tied: hasTies,
           error: false,
         };
       } catch (e) {
