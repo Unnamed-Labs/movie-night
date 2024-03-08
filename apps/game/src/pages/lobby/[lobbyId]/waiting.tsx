@@ -39,8 +39,10 @@ const Waiting = () => {
     { lobbyId: lobby?.id },
     {
       onData(data) {
-        if (data) {
+        if (data.done && !data.hasTies) {
           void router.push(`/lobby/${lobby?.id}/result`);
+        } else {
+          void router.push(`/lobby/${lobby?.id}/vote`);
         }
       },
     },

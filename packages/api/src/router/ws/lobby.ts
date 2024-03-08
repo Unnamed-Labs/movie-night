@@ -58,10 +58,10 @@ export const lobby = createTRPCRouter({
   onMovieVoted: publicProcedure
     .input(z.object({ lobbyId: z.string().cuid2() }))
     .subscription(({ input }) => {
-      return observable<boolean>((emit) => {
-        const onMovieVoted = (lobbyId: string) => {
+      return observable<{ done: boolean; hasTies: boolean }>((emit) => {
+        const onMovieVoted = (lobbyId: string, hasTies: boolean) => {
           if (input.lobbyId === lobbyId) {
-            emit.next(true);
+            emit.next({ done: true, hasTies });
           }
         };
         client.on('movieVoted', onMovieVoted);

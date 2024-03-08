@@ -25,10 +25,7 @@ const Vote = () => {
     }
   }, [lobby, user, router]);
 
-  const { data: proposed } = api.lobby.getProposedById.useQuery({
-    lobbyId: lobby?.id,
-    userId: user?.id,
-  });
+  const { data: proposed, refetch } = api.lobby.getProposedById.useQuery({ lobbyId: lobby?.id });
   const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
   const isDisabled = (movie: Movie) => selectedMovie && selectedMovie.title != movie.title;
@@ -44,8 +41,13 @@ const Vote = () => {
       void router.push(`/lobby/${lobby?.id}/waiting`);
     }
 
-    if (res.results) {
+    if (res.results && !res.tied) {
       void router.push(`/lobby/${lobby?.id}/result`);
+    }
+
+    if (res.results && res.tied) {
+      setSelectedMovie(undefined);
+      void refetch();
     }
   };
 
