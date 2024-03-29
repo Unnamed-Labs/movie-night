@@ -24,29 +24,31 @@ const Waiting = () => {
     }
   }, [lobby, user, router]);
 
-  api.lobbyWs.onMovieProposed.useSubscription(
-    { lobbyId: lobby?.id },
-    {
-      onData(data) {
-        if (data) {
-          void router.push(`/lobby/${lobby?.id}/vote`);
-        }
+  if (lobby) {
+    api.lobbyWs.onMovieProposed.useSubscription(
+      { lobbyId: lobby.id },
+      {
+        onData(data) {
+          if (data) {
+            void router.push(`/lobby/${lobby.id}/vote`);
+          }
+        },
       },
-    },
-  );
+    );
 
-  api.lobbyWs.onMovieVoted.useSubscription(
-    { lobbyId: lobby?.id },
-    {
-      onData(data) {
-        if (data.done && !data.hasTies) {
-          void router.push(`/lobby/${lobby?.id}/result`);
-        } else {
-          void router.push(`/lobby/${lobby?.id}/vote`);
-        }
+    api.lobbyWs.onMovieVoted.useSubscription(
+      { lobbyId: lobby.id },
+      {
+        onData(data) {
+          if (data.done && !data.hasTies) {
+            void router.push(`/lobby/${lobby.id}/result`);
+          } else {
+            void router.push(`/lobby/${lobby.id}/vote`);
+          }
+        },
       },
-    },
-  );
+    );
+  }
 
   return (
     <Page title="Movie Night">
