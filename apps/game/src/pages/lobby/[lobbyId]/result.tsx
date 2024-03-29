@@ -1,8 +1,29 @@
-import { Error } from '@movie/ui';
+import { type GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { createServerSideHelpers } from '@trpc/react-query/server';
+import superjson from 'superjson';
+import { appRouter, createInnerTRPCContext } from '@movie/api';
+import { Error } from '@movie/ui';
 import { Page } from '~/components/Page';
 import { api } from '~/utils/api';
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const serverHelpers = createServerSideHelpers({
+    router: appRouter,
+    ctx: createInnerTRPCContext({
+      session: null,
+    }),
+    transformer: superjson,
+  });
+  const lobbyId = context.params?.lobbyId?.toString() || '';
+  await serverHelpers.lobby.getResultById.prefetch({ lobbyId });
+  return {
+    props: {
+      trpcState: serverHelpers.dehydrate(),
+    },
+  };
+};
 
 const Result = () => {
   const router = useRouter();
