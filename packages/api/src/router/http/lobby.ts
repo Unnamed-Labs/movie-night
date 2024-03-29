@@ -6,27 +6,10 @@ import { createTRPCRouter, publicProcedure } from '../../trpc';
 import { client } from '../../utils/redisClient';
 import type { User } from '../../types/User';
 import type { Lobby } from '../../types/Lobby';
-import type { Movie } from '../../types/Movie';
+import { MovieSchema, type Movie } from '../../types/Movie';
+import type { MovieLobby } from '../../types/MovieLobby';
 
 const log: Logger<ILogObj> = new Logger();
-
-const zodMovieObject = z.object({
-  id: z.string().cuid2(),
-  description: z.string(),
-  date: z.string(),
-  title: z.string(),
-  location: z.string(),
-  rating: z.string(),
-  runtime: z.string(),
-  score: z.number(),
-  genres: z.array(z.string()),
-  image: z.object({
-    src: z.string(),
-    alt: z.string(),
-  }),
-});
-
-type ZodMovie = z.infer<typeof zodMovieObject>;
 
 const getLobby = async (lobbyId: string) => {
   const lobbyFromRedis = await client.get(lobbyId);
@@ -38,45 +21,6 @@ const getLobby = async (lobbyId: string) => {
   const lobby = JSON.parse(lobbyFromRedis) as Lobby;
 
   return lobby;
-};
-
-const addMovieUserToLobby = (
-  lobby: Lobby,
-  movie: ZodMovie,
-  user: User,
-  key: 'proposed' | 'votes',
-) => {
-  const itemIdx = lobby[key].findIndex((item) => item.movie.id === movie.id);
-  let newLobby: Lobby;
-
-  if (itemIdx > -1) {
-    const item = lobby[key][itemIdx];
-
-    const updatedItem = {
-      ...item,
-      users: [...item.users, user],
-    };
-
-    const newList = lobby[key].slice();
-    newList.splice(itemIdx, 1, updatedItem);
-
-    newLobby = {
-      ...lobby,
-      [key]: newList,
-    };
-  } else {
-    const newItem = {
-      movie,
-      users: [user],
-    };
-
-    newLobby = {
-      ...lobby,
-      [key]: [...lobby[key], newItem],
-    };
-  }
-
-  return newLobby;
 };
 
 export const lobby = createTRPCRouter({
@@ -137,15 +81,18 @@ export const lobby = createTRPCRouter({
           name: name,
           isHost: true,
           accountId,
+          hasProposed: false,
+          hasVoted: false,
         };
 
         const lobby: Lobby = {
           id: createId(),
           amount: 8,
           code: availableCode.code,
-          participants: [user],
-          proposed: [],
-          votes: [],
+          participants: {
+            [user.id]: user,
+          },
+          movies: {},
         };
 
         await prisma.lobby.create({
@@ -205,7 +152,7 @@ export const lobby = createTRPCRouter({
           return null;
         }
 
-        if (lobby.participants.length >= 8) {
+        if (Object.keys(lobby.participants).length >= 8) {
           log.warn(`lobby full, join attempt rejected for lobbyId [${lobby.id}]`);
           return null;
         }
@@ -214,11 +161,16 @@ export const lobby = createTRPCRouter({
           id: createId(),
           name,
           isHost,
+          hasProposed: false,
+          hasVoted: false,
         };
 
         const newLobby: Lobby = {
           ...lobby,
-          participants: [...lobby.participants, user],
+          participants: {
+            ...lobby.participants,
+            [user.id]: user,
+          },
         };
 
         await client.set(newLobby.id, JSON.stringify(newLobby));
@@ -242,7 +194,7 @@ export const lobby = createTRPCRouter({
     .mutation(({ input: { lobbyId } }) => {
       client.emit('startGame', lobbyId);
     }),
-  getProposedById: publicProcedure
+  getMoviesById: publicProcedure
     .input(z.object({ lobbyId: z.string().cuid2() }))
     .query(async ({ input: { lobbyId } }) => {
       const lobby = await getLobby(lobbyId);
@@ -252,7 +204,7 @@ export const lobby = createTRPCRouter({
         return null;
       }
 
-      return lobby.proposed;
+      return lobby.movies;
     }),
   getResultById: publicProcedure
     .input(z.object({ lobbyId: z.string().cuid2() }))
@@ -261,21 +213,15 @@ export const lobby = createTRPCRouter({
         select: {
           movie: {
             select: {
-              id: true,
               title: true,
-              description: true,
-              location: true,
-              date: true,
-              score: true,
-              runtime: true,
               imageSrc: true,
               imageAlt: true,
-              rating: {
-                select: {
-                  name: true,
-                },
-              },
-              genres: {
+            },
+          },
+          winners: {
+            select: {
+              name: true,
+              user: {
                 select: {
                   name: true,
                 },
@@ -289,52 +235,26 @@ export const lobby = createTRPCRouter({
       });
 
       if (!result) {
-        log.error(`no result found for lobbyId [${lobbyId}]`);
+        log.warn(`no result found for lobbyId [${lobbyId}]`);
         return null;
       }
 
       if (!result.movie) {
-        log.error(`no movie found for the result of lobbyId [${lobbyId}]`);
+        log.warn(`no movie found for the result of lobbyId [${lobbyId}]`);
         return null;
       }
 
-      const movie: Movie = {
-        id: result.movie.id,
-        title: result.movie.title,
-        description: result.movie.description,
-        location: result.movie.location,
-        date: result.movie.date,
-        score: result.movie.score,
-        runtime: result.movie.runtime,
-        image: {
-          src: result.movie.imageSrc,
-          alt: result.movie.imageAlt,
-        },
-        rating: result.movie.rating.name,
-        genres: result.movie.genres.map((genre) => genre.name),
-      };
+      if (!result.winners || (result.winners && result.winners.length == 0)) {
+        log.warn(`no winner found for the result of lobbyId [${lobbyId}]`);
+      }
 
-      return movie;
+      return result;
     }),
   submitProposedMovieById: publicProcedure
     .input(
       z.object({
         userId: z.string().cuid2(),
-        movie: z.object({
-          id: z.string().cuid2(),
-          description: z.string(),
-          date: z.string(),
-          title: z.string(),
-          location: z.string(),
-          rating: z.string(),
-          runtime: z.string(),
-          score: z.number(),
-          genres: z.array(z.string()),
-          image: z.object({
-            src: z.string(),
-            alt: z.string(),
-          }),
-        }),
+        movie: MovieSchema,
         lobbyId: z.string().cuid2(),
       }),
     )
@@ -351,7 +271,7 @@ export const lobby = createTRPCRouter({
           };
         }
 
-        const user = lobby.participants.find((participant) => participant.id === userId);
+        const user = lobby.participants[userId];
 
         if (!user) {
           log.warn(`user [${userId}] not in participants list for lobbyId [${lobbyId}]`);
@@ -362,11 +282,7 @@ export const lobby = createTRPCRouter({
           };
         }
 
-        const hasParticipantProposed = !!lobby.proposed.find(
-          (p) => !!p.users.find((u) => u.id === userId),
-        );
-
-        if (hasParticipantProposed) {
+        if (user.hasProposed) {
           log.warn(`user [${userId}] has already suggested a movie`);
           return {
             waiting: false,
@@ -375,12 +291,45 @@ export const lobby = createTRPCRouter({
           };
         }
 
-        const newLobby = addMovieUserToLobby(lobby, movie, user, 'proposed');
+        let newMovieLobby: MovieLobby;
+        if (lobby && lobby.movies && lobby.movies[movie.id]) {
+          newMovieLobby = {
+            ...lobby.movies[movie.id],
+            movie,
+            proposedBy: [...lobby.movies[movie.id].proposedBy, userId],
+          };
+        } else if (lobby && lobby.movies && !lobby.movies[movie.id]) {
+          newMovieLobby = {
+            movie,
+            proposedBy: [userId],
+            votedBy: [],
+          };
+        } else {
+          throw Error('lobby does not exist');
+        }
+
+        const newUser: User = {
+          ...lobby.participants[user.id],
+          hasProposed: true,
+        };
+
+        const newLobby = {
+          ...lobby,
+          movies: {
+            ...lobby.movies,
+            [movie.id]: newMovieLobby,
+          },
+          participants: {
+            ...lobby.participants,
+            [user.id]: newUser,
+          },
+        };
 
         await client.set(lobbyId, JSON.stringify(newLobby));
 
-        const proposedCount = newLobby.proposed.reduce((prev, curr) => prev + curr.users.length, 0);
-        const haveAllProposed = proposedCount === newLobby.participants.length;
+        const haveAllProposed = Object.keys(newLobby.participants).every(
+          (key) => newLobby.participants[key].hasProposed,
+        );
 
         if (haveAllProposed) {
           client.emit('movieProposed', lobbyId);
@@ -404,21 +353,7 @@ export const lobby = createTRPCRouter({
     .input(
       z.object({
         userId: z.string().cuid2(),
-        movie: z.object({
-          id: z.string().cuid2(),
-          description: z.string(),
-          date: z.string(),
-          title: z.string(),
-          location: z.string(),
-          rating: z.string(),
-          runtime: z.string(),
-          score: z.number(),
-          genres: z.array(z.string()),
-          image: z.object({
-            src: z.string(),
-            alt: z.string(),
-          }),
-        }),
+        movie: MovieSchema,
         lobbyId: z.string().cuid2(),
       }),
     )
@@ -431,62 +366,104 @@ export const lobby = createTRPCRouter({
           return {
             waiting: false,
             results: false,
+            tied: false,
             error: true,
           };
         }
 
-        const user = lobby.participants.find((participant) => participant.id === userId);
+        const user = lobby.participants[userId];
 
         if (!user) {
           log.warn(`user [${userId}] not in participants list for lobbyId [${lobbyId}]`);
           return {
             waiting: false,
             results: false,
+            tied: false,
             error: true,
           };
         }
 
-        const hasUserVoted = !!lobby.votes.find(
-          (vote) => !!vote.users.find((u) => u.id === userId),
-        );
-
-        if (hasUserVoted) {
+        if (user.hasVoted) {
           log.warn(`user [${userId}] has already voted for a movie`);
           return {
             waiting: false,
             results: false,
+            tied: false,
             error: true,
           };
         }
 
-        const newLobby = addMovieUserToLobby(lobby, movie, user, 'votes');
+        let newMovieLobby: MovieLobby;
+        if (lobby && lobby.movies && lobby.movies[movie.id]) {
+          newMovieLobby = {
+            ...lobby.movies[movie.id],
+            movie,
+            votedBy: [...lobby.movies[movie.id].votedBy, userId],
+          };
+        } else if (lobby && lobby.movies && !lobby.movies[movie.id]) {
+          newMovieLobby = {
+            movie,
+            proposedBy: [],
+            votedBy: [userId],
+          };
+        } else {
+          throw Error('lobby does not exist');
+        }
+
+        const newUser: User = {
+          ...lobby.participants[user.id],
+          hasVoted: true,
+        };
+
+        const newLobby = {
+          ...lobby,
+          movies: {
+            ...lobby.movies,
+            [movie.id]: newMovieLobby,
+          },
+          participants: {
+            ...lobby.participants,
+            [user.id]: newUser,
+          },
+        };
 
         await client.set(lobbyId, JSON.stringify(newLobby));
 
-        const votedCount = newLobby.votes.reduce((prev, curr) => prev + curr.users.length, 0);
-        const haveAllVoted = votedCount === newLobby.participants.length;
+        const haveAllVoted = Object.keys(newLobby.participants).every(
+          (key) => newLobby.participants[key].hasVoted,
+        );
         let hasTies = false;
 
         if (haveAllVoted) {
-          let result: Movie | null = null;
-          let maxVotes = 0;
-          const ties = [newLobby.votes[0]];
+          const movieKeys = Object.keys(newLobby.movies);
+          let result: Movie = newLobby.movies[movieKeys[0]].movie;
+          let maxVotes = newLobby.movies[movieKeys[0]].votedBy.length;
+          let winnerIds: string[] = newLobby.movies[movieKeys[0]].proposedBy;
+          const ties = {
+            [movieKeys[0]]: newLobby.movies[movieKeys[0]],
+          };
 
-          for (const vote of newLobby.votes) {
-            if (vote.users.length > maxVotes) {
-              result = vote.movie;
-              maxVotes = vote.users.length;
-            } else if (vote.users.length === maxVotes) {
-              ties.push(vote);
+          for (let i = 1; i < movieKeys.length; i++) {
+            const currentMovie = newLobby.movies[movieKeys[i]];
+            const votes = currentMovie.votedBy.length;
+            if (votes > maxVotes) {
+              result = currentMovie.movie;
+              maxVotes = votes;
+              winnerIds = currentMovie.proposedBy;
+            } else if (votes === maxVotes) {
+              const newProposal = {
+                ...currentMovie,
+                votedBy: [],
+              };
+              ties[currentMovie.movie.id] = newProposal;
             }
           }
 
           // logic for ties
-          if (ties.length > 1) {
+          if (Object.keys(ties).length > 1) {
             const newLobbyWithTies: Lobby = {
               ...newLobby,
-              proposed: ties,
-              votes: [],
+              movies: ties,
             };
 
             await client.set(lobbyId, JSON.stringify(newLobbyWithTies));
@@ -497,7 +474,7 @@ export const lobby = createTRPCRouter({
           } else {
             const newLobbyWithResult = {
               ...newLobby,
-              result: result as Movie,
+              result,
             };
 
             await client.del(lobbyId);
@@ -511,6 +488,17 @@ export const lobby = createTRPCRouter({
                 id: newLobbyWithResult.id,
               },
             });
+
+            const winners = winnerIds.map((winnerId) => newLobbyWithResult.participants[winnerId]);
+            for (const winner of winners) {
+              await prisma.winner.create({
+                data: {
+                  lobbyId,
+                  name: winner.name,
+                  userId: winner.accountId,
+                },
+              });
+            }
 
             await prisma.roomCode.update({
               data: {
@@ -539,6 +527,7 @@ export const lobby = createTRPCRouter({
         return {
           waiting: false,
           results: false,
+          tied: false,
           error: true,
         };
       }

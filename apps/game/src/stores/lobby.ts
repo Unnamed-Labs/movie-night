@@ -16,13 +16,19 @@ export const useLobbyStore = create<LobbyStore>((set) => ({
   setUser: (user: User) => set({ user }),
   addParticipant: (participant: User) =>
     set((state) => {
-      const updatedLobby = {
-        ...state.lobby,
-        participants: [...(state.lobby?.participants ?? []), participant],
-      };
-      return {
-        lobby: updatedLobby,
-      };
+      if (state.lobby) {
+        const updatedLobby = {
+          ...state.lobby,
+          participants: {
+            ...state.lobby.participants,
+            [participant.id]: participant,
+          },
+        };
+        return {
+          lobby: updatedLobby,
+        };
+      }
+      return {};
     }),
   setPreviousRoute: (previousRoute: string) => set({ previousRoute }),
 }));

@@ -61,36 +61,59 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
 
   const startGameById = async () => {
     setLoading('Starting game...');
-    await startGameByIdAsync({ lobbyId: lobby.id });
+    if (lobby) {
+      await startGameByIdAsync({ lobbyId: lobby.id });
+    }
     setLoading('');
   };
 
   const submitProposedMovieById = async (movie: Movie) => {
     setLoading('Submitting selected movies...');
-    const res = await submitProposedMovieByIdAsync({
-      userId: user.id,
-      lobbyId: lobby.id,
-      movie,
-    });
-    if (res.error) {
-      setError('uh oh! an error occurred submitting your suggestion...');
+    if (user && lobby) {
+      const res = await submitProposedMovieByIdAsync({
+        userId: user.id,
+        lobbyId: lobby.id,
+        movie,
+      });
+      if (res.error) {
+        setError('uh oh! an error occurred submitting your suggestion...');
+      }
+      setLoading('');
+      return res;
+    } else {
+      setError('uh oh! we could not submit your suggestion...');
+      setLoading('');
+      return {
+        waiting: false,
+        vote: false,
+        error: true,
+      };
     }
-    setLoading('');
-    return res;
   };
 
   const submitVoteForMovieById = async (movie: Movie) => {
     setLoading('Submitting vote...');
-    const res = await submitVoteForMovieByIdAsync({
-      userId: user.id,
-      lobbyId: lobby.id,
-      movie,
-    });
-    if (res.error) {
-      setError('uh oh! an error occurred submitting your vote...');
+    if (user && lobby) {
+      const res = await submitVoteForMovieByIdAsync({
+        userId: user.id,
+        lobbyId: lobby.id,
+        movie,
+      });
+      if (res.error) {
+        setError('uh oh! an error occurred submitting your vote...');
+      }
+      setLoading('');
+      return res;
+    } else {
+      setError('uh oh! we could not submit your vote...');
+      setLoading('');
+      return {
+        waiting: false,
+        results: false,
+        tied: false,
+        error: true,
+      };
     }
-    setLoading('');
-    return res;
   };
 
   if (lobby && enableParticipantUpdates) {

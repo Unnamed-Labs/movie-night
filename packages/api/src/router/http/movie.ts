@@ -9,19 +9,11 @@ export const movie = createTRPCRouter({
       select: {
         id: true,
         title: true,
-        description: true,
         date: true,
-        score: true,
-        location: true,
         runtime: true,
         imageSrc: true,
         imageAlt: true,
         rating: {
-          select: {
-            name: true,
-          },
-        },
-        genres: {
           select: {
             name: true,
           },
@@ -38,17 +30,15 @@ export const movie = createTRPCRouter({
     const movies: Movie[] = pMovies.map((pMovie) => ({
       id: pMovie.id,
       title: pMovie.title,
-      description: pMovie.description,
       date: pMovie.date,
-      score: pMovie.score,
-      location: pMovie.location,
       runtime: pMovie.runtime,
       image: {
         src: pMovie.imageSrc,
         alt: pMovie.imageAlt,
       },
       rating: pMovie.rating.name,
-      genres: pMovie.genres.map((genre) => genre.name),
+      proposedBy: [],
+      votedBy: [],
     }));
 
     return movies;
@@ -58,19 +48,11 @@ export const movie = createTRPCRouter({
       select: {
         id: true,
         title: true,
-        description: true,
         date: true,
-        score: true,
-        location: true,
         runtime: true,
         imageSrc: true,
         imageAlt: true,
         rating: {
-          select: {
-            name: true,
-          },
-        },
-        genres: {
           select: {
             name: true,
           },
@@ -86,17 +68,15 @@ export const movie = createTRPCRouter({
     const movies: Movie[] = pMovies.map((pMovie) => ({
       id: pMovie.id,
       title: pMovie.title,
-      description: pMovie.description,
       date: pMovie.date,
-      score: pMovie.score,
-      location: pMovie.location,
       runtime: pMovie.runtime,
       image: {
         src: pMovie.imageSrc,
         alt: pMovie.imageAlt,
       },
       rating: pMovie.rating.name,
-      genres: pMovie.genres.map((genre) => genre.name),
+      proposedBy: [],
+      votedBy: [],
     }));
 
     return movies;

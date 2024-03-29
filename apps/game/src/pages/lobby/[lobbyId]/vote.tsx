@@ -25,7 +25,9 @@ const Vote = () => {
     }
   }, [lobby, user, router]);
 
-  const { data: proposed, refetch } = api.lobby.getProposedById.useQuery({ lobbyId: lobby?.id });
+  const { data: lobbyMovies, refetch } = api.lobby.getMoviesById.useQuery({
+    lobbyId: lobby?.id ?? '',
+  });
   const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
   const isDisabled = (movie: Movie) => selectedMovie && selectedMovie.title != movie.title;
@@ -35,19 +37,21 @@ const Vote = () => {
   };
 
   const handleLockInClick = async () => {
-    const res = await submitVoteForMovieById(selectedMovie);
+    if (selectedMovie) {
+      const res = await submitVoteForMovieById(selectedMovie);
 
-    if (res.waiting) {
-      void router.push(`/lobby/${lobby?.id}/waiting`);
-    }
+      if (res.waiting) {
+        void router.push(`/lobby/${lobby?.id}/waiting`);
+      }
 
-    if (res.results && !res.tied) {
-      void router.push(`/lobby/${lobby?.id}/result`);
-    }
+      if (res.results && !res.tied) {
+        void router.push(`/lobby/${lobby?.id}/result`);
+      }
 
-    if (res.results && res.tied) {
-      setSelectedMovie(undefined);
-      void refetch();
+      if (res.results && res.tied) {
+        setSelectedMovie(undefined);
+        void refetch();
+      }
     }
   };
 
@@ -63,17 +67,18 @@ const Vote = () => {
         />
       ) : (
         <>
-          {proposed &&
-            proposed.map((option) => (
+          {lobbyMovies &&
+            Object.keys(lobbyMovies) &&
+            Object.keys(lobbyMovies).map((key) => (
               <MovieCard
-                key={option.movie.id}
-                title={option.movie.title}
-                image={option.movie.image}
-                date={option.movie.date}
-                rating={option.movie.rating}
-                runtime={option.movie.runtime}
-                disabled={isDisabled(option.movie)}
-                onClick={() => handleCardClick(option.movie)}
+                key={lobbyMovies[key].movie.id}
+                title={lobbyMovies[key].movie.title}
+                image={lobbyMovies[key].movie.image}
+                date={lobbyMovies[key].movie.date}
+                rating={lobbyMovies[key].movie.rating}
+                runtime={lobbyMovies[key].movie.runtime}
+                disabled={isDisabled(lobbyMovies[key].movie)}
+                onClick={() => handleCardClick(lobbyMovies[key].movie)}
               />
             ))}
           <Button

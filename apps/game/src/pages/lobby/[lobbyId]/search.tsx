@@ -79,11 +79,11 @@ const SearchPage = () => {
   const handleDoneClick = async () => {
     const res = await submitProposedMovieById(selectedMovies[0]);
 
-    if (res.waiting) {
+    if (res.waiting && lobby) {
       void router.push(`/lobby/${lobby.id}/waiting`);
     }
 
-    if (res.vote) {
+    if (res.vote && lobby) {
       void router.push(`/lobby/${lobby.id}/vote`);
     }
   };

@@ -7,4 +7,6 @@ export type User = {
     src: string;
     alt: string;
   };
+  hasProposed: boolean;
+  hasVoted: boolean;
 };
