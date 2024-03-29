@@ -1,5 +1,8 @@
 {
   "extends": "@movie/tsconfig/base.json",
   "include": ["."],
-  "exclude": ["node_modules", "coverage", ".turbo"]
+  "exclude": ["node_modules", "coverage", ".turbo"],
+  "compilerOptions": {
+    "allowJs": true
+  }
 }
