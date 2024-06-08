@@ -1,7 +1,7 @@
 import { prisma } from '../index';
 import ratings from './data/ratings.json';
 import genres from './data/genres.json';
-import movies from './data/movies.json';
+import { movies } from './data/movies';
 
 type Nvp = {
   id: string;
@@ -54,8 +54,7 @@ const createMovies = async () => {
         description: movie.description,
         runtime: movie.runtime,
         score: movie.score,
-        rating: movie.rating,
-        genres: movie.genres,
+        ratingId: movie.ratingId,
         date: movie.date,
         location: movie.location,
         imageSrc: movie.imageSrc,

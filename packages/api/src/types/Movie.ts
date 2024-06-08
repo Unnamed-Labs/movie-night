@@ -10,6 +10,8 @@ export const MovieSchema = z.object({
     src: z.string(),
     alt: z.string(),
   }),
+  proposedBy: z.array(z.string().cuid2()),
+  votedBy: z.array(z.string().cuid2()),
 });
 
 export type Movie = z.infer<typeof MovieSchema>;

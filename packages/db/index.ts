@@ -1,4 +1,13 @@
 import { PrismaClient } from '@prisma/client';
+import { movies } from './prisma/data/movies';
+
+const test = {
+  data: {
+    movies,
+  },
+};
+
+export { test };
 
 export * from '@prisma/client';
 
