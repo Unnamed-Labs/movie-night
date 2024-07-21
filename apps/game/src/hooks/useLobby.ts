@@ -36,7 +36,7 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
       setLobby(res.lobby);
       setUser(res.user);
     } else {
-      setError("uh oh! we couldn't create a lobby for you...");
+      setError("we couldn't create a lobby for you...");
     }
     setLoading('');
     return res?.lobby?.id;
@@ -53,7 +53,7 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
       setLobby(res.lobby);
       setUser(res.user);
     } else {
-      setError("uh oh! the lobby you tried to find doesn't exist...");
+      setError("the lobby you tried to find doesn't exist...");
     }
     setLoading('');
     return res?.lobby?.id;
@@ -76,12 +76,12 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
         movie,
       });
       if (res.error) {
-        setError('uh oh! an error occurred submitting your suggestion...');
+        setError('an error occurred submitting your suggestion...');
       }
       setLoading('');
       return res;
     } else {
-      setError('uh oh! we could not submit your suggestion...');
+      setError('we could not submit your suggestion...');
       setLoading('');
       return {
         waiting: false,
@@ -100,12 +100,12 @@ export const useLobby = ({ enableParticipantUpdates }: UseLobbyOptions = {}) => 
         movie,
       });
       if (res.error) {
-        setError('uh oh! an error occurred submitting your vote...');
+        setError('an error occurred submitting your vote...');
       }
       setLoading('');
       return res;
     } else {
-      setError('uh oh! we could not submit your vote...');
+      setError('we could not submit your vote...');
       setLoading('');
       return {
         waiting: false,

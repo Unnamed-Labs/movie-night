@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { ImageWithText } from '@movie/ui';
+import { UniversalPlacement } from '@movie/ui';
 import { Page } from '~/components/Page';
 import { useLobby } from '~/hooks/useLobby';
 import { api } from '~/utils/api';
@@ -9,14 +9,17 @@ const Waiting = () => {
   const router = useRouter();
   const { lobby, user, previousRoute } = useLobby();
   const waitingImageNumber = Math.floor(Math.random() * 3) + 1;
-  const waitingImageSrc = `http://localhost:3000/waiting-${waitingImageNumber}.jpeg`;
-  const waitingText = previousRoute
+  const waitingImage = {
+    src: `http://localhost:3000/waiting-${waitingImageNumber}.jpeg`,
+    alt: '',
+  };
+  const waitingDescription = previousRoute
     ? previousRoute.includes('search')
-      ? 'waiting for suggestions...'
+      ? 'for suggestions...'
       : previousRoute.includes('vote')
-        ? 'waiting for votes...'
-        : 'waiting...'
-    : 'waiting...';
+        ? 'for votes...'
+        : 'for time to pass...'
+    : 'for time to pass...';
 
   useEffect(() => {
     if (!lobby || !user) {
@@ -52,9 +55,10 @@ const Waiting = () => {
 
   return (
     <Page title="Movie Night">
-      <ImageWithText
-        src={waitingImageSrc}
-        text={waitingText}
+      <UniversalPlacement
+        heading="waiting"
+        description={waitingDescription}
+        image={waitingImage}
       />
     </Page>
   );

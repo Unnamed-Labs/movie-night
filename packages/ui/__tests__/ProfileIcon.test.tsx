@@ -1,3 +1,4 @@
+import { act } from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ProfileIcon } from '../src/components/ProfileIcon';
@@ -58,7 +59,7 @@ describe('<ProfileIcon />', () => {
     );
     const elem = getByTestId('profile-icon');
     expect(flag).toBeFalsy();
-    await userEvent.click(elem);
+    await act(async () => userEvent.click(elem));
     expect(flag).toBeTruthy();
   });
   it('should not be selectable when disabled', async () => {
