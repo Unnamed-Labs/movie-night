@@ -126,6 +126,9 @@ importers:
 
   apps/landing-site:
     dependencies:
+      '@movie/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
         version: 0.8.0(typescript@5.5.3)(zod@3.23.8)

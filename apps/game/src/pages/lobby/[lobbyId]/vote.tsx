@@ -11,7 +11,7 @@ const Vote = () => {
   const { lobby, user, error, submitVoteForMovieById, setPreviousRoute } = useLobby();
   const errorImageNumber = Math.floor(Math.random() * 3) + 1;
   const errorImage = {
-    src: `http://localhost:3000/waiting-${errorImageNumber}.jpeg`,
+    src: `http://localhost:3000/error-${errorImageNumber}.jpeg`,
     alt: '',
   };
 
