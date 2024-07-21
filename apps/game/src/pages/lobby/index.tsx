@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Error, Input } from '@movie/ui';
+import { Button, UniversalPlacement, Input } from '@movie/ui';
 import { Page } from '~/components/Page';
 import { useLobby } from '~/hooks/useLobby';
 
@@ -9,11 +9,11 @@ const Lobby = () => {
   const [name, setName] = useState('');
   const [roomCode, setRoomCode] = useState('');
   const { error, openRoom, joinByCode, setError } = useLobby();
-  const images = [
-    'http://localhost:3000/error-1.jpeg',
-    'http://localhost:3000/error-2.jpeg',
-    'http://localhost:3000/error-3.jpeg',
-  ];
+  const errorImageNumber = Math.floor(Math.random() * 3) + 1;
+  const errorImage = {
+    src: `http://localhost:3000/error-${errorImageNumber}.jpeg`,
+    alt: '',
+  };
 
   const handleNameChange = (val: string) => setName(val);
   const handleRoomCodeChange = (val: string) => setRoomCode(val);
@@ -44,10 +44,11 @@ const Lobby = () => {
       body="would you like to host or join a lobby?"
     >
       {error ? (
-        <Error
-          images={images}
-          text={error}
-          cta={{ label: 'try again', onClick: handleTryAgainClick }}
+        <UniversalPlacement
+          heading="uh oh!"
+          description={error}
+          image={errorImage}
+          primary={{ label: 'retry', onClick: handleTryAgainClick }}
         />
       ) : (
         <>

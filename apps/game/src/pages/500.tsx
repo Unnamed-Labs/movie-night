@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router';
-import { Error } from '@movie/ui';
+import { UniversalPlacement } from '@movie/ui';
 import { Page } from '~/components/Page';
 
 const Custom500 = () => {
   const router = useRouter();
-  const images = [
-    'http://localhost:3000/error-1.jpeg',
-    'http://localhost:3000/error-2.jpeg',
-    'http://localhost:3000/error-3.jpeg',
-  ];
+  const errorImageNumber = Math.floor(Math.random() * 3) + 1;
+  const errorImage = {
+    src: `http://localhost:3000/error-${errorImageNumber}.jpeg`,
+    alt: '',
+  };
 
   const handleBackToHome = () => {
     void router.push('/');
@@ -16,10 +16,11 @@ const Custom500 = () => {
 
   return (
     <Page title="Movie Night">
-      <Error
-        images={images}
-        text="uh oh! our projector broke. try again later..."
-        cta={{ label: 'back to home', onClick: handleBackToHome }}
+      <UniversalPlacement
+        heading="uh oh!"
+        description="an internal error occurred. try again later or contact us for help..."
+        image={errorImage}
+        primary={{ label: 'back to home', onClick: handleBackToHome }}
       />
     </Page>
   );

@@ -1,3 +1,4 @@
+import { act } from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MovieCard } from '../src/components/MovieCard';
@@ -28,7 +29,7 @@ describe('<MovieCard />', () => {
       />,
     );
     expect(getByTestId('movie-card')).toBeInTheDocument();
-    await userEvent.click(getByTestId('movie-card'));
+    await act(async () => userEvent.click(getByTestId('movie-card')));
     expect(getByTestId('movie-card-selected-filter')).toHaveClass('ui-opacity-15');
   });
   it('should not select the card when disabled and clicked', async () => {

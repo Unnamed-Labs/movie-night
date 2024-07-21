@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Error, MovieCard } from '@movie/ui';
+import { Button, UniversalPlacement, MovieCard } from '@movie/ui';
 import { type Movie } from '@movie/api';
 import { Page } from '~/components/Page';
 import { api } from '~/utils/api';
@@ -9,11 +9,11 @@ import { useLobby } from '~/hooks/useLobby';
 const Vote = () => {
   const router = useRouter();
   const { lobby, user, error, submitVoteForMovieById, setPreviousRoute } = useLobby();
-  const images = [
-    'http://localhost:3000/error-1.jpeg',
-    'http://localhost:3000/error-2.jpeg',
-    'http://localhost:3000/error-3.jpeg',
-  ];
+  const errorImageNumber = Math.floor(Math.random() * 3) + 1;
+  const errorImage = {
+    src: `http://localhost:3000/error-${errorImageNumber}.jpeg`,
+    alt: '',
+  };
 
   useEffect(() => {
     setPreviousRoute(router.asPath);
@@ -61,9 +61,10 @@ const Vote = () => {
       body="vote on your favorite movie."
     >
       {error ? (
-        <Error
-          images={images}
-          text={error}
+        <UniversalPlacement
+          heading="uh oh!"
+          description={error}
+          image={errorImage}
         />
       ) : (
         <>

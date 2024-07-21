@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import superjson from 'superjson';
 import { appRouter, createInnerTRPCContext } from '@movie/api';
-import { Error } from '@movie/ui';
+import { UniversalPlacement } from '@movie/ui';
 import { Page } from '~/components/Page';
 import { api } from '~/utils/api';
 
@@ -28,11 +28,11 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 const Result = () => {
   const router = useRouter();
   const lobbyId = router.query.lobbyId as string;
-  const images = [
-    'http://localhost:3000/error-1.jpeg',
-    'http://localhost:3000/error-2.jpeg',
-    'http://localhost:3000/error-3.jpeg',
-  ];
+  const errorImageNumber = Math.floor(Math.random() * 3) + 1;
+  const errorImage = {
+    src: `http://localhost:3000/error-${errorImageNumber}.jpeg`,
+    alt: '',
+  };
 
   const { data: result } = api.lobby.getResultById.useQuery({ lobbyId });
 
@@ -66,9 +66,10 @@ const Result = () => {
           />
         </section>
       ) : (
-        <Error
-          text="uh oh! no results for this lobby can be provided at this time..."
-          images={images}
+        <UniversalPlacement
+          heading="uh oh!"
+          description="no results for this lobby can be provided at this time..."
+          image={errorImage}
         />
       )}
     </Page>

@@ -2,6 +2,7 @@ packages:
   - apps/game
   - apps/server
   - apps/workshop
+  - apps/landing-site
   - packages/ui
   - packages/db
   - packages/api

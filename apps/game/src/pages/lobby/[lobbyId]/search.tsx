@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import superjson from 'superjson';
 import debounce from 'lodash.debounce';
-import { Button, Error, Input, MovieCard } from '@movie/ui';
+import { Button, UniversalPlacement, Input, MovieCard } from '@movie/ui';
 import { appRouter, createInnerTRPCContext, type Movie } from '@movie/api';
 import { Page } from '~/components/Page';
 import { api } from '~/utils/api';
@@ -36,11 +36,11 @@ const SearchPage = () => {
     { enabled: !!movieTitle, refetchOnWindowFocus: false },
   );
   const movies = searchResults && searchResults.length > 0 ? searchResults : popular;
-  const images = [
-    'http://localhost:3000/error-1.jpeg',
-    'http://localhost:3000/error-2.jpeg',
-    'http://localhost:3000/error-3.jpeg',
-  ];
+  const errorImageNumber = Math.floor(Math.random() * 3) + 1;
+  const errorImage = {
+    src: `http://localhost:3000/error-${errorImageNumber}.jpeg`,
+    alt: '',
+  };
 
   useEffect(() => {
     setPreviousRoute(router.asPath);
@@ -94,9 +94,10 @@ const SearchPage = () => {
       body="search for a movie everyone might enjoy!"
     >
       {error ? (
-        <Error
-          images={images}
-          text={error}
+        <UniversalPlacement
+          heading="uh oh!"
+          description={error}
+          image={errorImage}
         />
       ) : (
         <>
