@@ -7,27 +7,31 @@ export default {
   theme: {
     extend: {
       keyframes: {
-        characterslide: {
+        characterfade: {
           '0%': {
             opacity: '0',
-            transform: 'translate(0px, 0px)',
+            transform: 'translate(0px, 64px)',
           },
-          '25%': {
+          '100%': {
             opacity: '1',
           },
-          '100%': {
-            transform: 'translate(0px, -85px)',
-          },
         },
-        armslide: {
+        armleftslide: {
           '0%': {
-            transform: 'translate(0px, 0px)',
+            opacity: '0',
           },
           '75%': {
-            transform: 'translate(0px, -90px)',
+            opacity: '1',
+            transform: 'translate(0px, -5px)',
           },
-          '100%': {
-            transform: 'translate(0px, -85px)',
+        },
+        armrightslide: {
+          '0%': {
+            opacity: '0',
+          },
+          '75%': {
+            opacity: '1',
+            transform: 'translate(0px, -10px)',
           },
         },
       },

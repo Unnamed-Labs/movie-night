@@ -17,6 +17,7 @@ test-results
 .next/
 out/
 next-env.d.ts
+landing-site/apps/
 
 # expo
 .expo/
